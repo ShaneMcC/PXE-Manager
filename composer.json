@@ -1,0 +1,23 @@
+{
+    "name": "shanemcc/pxe-manager",
+    "description": "Web-Frontend to manage a pxe booting server",
+    "homepage": "https://github.com/ShaneMcC/pxe-manager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shane Mc Cormack",
+            "email": "shanemcc@gmail.com",
+            "homepage": "http://www.dataforce.org.uk/"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "bramus/router": "~1.0",
+        "twig/twig": "~2.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
