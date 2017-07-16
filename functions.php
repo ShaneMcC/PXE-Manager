@@ -1,4 +1,5 @@
 <?php
+	require_once(__DIR__ . '/vendor/autoload.php');
 
 	function getEnvOrDefault($var, $default) {
 		$result = getEnv($var);
@@ -6,6 +7,16 @@
 	}
 
 	require_once(dirname(__FILE__) . '/config.php');
+
+	// Prep DB
+	if ($database['type'] == 'sqlite') {
+		$pdo = new PDO(sprintf('%s:%s', $database['type'], $database['file']));
+	} else {
+		$pdo = new PDO(sprintf('%s:host=%s;dbname=%s', $database['type'], $database['server'], $database['database']), $database['username'], $database['password']);
+	}
+
+ 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	DB::get()->setPDO($pdo);
 
 	function recursiveFindFiles($dir) {
 		if (!file_exists($dir)) { return; }
@@ -16,6 +27,15 @@
 				yield $file;
 			}
 		}
+	}
+
+	function getDisplayEngine() {
+		global $config;
+
+		$displayEngine = new DisplayEngine($config);
+		$displayEngine->setSiteName($config['sitename']);
+
+		return $displayEngine;
 	}
 
 	function startsWith($haystack, $needle) {

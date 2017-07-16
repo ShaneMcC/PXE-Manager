@@ -1,13 +1,11 @@
 <?php
-	require_once(__DIR__ . '/../vendor/autoload.php');
 	require_once(__DIR__ . '/../functions.php');
 
 	// Router for requests
 	$router = new \Bramus\Router\Router();
 
 	// Templating engine
-	$displayEngine = new DisplayEngine($config);
-	$displayEngine->setSiteName($config['sitename']);
+	$displayEngine = getDisplayEngine();
 
 	if ($config['securecookies']) {
 		ini_set('session.cookie_secure', True);
@@ -20,11 +18,15 @@
 		ini_set('session.save_path', $config['memcached']);
 	}
 	session::init();
+	if (!session::exists('csrftoken')) {
+		session::set('csrftoken', genUUID());
+	}
 
-	// Storage array
-	$storage = [];
+	$api = new API(DB::get());
 
-	(new SiteRoutes())->addRoutes($router, $displayEngine);
+	(new SiteRoutes())->addRoutes($router, $displayEngine, $api);
+	(new ImageRoutes())->addRoutes($router, $displayEngine, $api);
+	(new ServerRoutes())->addRoutes($router, $displayEngine, $api);
 
 	// Check CSRF Tokens.
 	$router->before('POST', '.*', function() {

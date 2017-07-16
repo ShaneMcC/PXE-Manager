@@ -1,3 +1,8 @@
 vendor/
 templates_c/
 config.local.php
+dev_public/
+admin/test.php
+admin/seed.php
+test.php
+data/*

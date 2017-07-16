@@ -1,7 +1,7 @@
 <?php
 	class SiteRoutes {
 
-		public function addRoutes($router, $displayEngine) {
+		public function addRoutes($router, $displayEngine, $api) {
 			$router->get('/', function() use ($displayEngine) {
 				$displayEngine->setPageID('home')->setTitle('Home')->display('home.tpl');
 			});

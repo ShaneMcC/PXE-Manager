@@ -19,5 +19,9 @@
         "classmap": [
             "src/"
         ]
+    },
+    "require-dev": {
+        "filp/whoops": "^2.1",
+        "symfony/var-dumper": "^3.3"
     }
 }

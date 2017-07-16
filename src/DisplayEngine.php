@@ -91,8 +91,22 @@
 			return array_key_exists($var, $this->vars) ? $this->vars[$var] : '';
 		}
 
+		public function getBaseURL() {
+			$protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+			$domain = $_SERVER['SERVER_NAME'];
+
+			$port = $_SERVER['SERVER_PORT'];
+			$port = ($protocol == 'http' && $port == 80 || $protocol == 'https' && $port == 443) ? '' : ':' . $port;
+
+			return $protocol . '://' . $domain . $port;
+		}
+
 		public function getBasePath() {
 			return rtrim($this->basepath, '/');
+		}
+
+		public function getFullURL($path) {
+			return $this->getBaseURL() . $this->getURL($path);
 		}
 
 		public function getURL($path) {
@@ -101,14 +115,38 @@
 			return $path;
 		}
 
+		public function setExtraVars() {
+			$this->setVar('csrftoken', session::get('csrftoken'));
+		}
+
 		public function display($template) {
+			$this->setExtraVars();
+
 			$this->twig->display('header.tpl', $this->vars);
 			$this->twig->display($template, $this->vars);
 			$this->twig->display('footer.tpl', $this->vars);
 		}
 
 		public function displayRaw($template) {
+			$this->setExtraVars();
+
 			$this->twig->display($template, $this->vars);
+		}
+
+		public function renderString($string) {
+			$this->setExtraVars();
+
+			$oldLoader = $this->twig->getLoader();
+			$oldCache = $this->twig->getCache();
+
+			$this->twig->setCache(false);
+			$this->twig->setLoader(new Twig_Loader_Array(['template' => $string]));
+			$rendered = $this->twig->load('template')->render($this->vars);
+
+			$this->twig->setCache($oldCache);
+			$this->twig->setLoader($oldLoader);
+
+			return $rendered;
 		}
 
 		public function getFile($file) {
@@ -158,8 +196,9 @@
 		public function showHeaderMenu() {
 			$menu = [];
 
-			$public = ['link' => $this->getURL('/'), 'title' => 'Home', 'active' => true];
-			array_unshift($menu, $public);
+			$menu[] = ['link' => $this->getURL('/'), 'title' => 'Home', 'active' => $this->pageID == 'home'];
+			$menu[] = ['link' => $this->getURL('/images'), 'title' => 'Images', 'active' => $this->pageID == 'images'];
+			$menu[] = ['link' => $this->getURL('/servers'), 'title' => 'Servers', 'active' => $this->pageID == 'servers'];
 
 			$this->twig->display('header_menu.tpl', ['menu' => $menu]);
 		}

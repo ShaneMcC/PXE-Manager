@@ -25,6 +25,17 @@ span.pointer {
   cursor: hand;
 }
 
+pre {
+  margin: 0px;
+}
+
+pre.preview {
+  border-left: 1px solid #aaa;
+  background: #eee;
+  margin-left: 25px;
+  padding: 10px;
+}
+
 /**********************************************************************
  * Headers
  **********************************************************************/
@@ -75,4 +86,19 @@ h1 small.subtitle {
 
 .sidebar .nav-link {
   border-radius: 0;
+}
+
+/**********************************************************************
+ * Tables
+ **********************************************************************/
+
+table tr.deleted td {
+  /* background-color: #f2dede; */
+  background-color: #eee;
+  color: #ccc;
+  text-decoration: line-through;
+}
+
+table tr.deleted td.actions {
+  text-decoration: none;
 }
