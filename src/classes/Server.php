@@ -164,7 +164,7 @@ class Server extends DBObject {
 			@file_put_contents($file, implode("\n", $contents));
 			@chmod($file, 0777);
 		} else {
-			unlink($file);
+			@unlink($file);
 		}
 	}
 }

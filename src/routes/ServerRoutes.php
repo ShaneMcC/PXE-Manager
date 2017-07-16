@@ -38,6 +38,27 @@
 				$displayEngine->display('servers/view.tpl');
 			});
 
+			$router->post('/servers/([0-9]+)/delete', function($serverid) use ($router, $displayEngine, $api) {
+				$server = $api->getServer($serverid);
+				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+
+				if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
+					$result = $server->delete();
+					if ($result) {
+						$displayEngine->flash('success', '', 'Server ' . $server->getName() . ' has been deleted.');
+						header('Location: ' . $displayEngine->getURL('/servers'));
+						return;
+					} else {
+						$displayEngine->flash('error', '', 'There was an error deleting the server.');
+						header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
+						return;
+					}
+				} else {
+					header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
+					return;
+				}
+			});
+
 			$router->get('/servers/([0-9]+)/preview', function($serverid) use ($router, $displayEngine, $api) {
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }

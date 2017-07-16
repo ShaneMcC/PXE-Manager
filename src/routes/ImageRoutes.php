@@ -47,6 +47,27 @@
 			$router->post('/images/([0-9]+)/edit.json', function($imageid) use ($router, $displayEngine, $api) {
 				$this->doCreateOrEdit($api, $displayEngine, $imageid, $_POST);
 			});
+
+			$router->post('/images/([0-9]+)/delete', function($imageid) use ($router, $displayEngine, $api) {
+				$image = $api->getBootableImage($imageid);
+				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
+
+				if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
+					$result = $image->delete();
+					if ($result) {
+						$displayEngine->flash('success', '', 'Image ' . $image->getName() . ' has been deleted.');
+						header('Location: ' . $displayEngine->getURL('/images'));
+						return;
+					} else {
+						$displayEngine->flash('error', '', 'There was an error deleting the image.');
+						header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
+						return;
+					}
+				} else {
+					header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
+					return;
+				}
+			});
 		}
 
 		function doCreateOrEdit($api, $displayEngine, $imageid, $data) {
