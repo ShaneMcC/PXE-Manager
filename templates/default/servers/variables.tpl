@@ -3,7 +3,13 @@
 		{% for var,vardata in image.variables %}
 			<tr>
 				<th>{{ vardata.description }}</th>
-				<td data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] }}">{{ server.variables[var] }}</td>
+				<td data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] }}">
+					{% if vardata.type == 'text' %}
+						<pre>{{ server.variables[var] }}</pre>
+					{% else %}
+						{{ server.variables[var] }}
+					{% endif %}
+				</td>
 			</tr>
 		{% endfor %}
 	</tbody>

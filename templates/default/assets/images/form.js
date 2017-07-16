@@ -73,14 +73,14 @@ $(function() {
 var options = {};
 var options = {"variableTypes": {"ipv4": "IPv4 Address",
                                  "string": "Text String",
-                                 "text": "Text Data",
+                                 "text": "Multi-Line Text Data",
                                 }
               };
 
 function setEditable(element) {
 	$(element).each(function (index) {
 		var field = $(this);
-		var value = field.data('value');
+		var value = (field.data('raw-value') !== undefined) ? field.data('raw-value') : field.data('value');
 		var key = field.data('name');
 		var fieldType = field.data('type');
 		var varid = field.parent('tr').data('varid');

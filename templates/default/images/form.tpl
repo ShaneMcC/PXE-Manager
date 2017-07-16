@@ -5,6 +5,10 @@
 {% endif %}
 <input type="hidden" name="csrftoken" value="{{csrftoken}}">
 
+{% set variableTypes = [] %}
+{% set variableTypes = variableTypes | merge({"ipv4": "IPv4 Address"}) %}
+{% set variableTypes = variableTypes | merge({"string": "Text String"}) %}
+{% set variableTypes = variableTypes | merge({"text": "Multi-Line Text Data"}) %}
 
 <table id="imageinfo" class="table table-striped table-bordered">
 	<tbody>
@@ -29,7 +33,13 @@
 							<tr data-varid="{{ varid }}">
 								<td class="name" data-name="name" data-value="{{ var }}">{{ var }}</td>
 								<td class="description" data-name="description" data-value="{{ vardata.description }}">{{ vardata.description }}</td>
-								<td class="type" data-name="type" data-type="select" data-options="variableTypes" data-value="{{ vardata.type }}">{{ vardata.type }}</td>
+								<td class="type" data-name="type" data-type="select" data-options="variableTypes" data-raw-value="{{ vardata.type }}" {% if variableTypes[vardata.type] %}data-value="{{ variableTypes[vardata.type] }}"{% endif %}>
+									{% if variableTypes[vardata.type] %}
+										{{ variableTypes[vardata.type] }}
+									{% else %}
+										{{ vardata.type }}
+									{% endif %}
+								</td>
 								<td class="actions editonly" style="display: none">
 									<button type="button" class="btn btn-sm btn-danger" data-action="deleteVar" role="button">Delete</button>
 								</td>

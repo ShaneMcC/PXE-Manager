@@ -101,7 +101,7 @@ function setEditable(element) {
 		var key = field.data('name');
 		var fieldType = field.data('type');
 
-		if (fieldType == 'textfield') {
+		if (fieldType == 'textfield' || fieldType == 'text') {
 			var rows = field.data('rows');
 			if (rows === undefined) { rows = 5; }
 			field.html('<textarea rows="' + rows + '" class="form-control mono" name="' + key + '">' + escapeHtml(value) + '</textarea>');
