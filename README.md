@@ -41,3 +41,21 @@ I can be found idling on various different IRC Networks, but the best way to get
 Bugs and Feature Requests should be raised on the [[https://github.com/ShaneMcC/PXE-Manager/issues|issue tracker on github]], and I'm happy to recieve code pull requests via github.
 
 I can be found idling on various different IRC Networks, but the best way to get in touch would be to message "Dataforce" on Quakenet, or drop me a mail (email address is in my [github profile](https://github.com/ShaneMcC))
+
+## Screenshots
+
+### Main Index
+![Main Index](/screenshots/index.png?raw=true "Main Index")
+
+### Images
+![Images](/screenshots/images.png?raw=true "Images")
+![Bootable1](/screenshots/bootable1.png?raw=true "Bootable1")
+![Bootable2](/screenshots/bootable2.png?raw=true "Bootable2")
+![Bootable3](/screenshots/bootable3.png?raw=true "Bootable3")
+![Bootable-Edit](/screenshots/bootable-edit.png?raw=true "Bootable-Edit")
+
+### Servers
+![Servers](/screenshots/servers.png?raw=true "Servers")
+![Servers1](/screenshots/servers1.png?raw=true "Servers1")
+![Servers-Edit](/screenshots/servers-edit.png?raw=true "Servers-Edit")
+![Servers-Preview](/screenshots/servers-preview.png?raw=true "Servers-Preview")
