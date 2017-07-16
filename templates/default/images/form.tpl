@@ -14,7 +14,7 @@
 	<tbody>
 		<tr class="name">
 			<th>Name</th>
-			<td class="mono" data-type="text" data-name="name" data-value="{{ image.name }}">{{ image.name }}</td>
+			<td class="mono" data-type="string" data-name="name" data-value="{{ image.name }}">{{ image.name }}</td>
 		</tr>
 
 		<tr class="variables">

@@ -131,16 +131,20 @@ table#imageinfo > tr > th {
   width: 250px;
 }
 
+table#variables {
+  table-layout: fixed;
+}
+
 table#variables th.name, table#variables td.name {
-  width: 250px;
+  width: 150px;
 }
 
 table#variables th.type, table#variables td.type {
-  width: 250px;
+  width: 150px;
 }
 
 table#variables th.actions, table#variables td.actions {
-  width: 250px;
+  width: 150px;
 }
 
 table#imageinfo tr.scriptdata td {
@@ -151,6 +155,12 @@ table#imageinfo tr.scriptdata td {
 table#imageinfo tr.scriptdata pre {
   max-height: 250px;
   overflow: auto;
+
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 table#imagelist th.actions, table#imagelist td.actions {

@@ -10,14 +10,14 @@
 	<tbody>
 		<tr>
 			<th>Name</th>
-			<td class="mono" data-type="text" data-name="name" data-value="{{ server.name }}">
+			<td class="mono" data-type="string" data-name="name" data-value="{{ server.name }}">
 				{{ server.name }}
 			</td>
 		</tr>
 
 		<tr>
 			<th>MAC Address</th>
-			<td class="mono" data-type="text" data-name="macaddr" data-value="{{ server.macaddr }}">
+			<td class="mono" data-type="string" data-name="macaddr" data-value="{{ server.macaddr }}">
 				{{ server.macaddr }}
 			</td>
 		</tr>
