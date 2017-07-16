@@ -16,7 +16,7 @@
 	</thead>
 	<tbody>
 		{% for image in images %}
-		<tr>
+		<tr data-searchable-value="{{ image.name }}">
 			<td class="image">
 				{{ image.name }}
 			</td>

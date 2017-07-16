@@ -84,10 +84,7 @@ class Server extends DBObject {
 		return BootableImage::load($this->getDB(), $this->getData('image'));
 	}
 
-	public function getDisplayEngine($injectVars = true) {
-		$de = getDisplayEngine();
-
-
+	public function getValidVariables() {
 		// Ensure that our getVariable() function only returns variables
 		// that are valid for this image.
 		$validVars = [];
@@ -98,9 +95,20 @@ class Server extends DBObject {
 			foreach ($image->getVariables() as $v => $vd) {
 				if (array_key_exists($v, $myVars)) {
 					$validVars[$v] = $myVars[$v];
-
-					if ($injectVars) { $de->setVar($v, $myVars[$v]); }
 				}
+			}
+		}
+
+		return $validVars;
+	}
+
+	public function getDisplayEngine($injectVars = true) {
+		$de = getDisplayEngine();
+
+		$validVars = $this->getValidVariables();
+		if ($injectVars) {
+			foreach ($validVars as $k => $v) {
+				$de->setVar($k, $v);
 			}
 		}
 
@@ -111,6 +119,10 @@ class Server extends DBObject {
 
 		$twig->addFunction(new Twig_Function('getScriptURL', function () use ($de) {
 			return $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash() . '/script');
+		}));
+
+		$twig->addFunction(new Twig_Function('getPostInstallURL', function () use ($de) {
+			return $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash() . '/postinstall');
 		}));
 
 		$twig->addFunction(new Twig_Function('getServiceURL', function () use ($de) {

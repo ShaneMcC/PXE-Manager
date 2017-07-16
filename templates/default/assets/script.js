@@ -13,7 +13,7 @@ $(function() {
 			$(searchTop).find("[data-searchable-value]").each(function() {
 				var show = false;
 
-				for (val in $(this).data('searchable-value').split(" ")) {
+				for (val in $(this).data('searchable-value').split("||")) {
 					if ($(this).data('searchable-value').match(match)) {
 						show = true;
 						break;

@@ -103,3 +103,11 @@ CREATE TABLE `servers` (
 CREATE UNIQUE INDEX `server_macaddr` ON `server`(`macaddr`);
 DBQUERY
 );
+
+	// ------------------------------------------------------------------------
+	// Post-Install script
+	// ------------------------------------------------------------------------
+	$dataChanges[3] = new DBChange(<<<DBQUERY
+ALTER TABLE `bootableimages` ADD `postinstall` TEXT;
+DBQUERY
+);

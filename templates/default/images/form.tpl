@@ -8,28 +8,28 @@
 
 <table id="imageinfo" class="table table-striped table-bordered">
 	<tbody>
-		<tr>
+		<tr class="name">
 			<th>Name</th>
 			<td class="mono" data-type="text" data-name="name" data-value="{{ image.name }}">{{ image.name }}</td>
 		</tr>
 
-		<tr>
+		<tr class="variables">
 			<th>Variables</th>
 			<td>
 				<table id="variables" class="table table-striped table-bordered">
 					<tbody>
 						<tr>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Type</th>
-							<th class="editonly" style="display: none">Actions</th>
+							<th class="name">Name</th>
+							<th class="description">Description</th>
+							<th class="type">Type</th>
+							<th class="actions editonly" style="display: none">Actions</th>
 						</tr>
 						{% set varid = 0 %}
 						{% for var,vardata in image.variables %}
 							<tr data-varid="{{ varid }}">
-								<td data-name="name" data-value="{{ var }}">{{ var }}</td>
-								<td data-name="description" data-value="{{ vardata.description }}">{{ vardata.description }}</td>
-								<td data-name="type" data-type="select" data-options="variableTypes" data-value="{{ vardata.type }}">{{ vardata.type }}</td>
+								<td class="name" data-name="name" data-value="{{ var }}">{{ var }}</td>
+								<td class="description" data-name="description" data-value="{{ vardata.description }}">{{ vardata.description }}</td>
+								<td class="type" data-name="type" data-type="select" data-options="variableTypes" data-value="{{ vardata.type }}">{{ vardata.type }}</td>
 								<td class="actions editonly" style="display: none">
 									<button type="button" class="btn btn-sm btn-danger" data-action="deleteVar" role="button">Delete</button>
 								</td>
@@ -45,14 +45,19 @@
 			</td>
 		</tr>
 
-		<tr>
+		<tr class="pxedata scriptdata">
 			<th>PXE Data</th>
 			<td class="mono" data-rows="5" data-type="textfield" data-name="pxedata" data-value="{{ image.pxedata }}"><pre>{{ image.pxedata }}</pre></td>
 		</tr>
 
-		<tr>
+		<tr class="script scriptdata">
 			<th>Kickstart/Preseed Data</th>
 			<td class="mono" data-rows="15" data-type="textfield" data-name="script" data-value="{{ image.script }}"><pre>{{ image.script }}</pre></td>
+		</tr>
+
+		<tr class="postinstall scriptdata">
+			<th>Post-Install Script</th>
+			<td class="mono" data-rows="15" data-type="textfield" data-name="postinstall" data-value="{{ image.postinstall }}"><pre>{{ image.postinstall }}</pre></td>
 		</tr>
 
 	</tbody>
@@ -91,6 +96,27 @@
 			{% endembed %}
 		{% endif %}
 	</div>
+</div>
+
+<br><br>
+<div class="helptext">
+<H2> Image Templating </H2>
+The PXE Data, kickstart/preseed script and Post-Install script values are all template-driven powered by <a href="https://twig.sensiolabs.org">Twig</a>.
+
+Variables defined in images can be accessed in scripts using <code>{% verbatim %}{{ getVariable('<kbd>varname</kbd>') }}{% endverbatim %}</code> which will use the value as defined by the specific server.
+
+In addition to variables, there are other functions that can be used:
+<ul>
+	<li>
+		<code>{% verbatim %}{{ getServiceURL() }}{% endverbatim %}</code> - Get the service-url. (Used for example to disable a server after deployment: <code>{% verbatim %}wget {{ getServiceURL() }}/disable{% endverbatim %}</code>)
+	</li>
+	<li>
+		<code>{% verbatim %}{{ getScriptURL() }}{% endverbatim %}</code> - Shorthand to get the URL for the <code>/script</code> service (kickstart/preseed data).
+	</li>
+	<li>
+		<code>{% verbatim %}{{ getPostInstallURL() }}{% endverbatim %}</code> - Shorthand to get the URL for the <code>/postinstall</code> service (post-install script).
+	</li>
+</ul>
 </div>
 
 <script src="{{ url('/assets/images/form.js') }}"></script>

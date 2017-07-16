@@ -102,3 +102,57 @@ table tr.deleted td {
 table tr.deleted td.actions {
   text-decoration: none;
 }
+
+/**********************************************************************
+ * Image Info
+ **********************************************************************/
+
+table#imageinfo > tr > th {
+  width: 250px;
+}
+
+table#variables th.name, table#variables td.name {
+  width: 250px;
+}
+
+table#variables th.type, table#variables td.type {
+  width: 250px;
+}
+
+table#variables th.actions, table#variables td.actions {
+  width: 250px;
+}
+
+table#imageinfo tr.scriptdata td {
+  max-height: 250px;
+  overflow: auto;
+}
+
+table#imageinfo tr.scriptdata pre {
+  max-height: 250px;
+  overflow: auto;
+}
+
+table#imagelist th.actions, table#imagelist td.actions {
+  width: 350px;
+}
+
+/**********************************************************************
+ * Server Info
+ **********************************************************************/
+
+table#serverinfo > tbody > tr > th, table#variables > tbody > tr > th {
+  width: 250px;
+}
+
+table#serverlist th.actions, table#serverlist td.actions {
+  width: 350px;
+}
+
+table#serverlist th.enabled, table#serverlist td.enabled {
+  width: 200px;
+}
+
+table#serverlist th.image, table#serverlist td.image {
+  width: 300px;
+}

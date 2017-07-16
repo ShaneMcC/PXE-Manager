@@ -72,6 +72,9 @@
 
 					$displayEngine->setVar('pxedata', $te->renderString($image->getPXEData()));
 					$displayEngine->setVar('kickstart', $te->renderString($image->getScript()));
+					$displayEngine->setVar('postinstall', $te->renderString($image->getPostInstall()));
+
+					$displayEngine->setVar('validvars', $server->getValidVariables());
 				}
 
 				$displayEngine->display('servers/preview.tpl');
@@ -92,6 +95,13 @@
 					$image = $server->getBootableImage();
 					if ($image instanceof BootableImage) {
 						die($server->getDisplayEngine()->renderString($image->getScript()));
+					} else {
+						die();
+					}
+				} else if ($action == 'postinstall') {
+					$image = $server->getBootableImage();
+					if ($image instanceof BootableImage) {
+						die($server->getDisplayEngine()->renderString($image->getPostInstall()));
 					} else {
 						die();
 					}

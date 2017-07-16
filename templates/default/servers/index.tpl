@@ -18,7 +18,7 @@
 	</thead>
 	<tbody>
 		{% for server in servers %}
-		<tr>
+		<tr data-searchable-value="{{ server.name }}||{{ server.imagename }}">
 			<td class="server">
 				{{ server.name }}
 			</td>

@@ -6,6 +6,7 @@ class BootableImage extends DBObject {
 	                             'variables' => NULL,
 	                             'pxedata' => NULL,
 	                             'script' => NULL,
+	                             'postinstall' => NULL,
 	                            ];
 	protected $variables = [];
 	protected static $_json_fields = ['variables'];
@@ -49,6 +50,10 @@ class BootableImage extends DBObject {
 		return $this->setData('script', $value);
 	}
 
+	public function setPostInstall($value) {
+		return $this->setData('postinstall', $value);
+	}
+
 	public function getID() {
 		return $this->getData('id');
 	}
@@ -71,6 +76,10 @@ class BootableImage extends DBObject {
 
 	public function getScript() {
 		return $this->getData('script');
+	}
+
+	public function getPostInstall() {
+		return $this->getData('postinstall');
 	}
 
 	public function getServers() {
