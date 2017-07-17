@@ -108,4 +108,12 @@ class BootableImage extends DBObject {
 
 		return TRUE;
 	}
+
+	public function postSave($result) {
+		if (!$result) { return; }
+
+		foreach ($this->getServers() as $server) {
+			$server->generateConfig();
+		}
+	}
 }

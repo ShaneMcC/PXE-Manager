@@ -156,6 +156,10 @@ class Server extends DBObject {
 	public function postSave($result) {
 		if (!$result) { return; }
 
+		$this->generateConfig();
+	}
+
+	public function generateConfig() {
 		global $config;
 
 		$image = $this->getBootableImage();
