@@ -69,7 +69,8 @@ class Server extends DBObject {
 	}
 
 	public function getVariables() {
-		return $this->getData('variables');
+		$vars = $this->getData('variables');
+		return is_array($vars) ? $vars : [];
 	}
 
 	public function getVariable($name) {

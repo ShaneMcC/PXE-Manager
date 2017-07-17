@@ -32,11 +32,13 @@ class API {
 
 		if (isset($data['name'])) { $image->setName($data['name']); }
 
-		$image->setVariables([]);
 		if (isset($data['var'])) {
-			foreach ($data['var'] as $vardata) {
-				if (array_key_exists('delete', $vardata)) { continue; }
-				$image->setVariable($vardata['name'], $vardata['description'], isset($vardata['type']) ? $vardata['type'] : 'string');
+			$image->setVariables([]);
+			if (is_array($data['var'])) {
+				foreach ($data['var'] as $vardata) {
+					if (array_key_exists('delete', $vardata)) { continue; }
+					$image->setVariable($vardata['name'], $vardata['description'], isset($vardata['type']) ? $vardata['type'] : 'string');
+				}
 			}
 		}
 
@@ -86,10 +88,12 @@ class API {
 		if (isset($data['image'])) { $server->setImage($data['image']); }
 		if (isset($data['enabled'])) { $server->setEnabled($data['enabled']); }
 
-		$server->setVariables([]);
 		if (isset($data['var'])) {
-			foreach ($data['var'] as $k => $v) {
-				$server->setVariable($k, $v);
+			$server->setVariables([]);
+			if (is_array($data['var'])) {
+				foreach ($data['var'] as $k => $v) {
+					$server->setVariable($k, $v);
+				}
 			}
 		}
 
