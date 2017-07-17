@@ -74,6 +74,7 @@ var options = {};
 var options = {"variableTypes": {"ipv4": "IPv4 Address",
                                  "string": "Text String",
                                  "text": "Multi-Line Text Data",
+                                 "yesno": "Boolean Value",
                                 }
               };
 

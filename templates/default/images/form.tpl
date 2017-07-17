@@ -9,6 +9,7 @@
 {% set variableTypes = variableTypes | merge({"ipv4": "IPv4 Address"}) %}
 {% set variableTypes = variableTypes | merge({"string": "Text String"}) %}
 {% set variableTypes = variableTypes | merge({"text": "Multi-Line Text Data"}) %}
+{% set variableTypes = variableTypes | merge({"yesno": "Boolean Value"}) %}
 
 <table id="imageinfo" class="table table-striped table-bordered">
 	<tbody>

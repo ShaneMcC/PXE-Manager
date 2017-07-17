@@ -96,6 +96,8 @@ class Server extends DBObject {
 			foreach ($image->getVariables() as $v => $vd) {
 				if (array_key_exists($v, $myVars)) {
 					$validVars[$v] = $myVars[$v];
+
+					if ($vd['type'] == 'yesno') { $validVars[$v] = parseBool($validVars[$v]); }
 				}
 			}
 		}
@@ -115,7 +117,7 @@ class Server extends DBObject {
 
 		$twig = $de->getTwig();
 		$twig->addFunction(new Twig_Function('getVariable', function ($var, $default = '') use ($validVars) {
-			return array_key_exists($var, $validVars) ? $validVars[$var] : '';
+			return array_key_exists($var, $validVars) && $validVars[$var] !== "" ? $validVars[$var] : $default;
 		}));
 
 		$twig->addFunction(new Twig_Function('getScriptURL', function () use ($de) {

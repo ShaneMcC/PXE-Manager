@@ -14,7 +14,7 @@ class BootableImage extends DBObject {
 	protected static $_key = 'id';
 	protected static $_table = 'bootableimages';
 
-	protected static $_VARIABLE_TYPES = ['ipv4', 'string', 'text'];
+	protected static $_VARIABLE_TYPES = ['ipv4', 'string', 'text', 'yesno'];
 
 	public function __construct($db) {
 		parent::__construct($db);

@@ -6,7 +6,7 @@ The current variables and values for this server/image are:
 <ul>
 {% for k,v in validvars %}
 	<li>
-		<strong>{{ k }}</strong>: <code>{{ v }}</code>
+		<strong>{{ k }}</strong>: <code>{{ v | vardisplay }}</code>
 	</li>
 {% endfor %}
 </ul>

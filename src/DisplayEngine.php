@@ -53,6 +53,19 @@
 				return date('r', $input);
 			}));
 
+			$twig->addFilter(new Twig_Filter('vardisplay', function($input) {
+				if (is_string($input)) {
+					return '"' . $input . '"';
+				} else {
+					ob_start();
+					var_dump($input);
+					$dump = ob_get_contents();
+					ob_end_clean();
+
+					return $dump;
+				}
+			}));
+
 			$this->vars = ['sitename' => '', 'pagetitle' => ''];
 
 			$this->twig = $twig;
