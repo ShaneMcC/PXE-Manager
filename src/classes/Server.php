@@ -134,7 +134,7 @@ class Server extends DBObject {
 
 	public function getServiceHash() {
 		$hashData = $this->toArray();
-		$hashData['enabled'] = parseBool($hashData['enabled']);
+		unset($hashData['enabled']);
 
 		return base_convert(crc32(json_encode($hashData)), 10, 32) . '_' . base_convert(crc32(sha1(json_encode($hashData))), 10, 16);
 	}
