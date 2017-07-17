@@ -38,6 +38,7 @@
 			</td>
 			<td class="actions">
 				<a href="{{ url('/servers/' ~ server.id) }}" class="btn btn-success">View</a>
+				<a href="{{ url('/servers/' ~ server.id ~ '/preview') }}" class="btn btn-primary">Preview</a>
 			</td>
 		</tr>
 		{% endfor %}
