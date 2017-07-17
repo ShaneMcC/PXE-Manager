@@ -105,6 +105,13 @@
 					} else {
 						die();
 					}
+				} else if ($action == 'pxedata') {
+					$image = $server->getBootableImage();
+					if ($image instanceof BootableImage) {
+						die($server->getDisplayEngine()->renderString($image->getPXEData()));
+					} else {
+						die();
+					}
 				}
 			});
 
@@ -134,6 +141,18 @@
 
 			$router->post('/servers/([0-9]+)/edit.json', function($serverid) use ($router, $displayEngine, $api) {
 				$this->doCreateOrEdit($api, $displayEngine, $serverid, $_POST);
+			});
+
+			$router->get('/pxedata/([^/]+)', function($macaddr) use ($router, $displayEngine, $api) {
+				$server = $api->getServerFromMAC($macaddr);
+				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+
+				$image = $server->getBootableImage();
+				if ($image instanceof BootableImage) {
+					die($server->getDisplayEngine()->renderString($image->getPXEData()));
+				} else {
+					die();
+				}
 			});
 		}
 

@@ -23,7 +23,7 @@ class Server extends DBObject {
 	}
 
 	public function setMacAddr($value) {
-		return $this->setData('macaddr', $value);
+		return $this->setData('macaddr', strtolower($value));
 	}
 
 	public function setImage($value) {
@@ -184,8 +184,19 @@ class Server extends DBObject {
 			$contents[] = 'prompt 0';
 			$contents[] = '';
 			$contents[] = 'LABEL install';
-			foreach (explode("\n", $this->getDisplayEngine()->renderString($image->getPXEData())) as $line) {
+			$first = true;
+			$de = $this->getDisplayEngine();
+			$serviceURL = $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash());
+
+			foreach (explode("\n", $de->renderString($image->getPXEData())) as $line) {
+				if ($first && $line == "#!ipxe") {
+					$contents[] = '    KERNEL ipxe.lkrn';
+    				$contents[] = '    APPEND dhcp && chain --autofree ' . $serviceURL . '/pxedata';
+					break;
+				}
+
 				$contents[] = '    ' . $line;
+				$first = false;
 			}
 			$contents[] = '';
 

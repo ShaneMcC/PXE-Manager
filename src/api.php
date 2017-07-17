@@ -67,6 +67,15 @@ class API {
 		return $asArray ? $search->getRows() : $search->find();
 	}
 
+
+	public function getServerFromMAC($macaddr) {
+		$search = Server::getSearch($this->db);
+		$search->where('macaddr', strtolower($macaddr));
+		$result = $search->find();
+
+		return is_array($result) && !empty($result) ? $result[0] : null;
+	}
+
 	public function getServer($id) {
 		return Server::load($this->db, $id);
 	}
