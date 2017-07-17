@@ -161,7 +161,7 @@ class Server extends DBObject {
 		$image = $this->getBootableImage();
 
 		$macaddr = preg_replace('#[^0-9A-F]#i', '', strtolower($this->getMacAddr()));
-		$macaddr = join('-', str_split($mac, 2));
+		$macaddr = join('-', str_split($macaddr, 2));
 
 		$file = rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . $macaddr;
 
