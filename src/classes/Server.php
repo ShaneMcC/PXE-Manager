@@ -160,10 +160,13 @@ class Server extends DBObject {
 
 		$image = $this->getBootableImage();
 
-		$macaddr = preg_replace('#[^0-9A-F]#i', '', strtolower($this->getMacAddr()));
-		$macaddr = join('-', str_split($macaddr, 2));
+		$filename = $this->getMacAddr();
+		if (isValidMac($filename)) {
+			$filename = preg_replace('#[^0-9A-F]#i', '', strtolower($filename));
+			$filename = '01-' . join('-', str_split($filename, 2));
+		}
 
-		$file = rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . $macaddr;
+		$file = rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . $filename;
 
 		if ($this->getEnabled() && $image instanceof BootableImage) {
 			$contents = [];
