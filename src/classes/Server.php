@@ -159,7 +159,11 @@ class Server extends DBObject {
 		global $config;
 
 		$image = $this->getBootableImage();
-		$file = rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . preg_replace('#[^0-9A-F]#i', '', strtolower($this->getMacAddr())) . '.cfg';
+
+		$macaddr = preg_replace('#[^0-9A-F]#i', '', strtolower($this->getMacAddr()));
+		$macaddr = join('-', str_split($mac, 2));
+
+		$file = rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . $macaddr;
 
 		if ($this->getEnabled() && $image instanceof BootableImage) {
 			$contents = [];
