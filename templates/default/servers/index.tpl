@@ -26,7 +26,7 @@
 				{{ server.imagename }}
 			</td>
 			<td class="enabled">
-				{% if server.enabled %}
+				{% if server.enabled == 'true' %}
 					<span class="badge badge-success">
 						Yes
 					</span>
