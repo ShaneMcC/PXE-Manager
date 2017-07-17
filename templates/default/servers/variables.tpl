@@ -7,7 +7,7 @@
 
 				{% if vardata.type == 'yesno' %}
 					<td class="mono" data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] | yesno }}" data-badge-yes="success" data-badge-no="danger">
-						{% if server.enabled == 'true' %}
+						{% if server.variables[var] == 'true' %}
 							<span class="badge badge-success">Yes</span>
 						{% else %}
 							<span class="badge badge-danger">No</span>
