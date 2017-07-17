@@ -100,7 +100,7 @@ CREATE TABLE `servers` (
   CONSTRAINT `fk_image` FOREIGN KEY (`image`) REFERENCES `bootableimages`(`image`) ON DELETE SET NULL
 );
 
-CREATE UNIQUE INDEX `server_macaddr` ON `server`(`macaddr`);
+CREATE UNIQUE INDEX `servers_macaddr` ON `servers`(`macaddr`);
 DBQUERY
 );
 
