@@ -1,9 +1,12 @@
-{% if image %}
-<form method="post" id="imageform" action="{{ url("#{pathprepend}/images/#{image.id}/edit.json") }}">
-{% else %}
-<form method="post" id="imageform" action="{{ url("#{pathprepend}/images/create.json") }}">
+{% if hasPermission(['edit_images']) %}
+	{% if image %}
+		<form method="post" id="imageform" action="{{ url("#{pathprepend}/images/#{image.id}/edit.json") }}">
+	{% else %}
+		<form method="post" id="imageform" action="{{ url("#{pathprepend}/images/create.json") }}">
+	{% endif %}
+
+	<input type="hidden" name="csrftoken" value="{{csrftoken}}">
 {% endif %}
-<input type="hidden" name="csrftoken" value="{{csrftoken}}">
 
 {% set variableTypes = [] %}
 {% set variableTypes = variableTypes | merge({"ipv4": "IPv4 Address"}) %}
@@ -77,14 +80,23 @@
 
 <div class="row" id="formcontrols">
 	<div class="col">
-		<button type="button" data-action="editimage" class="btn btn-primary" role="button">Edit Image</button>
-		<button type="button" data-action="saveimage" class="btn btn-success hidden" role="button">Save Changes</button>
+		{% if hasPermission(['edit_images']) %}
+			<button type="button" data-action="editimage" class="btn btn-primary" role="button">Edit Image</button>
+			<button type="button" data-action="saveimage" class="btn btn-success hidden" role="button">Save Changes</button>
+		{% endif %}
+		<span class="customButtons">
+		{% block left_buttons %}{% endblock %}
+		</span>
 
-		{% if image.id %}
-			<div class="float-right">
+		<div class="float-right">
+			{% if image.id and hasPermission(['edit_images']) %}
 				<button type="button" class="btn btn-danger" role="button" data-toggle="modal" data-target="#deleteModal" data-backdrop="static">Delete Image</button>
-			</div>
-
+			{% endif %}
+			<span class="customButtons">
+			{% block right_buttons %}{% endblock %}
+			</span>
+		</div>
+		{% if image.id and hasPermission(['edit_images']) %}
 			{% embed 'blocks/modal_confirm.tpl' with {'id': 'deleteModal'} %}
 				{% block title %}
 					Delete Image

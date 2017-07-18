@@ -1,9 +1,11 @@
-{% if server %}
-<form method="post" id="serverform" data-server-id="{{ server.id }}" action="{{ url("#{pathprepend}/servers/#{server.id}/edit.json") }}">
-{% else %}
-<form method="post" id="serverform" action="{{ url("#{pathprepend}/servers/create.json") }}">
+{% if hasPermission(['edit_servers']) %}
+	{% if server %}
+		<form method="post" id="serverform" data-server-id="{{ server.id }}" action="{{ url("#{pathprepend}/servers/#{server.id}/edit.json") }}">
+	{% else %}
+		<form method="post" id="serverform" action="{{ url("#{pathprepend}/servers/create.json") }}">
+	{% endif %}
+	<input type="hidden" name="csrftoken" value="{{csrftoken}}">
 {% endif %}
-<input type="hidden" name="csrftoken" value="{{csrftoken}}">
 
 
 <table id="serverinfo" class="table table-striped table-bordered">
@@ -56,21 +58,23 @@
 
 <div class="row" id="formcontrols">
 	<div class="col">
-		<button type="button" data-action="editserver" class="btn btn-primary" role="button">Edit Server</button>
-		<button type="button" data-action="saveserver" class="btn btn-success hidden" role="button">Save Changes</button>
+		{% if hasPermission(['edit_servers']) %}
+			<button type="button" data-action="editserver" class="btn btn-primary" role="button">Edit Server</button>
+			<button type="button" data-action="saveserver" class="btn btn-success hidden" role="button">Save Changes</button>
+		{% endif %}
 		<span class="customButtons">
 		{% block left_buttons %}{% endblock %}
 		</span>
 
 		<div class="float-right">
-			{% if server.id %}
+			{% if server.id and hasPermission(['edit_servers']) %}
 				<button type="button" class="btn btn-danger" role="button" data-toggle="modal" data-target="#deleteModal" data-backdrop="static">Delete Server</button>
 			{% endif %}
 			<span class="customButtons">
 			{% block right_buttons %}{% endblock %}
 			</span>
 		</div>
-		{% if server.id %}
+		{% if server.id and hasPermission(['edit_servers']) %}
 			{% embed 'blocks/modal_confirm.tpl' with {'id': 'deleteModal'} %}
 				{% block title %}
 					Delete Server

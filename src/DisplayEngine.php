@@ -7,6 +7,7 @@
 		private $vars = [];
 		private $pageID = '';
 		private $customSidebar = FALSE;
+		private $menu;
 
 		public function __construct($siteconfig) {
 			$config = $siteconfig['templates'];
@@ -40,6 +41,7 @@
 
 			$twig->addFunction(new Twig_Function('url', function ($path) { return $this->getURL($path); }));
 			$twig->addFunction(new Twig_Function('getVar', function ($var) { return $this->getVar($var); }));
+			$twig->addFunction(new Twig_Function('hasPermission', function($permissions) { return $this->hasPermission($permissions); }));
 
 			$twig->addFunction(new Twig_Function('flash', function() { $this->displayFlash(); }));
 			$twig->addFunction(new Twig_Function('showSidebar', function() { $this->showSidebar(); }));
@@ -71,9 +73,20 @@
 			$this->twig = $twig;
 		}
 
+		public function hasPermission($permissions) {
+			global $authProvider;
+
+			return $authProvider->checkPermissions($permissions);
+		}
+
 		public function getTwig() {
 			return $this->twig;
 		}
+
+		public function getPageID() {
+			return $this->pageID;
+		}
+
 
 		public function setPageID($pageID) {
 			$this->pageID = $pageID;
@@ -206,12 +219,19 @@
 			$this->twig->display('sidebar_menu.tpl', $vars);
 		}
 
-		public function showHeaderMenu() {
-			$menu = [];
 
-			$menu[] = ['link' => $this->getURL('/'), 'title' => 'Home', 'active' => $this->pageID == 'home'];
-			$menu[] = ['link' => $this->getURL('/images'), 'title' => 'Images', 'active' => $this->pageID == 'images'];
-			$menu[] = ['link' => $this->getURL('/servers'), 'title' => 'Servers', 'active' => $this->pageID == 'servers'];
+		public function addMenuItem($item) {
+			$this->menu[] = $item;
+		}
+
+		public function showHeaderMenu() {
+			$menu = $this->menu;
+			foreach ($menu as &$m) {
+				if (is_callable($m['active'])) {
+					$m['active'] = call_user_func($m['active'], $this);
+				}
+			}
+
 
 			$this->twig->display('header_menu.tpl', ['menu' => $menu]);
 		}

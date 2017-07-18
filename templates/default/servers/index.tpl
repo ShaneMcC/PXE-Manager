@@ -2,10 +2,12 @@
 
 <input class="form-control" data-search-top="table#serverlist" value="" placeholder="Search..."><br>
 
-<div class="float-right">
-	<a href="{{ url('/servers/create') }}" class="btn btn-success">Add Server</a>
-</div>
-<br><br>
+{% if hasPermission(['edit_servers']) %}
+	<div class="float-right">
+		<a href="{{ url('/servers/create') }}" class="btn btn-success">Add Server</a>
+	</div>
+	<br><br>
+{% endif %}
 
 <table id="serverlist" class="table table-striped table-bordered">
 	<thead>

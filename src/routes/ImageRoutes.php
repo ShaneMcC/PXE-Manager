@@ -6,7 +6,13 @@
 			$displayEngine->display('images/unknown.tpl');
 		}
 
-		public function addRoutes($router, $displayEngine, $api) {
+		public function addUnauthedRoutes($router, $displayEngine, $api) {
+		}
+
+		public function addAuthedRoutes($authProvider, $router, $displayEngine, $api) {
+			if (!$authProvider->checkPermissions(['view_images'])) { return; }
+			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/images'), 'title' => 'Images', 'active' => function($de) { return $de->getPageID() == 'images'; }]);
+
 			$router->get('/images(.json)?', function($json = true) use ($displayEngine, $api) {
 				$displayEngine->setPageID('images')->setTitle('Bootable Images');
 
@@ -22,12 +28,6 @@
 				$displayEngine->display('images/index.tpl');
 			});
 
-			$router->get('/images/create', function() use ($displayEngine, $api) {
-				$displayEngine->setPageID('images')->setTitle('Bootable Images :: Create');
-
-				$displayEngine->display('images/create.tpl');
-			});
-
 			$router->get('/images/([0-9]+)', function($imageid) use ($router, $displayEngine, $api) {
 				$image = $api->getBootableImage($imageid);
 				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
@@ -39,35 +39,42 @@
 				$displayEngine->display('images/view.tpl');
 			});
 
-			$router->post('/images/create.json', function() use ($router, $displayEngine, $api) {
-				$this->doCreateOrEdit($api, $displayEngine, NULL, $_POST);
-			});
+			if ($authProvider->checkPermissions(['edit_images'])) {
+				$router->get('/images/create', function() use ($displayEngine, $api) {
+					$displayEngine->setPageID('images')->setTitle('Bootable Images :: Create');
 
+					$displayEngine->display('images/create.tpl');
+				});
 
-			$router->post('/images/([0-9]+)/edit.json', function($imageid) use ($router, $displayEngine, $api) {
-				$this->doCreateOrEdit($api, $displayEngine, $imageid, $_POST);
-			});
+				$router->post('/images/create.json', function() use ($router, $displayEngine, $api) {
+					$this->doCreateOrEdit($api, $displayEngine, NULL, $_POST);
+				});
 
-			$router->post('/images/([0-9]+)/delete', function($imageid) use ($router, $displayEngine, $api) {
-				$image = $api->getBootableImage($imageid);
-				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
+				$router->post('/images/([0-9]+)/edit.json', function($imageid) use ($router, $displayEngine, $api) {
+					$this->doCreateOrEdit($api, $displayEngine, $imageid, $_POST);
+				});
 
-				if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
-					$result = $image->delete();
-					if ($result) {
-						$displayEngine->flash('success', '', 'Image ' . $image->getName() . ' has been deleted.');
-						header('Location: ' . $displayEngine->getURL('/images'));
-						return;
+				$router->post('/images/([0-9]+)/delete', function($imageid) use ($router, $displayEngine, $api) {
+					$image = $api->getBootableImage($imageid);
+					if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
+
+					if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
+						$result = $image->delete();
+						if ($result) {
+							$displayEngine->flash('success', '', 'Image ' . $image->getName() . ' has been deleted.');
+							header('Location: ' . $displayEngine->getURL('/images'));
+							return;
+						} else {
+							$displayEngine->flash('error', '', 'There was an error deleting the image.');
+							header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
+							return;
+						}
 					} else {
-						$displayEngine->flash('error', '', 'There was an error deleting the image.');
 						header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
 						return;
 					}
-				} else {
-					header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
-					return;
-				}
-			});
+				});
+			}
 		}
 
 		function doCreateOrEdit($api, $displayEngine, $imageid, $data) {

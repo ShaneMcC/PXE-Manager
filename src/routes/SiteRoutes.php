@@ -1,7 +1,9 @@
 <?php
 	class SiteRoutes {
 
-		public function addRoutes($router, $displayEngine, $api) {
+		public function addUnauthedRoutes($router, $displayEngine, $api) {
+			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/'), 'title' => 'Home', 'active' => function($de) { return $de->getPageID() == 'home'; }]);
+
 			$router->get('/', function() use ($displayEngine) {
 				$displayEngine->setPageID('home')->setTitle('Home')->display('home.tpl');
 			});
@@ -21,5 +23,8 @@
 				header('HTTP/1.1 404 Not Found');
 				$displayEngine->setPageID('404')->setTitle('Error 404')->display('404.tpl');
 			});
+		}
+
+		public function addAuthedRoutes($authProvider, $router, $displayEngine, $api) {
 		}
 	}

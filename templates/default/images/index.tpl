@@ -2,10 +2,12 @@
 
 <input class="form-control" data-search-top="table#imagelist" value="" placeholder="Search..."><br>
 
-<div class="float-right">
-	<a href="{{ url('/images/create') }}" class="btn btn-success">Add Bootable Image</a>
-</div>
-<br><br>
+{% if hasPermission(['edit_images']) %}
+	<div class="float-right">
+		<a href="{{ url('/images/create') }}" class="btn btn-success">Add Bootable Image</a>
+	</div>
+	<br><br>
+{% endif %}
 
 <table id="imagelist" class="table table-striped table-bordered">
 	<thead>

@@ -22,11 +22,23 @@
 		session::set('csrftoken', genUUID());
 	}
 
+	// TODO: Config.
+	$authProvider = new NullAuthProvider();
+
+	// API to interact with backend
+	if (session::exists('logindata')) {
+		$authProvider->checkSession(session::get('logindata'));
+	}
+
 	$api = new API(DB::get());
 
-	(new SiteRoutes())->addRoutes($router, $displayEngine, $api);
-	(new ImageRoutes())->addRoutes($router, $displayEngine, $api);
-	(new ServerRoutes())->addRoutes($router, $displayEngine, $api);
+	foreach ([new SiteRoutes(), new ImageRoutes(), new ServerRoutes()] as $routeProvider) {
+		$routeProvider->addUnauthedRoutes($router, $displayEngine, $api);
+
+		if ($authProvider->isAuthenticated()) {
+			$routeProvider->addAuthedRoutes($authProvider, $router, $displayEngine, $api);
+		}
+	}
 
 	// Check CSRF Tokens.
 	$router->before('POST', '.*', function() {
