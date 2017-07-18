@@ -3,12 +3,17 @@
 class PasswordAuthProvider extends AuthProvider implements RouteProvider {
 	private $config;
 	private $isAuthenticated = false;
-	private $passtype = 'none';
+	private $permissions = [];
 
 	public function checkSession($sessionData) {
-		if (isset($sessionData['type']) && isset($sessionData['checkPass']) && isset($sessionData['passtype']) && $sessionData['type'] == __CLASS__) {
-			$this->isAuthenticated = $sessionData['checkPass'] == sha1($this->config['authProvider'][$sessionData['passtype']]);
-			$this->passtype = $sessionData['passtype'];
+		if (isset($sessionData['type']) && isset($sessionData['checkPass']) && $sessionData['type'] == __CLASS__) {
+			foreach ($this->config['PasswordAuthProvider']['passwords'] as $password => $permissions) {
+				if ($sessionData['checkPass'] == sha1($password)) {
+					$this->isAuthenticated = true;
+					$this->permissions = $permissions;
+					break;
+				}
+			}
 		}
 	}
 
@@ -18,17 +23,23 @@ class PasswordAuthProvider extends AuthProvider implements RouteProvider {
 
 	public function getPermissions() {
 		$permissions = [];
-		foreach (array_keys(AuthProvider::$VALID_PERMISSIONS) as $p) {
-			// Edit permissions require authentication
-			// Otherwise, allow read-only if $config['authProvider']['allowread'] is not false
-			if ($this->isAuthenticated() && $this->passtype == 'password') {
-				$permissions[$p] = true;
-			} else if ($this->isAuthenticated() && $this->passtype == 'readonlypassword') {
-				$permissions[$p] = startsWith($p, 'view_');
-			} else if (startsWith($p, 'edit_')) {
-				$permissions[$p] = false;
-			} else {
-				$permissions[$p] = isset($this->config['authProvider']['allowread']) ? $this->config['authProvider']['allowread'] : true;
+
+		// If not authenticated, use default permissions, else use
+		// permissions from authentication.
+		if ($this->isAuthenticated()) {
+			$allowedPermissions = $this->permissions;
+		} else {
+			$allowedPermissions = isset($this->config['PasswordAuthProvider']['default']) ? $this->config['PasswordAuthProvider']['default'] : [];
+		}
+
+		if (is_array($allowedPermissions)) {
+			foreach (array_keys(AuthProvider::$VALID_PERMISSIONS) as $p) {
+			// Check if permission matches a permission in the array.
+				foreach ($allowedPermissions as $permission) {
+					if (preg_match('#' . str_replace('#', '\\#', $permission) . '#', $p)) {
+						$permissions[$p] = true;
+					}
+				}
 			}
 		}
 
@@ -72,11 +83,11 @@ class PasswordAuthProvider extends AuthProvider implements RouteProvider {
 			$router->post('/login', function() use ($displayEngine, $api) {
 				$pass = $_POST['pass'];
 
-				foreach (['password', 'readonlypassword'] as $passtype) {
-					if (isset($this->config['authProvider'][$passtype]) && $pass == $this->config['authProvider'][$passtype]) {
+				foreach ($this->config['PasswordAuthProvider']['passwords'] as $password => $permissions) {
+					if ($pass == $password) {
 						$displayEngine->flash('success', 'Success!', 'You are now logged in.');
 
-						session::set('logindata', ['type' => __CLASS__, 'checkPass' => sha1($pass), 'passtype' => $passtype]);
+						session::set('logindata', ['type' => __CLASS__, 'checkPass' => sha1($pass)]);
 
 						if (session::exists('wantedPage')) {
 							header('Location: ' . $displayEngine->getURL(session::get('wantedPage')));

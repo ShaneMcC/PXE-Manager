@@ -29,12 +29,28 @@
 	// authentication. This includes "Service" urls and /pxedata/<MAC>
 	$config['authProvider']['name'] = 'FullAuthProvider';
 
-	// Example:
+	// Alternative providers:
+	//
+	// - PasswordAuthProvider - Grants permissions based on a given password,
 	//
 	// $config['authProvider']['name'] = 'PasswordAuthProvider';
-	// $config['authProvider']['password'] = 'admin123';
-	// $config['authProvider']['readonlypassword'] = 'read';
-	// $config['authProvider']['allowread'] = false;
+
+	// Default permissions for anyone not authenticated?
+	// By default we allow view access.
+	$config['PasswordAuthProvider']['default'] = ['view_(servers|images)'];
+
+	// If using PasswordAuthProvider, what passwords are valid?
+	// This is an array of password => [<permissions>] where <permissions>
+	// are regex entries, any permission name that matches an entry is granted.
+	//
+	// As examples, "admin123" can do anything, but "user123" can only edit
+	// servers but not images.
+	//
+	// These permissions are used *instead* of the default not in addition to
+	// so must include all the permissions you want the password to grant.
+	$config['PasswordAuthProvider']['passwords'] = ['admin123' => ['.*'],
+	                                                'user123' => ['view_.*', '.*_servers']
+	                                               ];
 
 	if (file_exists(dirname(__FILE__) . '/config.local.php')) {
 		include(dirname(__FILE__) . '/config.local.php');
