@@ -25,13 +25,16 @@
 	$config['tftppath'] = getEnvOrDefault('TFTPPATH', '/tftpboot/');
 
 	// Name of auth provider to use.
+	// Note: URLs required for main functionality are always available without
+	// authentication. This includes "Service" urls and /pxedata/<MAC>
 	$config['authProvider']['name'] = 'FullAuthProvider';
 
 	// Example:
 	//
 	// $config['authProvider']['name'] = 'PasswordAuthProvider';
 	// $config['authProvider']['password'] = 'admin123';
-
+	// $config['authProvider']['readonlypassword'] = 'read';
+	// $config['authProvider']['allowread'] = false;
 
 	if (file_exists(dirname(__FILE__) . '/config.local.php')) {
 		include(dirname(__FILE__) . '/config.local.php');
