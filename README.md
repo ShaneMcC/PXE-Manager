@@ -6,11 +6,9 @@ The app allows you to create "Bootable Images" (Pre-defined Templates that defin
 
 Bootable Images define a set of variables that can be specified when setting a server to boot from the image.
 
-Creating a server that has a bootable image will create the appropriate file in `/tftpboot/pxelinux.cfg/` to cause the server to boot the template.
+Creating a server that has a bootable image will create the appropriate file in `/var/lib/tftpboot/pxelinux.cfg/` to cause the server to boot the template. ipxe is supported by chainloading it from pxelinux first.
 
-With the exception of the dynamic files/urls created by the web app, all other files (eg `vmlinuz` and `initrd` files) must already exist on the server within the `/tftpboot/` directory.
-
-Currently all access is unauthenticated. This will change in future.
+With the exception of the dynamic files/urls created by the web app, all other files (eg `vmlinuz` and `initrd` files) must already exist on the server within the `/var/lib/tftpboot/` directory and must be added manually separate to this application.
 
 ## Deploying
 
