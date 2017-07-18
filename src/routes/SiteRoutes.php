@@ -1,5 +1,5 @@
 <?php
-	class SiteRoutes {
+	class SiteRoutes implements RouteProvider {
 
 		public function addUnauthedRoutes($router, $displayEngine, $api) {
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/'), 'title' => 'Home', 'active' => function($de) { return $de->getPageID() == 'home'; }]);

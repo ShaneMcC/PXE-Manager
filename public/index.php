@@ -17,22 +17,32 @@
 		ini_set('session.save_handler', 'memcached');
 		ini_set('session.save_path', $config['memcached']);
 	}
+
+	// API to interact with backend
+	$api = new API(DB::get());
+
+	// Session/Authentication
 	session::init();
 	if (!session::exists('csrftoken')) {
 		session::set('csrftoken', genUUID());
 	}
 
-	// TODO: Config.
-	$authProvider = new NullAuthProvider();
-
-	// API to interact with backend
+	$authProvider = getAuthProvider();
 	if (session::exists('logindata')) {
 		$authProvider->checkSession(session::get('logindata'));
 	}
 
-	$api = new API(DB::get());
+	// Routes
+	$routeProviders = [];
+	$routeProviders[] = new SiteRoutes();
+	$routeProviders[] = new ImageRoutes();
+	$routeProviders[] = new ServerRoutes();
 
-	foreach ([new SiteRoutes(), new ImageRoutes(), new ServerRoutes()] as $routeProvider) {
+	if ($authProvider instanceof RouteProvider) {
+		$routeProviders[] = $authProvider;
+	}
+
+	foreach ($routeProviders as $routeProvider) {
 		$routeProvider->addUnauthedRoutes($router, $displayEngine, $api);
 
 		if ($authProvider->isAuthenticated()) {

@@ -61,4 +61,64 @@ class DB {
 	public function getLastError() {
 		return $this->pdo->errorInfo();
 	}
+
+	function runChanges($changer) {
+		$changes = $changer->getChanges();
+		$versionField = $changer->getVersionField();
+
+		$currentVersion = (int)$this->getMetaData($versionField, 0);
+
+		echo 'Current Version: ', $currentVersion, "\n";
+
+		foreach ($changes as $version => $change) {
+			if ($version <= $currentVersion) { continue; }
+			echo 'Updating to version ', $version, ': ';
+
+			if ($change->run($this->getPDO())) {
+				$this->setMetaData($versionField, $version);
+				$currentVersion = $version;
+			} else {
+				echo "\n", 'Error updating to version ', $version, ': ', $change->getLastError(), "\n";
+				return $currentVersion;
+			}
+		}
+
+		return $currentVersion;
+	}
+}
+
+class DBChange {
+	protected $query = '';
+	protected $result = null;
+
+	public function __construct($query) {
+		$this->query = $query;
+	}
+
+	public function run($pdo) {
+		if ($pdo->exec($this->query) !== FALSE) {
+			$this->result = TRUE;
+			echo 'success', "\n";
+		} else {
+			$ei = $pdo->errorInfo();
+			$this->result = $ei[2];
+			echo 'failed', "\n";
+		}
+
+		return $this->getLastResult();
+	}
+
+	public function getLastResult() {
+		return ($this->result === TRUE);
+	}
+
+	public function getLastError() {
+		return ($this->result === TRUE) ? NULL : $this->result;
+	}
+}
+
+
+interface DBChanger {
+	public function getChanges();
+	public function getVersionField();
 }

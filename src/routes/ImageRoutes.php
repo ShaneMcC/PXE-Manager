@@ -1,5 +1,5 @@
 <?php
-	class ImageRoutes {
+	class ImageRoutes implements RouteProvider {
 
 		public function showUnknown($displayEngine) {
 			$displayEngine->setPageID('images')->setTitle('Bootable Images :: Unknown');

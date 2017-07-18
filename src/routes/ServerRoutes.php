@@ -1,5 +1,5 @@
 <?php
-	class ServerRoutes {
+	class ServerRoutes implements RouteProvider {
 
 		public function showUnknown($displayEngine) {
 			$displayEngine->setPageID('servers')->setTitle('Servers :: Unknown');

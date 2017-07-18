@@ -24,6 +24,9 @@
 	// Where to output per-server pxe configs.
 	$config['tftppath'] = getEnvOrDefault('TFTPPATH', '/tftpboot/');
 
+	// Name of auth provider to use.
+	$config['authProvider']['name'] = 'NullAuthProvider';
+
 	if (file_exists(dirname(__FILE__) . '/config.local.php')) {
 		include(dirname(__FILE__) . '/config.local.php');
 	}

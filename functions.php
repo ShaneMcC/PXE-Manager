@@ -18,6 +18,29 @@
  	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	DB::get()->setPDO($pdo);
 
+	function getAuthProvider() {
+		global $__AUTHPROVIDER, $config;
+
+		if ($__AUTHPROVIDER === null) {
+			if (isset($config['authProvider']['name']) && class_exists($config['authProvider']['name'])) {
+				try {
+					$provider = new $config['authProvider']['name']();
+					if ($provider instanceof AuthProvider) {
+						$__AUTHPROVIDER = $provider;
+					}
+				} catch (Exception $ex) {
+					$__AUTHPROVIDER = null;
+				}
+			}
+
+			if ($__AUTHPROVIDER === null) {
+				$__AUTHPROVIDER = new NullAuthProvider();
+			}
+		}
+
+		return $__AUTHPROVIDER;
+	}
+
 	function recursiveFindFiles($dir) {
 		if (!file_exists($dir)) { return; }
 

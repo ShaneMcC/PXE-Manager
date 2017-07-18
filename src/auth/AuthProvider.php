@@ -6,9 +6,6 @@ abstract class AuthProvider {
 
 	                                       'view_servers' => 'View Servers',
 	                                       'edit_servers' => 'Edit Servers',
-
-	                                       'view_users' => 'View Users',
-	                                       'edit_users' => 'Edit Users',
 	                                      ];
 
 	abstract public function checkSession($sessionData);
