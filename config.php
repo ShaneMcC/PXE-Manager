@@ -22,7 +22,7 @@
 	$config['securecookies'] = getEnvOrDefault('SECURE_COOKIES', false);
 
 	// Where to output per-server pxe configs.
-	$config['tftppath'] = getEnvOrDefault('TFTPPATH', '/tftpboot/');
+	$config['tftppath'] = getEnvOrDefault('TFTPPATH', '/var/lib/tftpboot/');
 
 	// Name of auth provider to use.
 	// Note: URLs required for main functionality are always available without
