@@ -23,8 +23,20 @@
 			});
 
 			$router->set404(function() use ($displayEngine, $router) {
-				header('HTTP/1.1 404 Not Found');
-				$displayEngine->setPageID('404')->setTitle('Error 404')->display('404.tpl');
+				$wanted = $_SERVER['REQUEST_URI'];
+				$wanted = preg_replace('#^' . preg_quote($displayEngine->getBasePath()) . '#', '/', $wanted);
+				$wanted = preg_replace('#^/+#', '/', $wanted);
+
+				// Remember wanted pages for post-login if we have
+				// an auth provider that cares.
+				if (!preg_match('#^/?(assets)/#', $wanted) && $wanted != 'favicon.ico') {
+					session::set('wantedPage', $wanted);
+				}
+
+				if (!getAuthProvider()->handle404($router, $displayEngine, $wanted)) {
+					header('HTTP/1.1 404 Not Found');
+					$displayEngine->setPageID('404')->setTitle('Error 404')->display('404.tpl');
+				}
 			});
 		}
 	}

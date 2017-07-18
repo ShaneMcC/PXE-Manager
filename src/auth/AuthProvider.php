@@ -30,4 +30,6 @@ abstract class AuthProvider {
 
 		return true;
 	}
+
+	public function handle404($router, $displayEngine, $wanted) { return false; }
 }

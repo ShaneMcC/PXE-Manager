@@ -97,7 +97,12 @@ class PasswordAuthProvider extends AuthProvider implements RouteProvider {
 		}
 	}
 
-	public function addAuthedRoutes($authProvider, $router, $displayEngine, $api) {
+	public function handle404($router, $displayEngine, $wanted) {
+		if (!$this->isAuthenticated()) {
+			header('Location: ' . $displayEngine->getURL('/login'));
+			return true;
+		}
 
+		return false;
 	}
 }
