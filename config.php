@@ -25,7 +25,13 @@
 	$config['tftppath'] = getEnvOrDefault('TFTPPATH', '/tftpboot/');
 
 	// Name of auth provider to use.
-	$config['authProvider']['name'] = 'NullAuthProvider';
+	$config['authProvider']['name'] = 'FullAuthProvider';
+
+	// Example:
+	//
+	// $config['authProvider']['name'] = 'PasswordAuthProvider';
+	// $config['authProvider']['password'] = 'admin123';
+
 
 	if (file_exists(dirname(__FILE__) . '/config.local.php')) {
 		include(dirname(__FILE__) . '/config.local.php');

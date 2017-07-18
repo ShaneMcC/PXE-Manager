@@ -13,6 +13,13 @@
 			$config = $siteconfig['templates'];
 
 			$loader = new Twig_Loader_Filesystem();
+			$this->twig = $twig = new Twig_Environment($loader, array(
+				'cache' => $config['cache'],
+				'auto_reload' => true,
+				'debug' => true,
+				'autoescape' => 'html',
+			));
+
 			$themes = [];
 			if (isset($config['theme'])) {
 				$themes = is_array($config['theme']) ? $config['theme'] : [$config['theme']];
@@ -20,18 +27,9 @@
 			foreach (array_unique(array_merge($themes, ['default'])) as $theme) {
 				$path = $config['dir'] . '/' . $theme;
 				if (file_exists($path)) {
-					$loader->addPath($path, $theme);
-					$loader->addPath($path, '__main__');
-					$this->directories[] = $path;
+					$this->addTemplateDirectory($path, $theme);
 				}
 			}
-
-			$twig = new Twig_Environment($loader, array(
-				'cache' => $config['cache'],
-				'auto_reload' => true,
-				'debug' => true,
-				'autoescape' => 'html',
-			));
 
 			$twig->addExtension(new Twig_Extension_Debug());
 
@@ -45,7 +43,7 @@
 
 			$twig->addFunction(new Twig_Function('flash', function() { $this->displayFlash(); }));
 			$twig->addFunction(new Twig_Function('showSidebar', function() { $this->showSidebar(); }));
-			$twig->addFunction(new Twig_Function('showHeaderMenu', function() { $this->showHeaderMenu(); }));
+			$twig->addFunction(new Twig_Function('showHeaderMenu', function($menuName = 'left') { $this->showHeaderMenu($menuName); }));
 
 			$twig->addFilter(new Twig_Filter('yesno', function($input) {
 				return parseBool($input) ? "Yes" : "No";
@@ -69,14 +67,20 @@
 			}));
 
 			$this->vars = ['sitename' => '', 'pagetitle' => ''];
+		}
 
-			$this->twig = $twig;
+		public function addTemplateDirectory($path, $namespace = '__main__') {
+			if ($namespace !== '__main__') {
+				$this->getTwig()->getLoader()->addPath($path, $namespace);
+			}
+
+			$this->getTwig()->getLoader()->addPath($path, '__main__');
+
+			$this->directories[] = $path;
 		}
 
 		public function hasPermission($permissions) {
-			global $authProvider;
-
-			return $authProvider->checkPermissions($permissions);
+			return getAuthProvider()->checkPermissions($permissions);
 		}
 
 		public function getTwig() {
@@ -220,18 +224,24 @@
 		}
 
 
-		public function addMenuItem($item) {
-			$this->menu[] = $item;
-		}
-
-		public function showHeaderMenu() {
-			$menu = $this->menu;
-			foreach ($menu as &$m) {
-				if (is_callable($m['active'])) {
-					$m['active'] = call_user_func($m['active'], $this);
-				}
+		public function addMenuItem($item, $menuName = 'left') {
+			if (!isset($this->menu[$menuName])) {
+				$this->menu[$menuName] = [];
 			}
 
+			$this->menu[$menuName][] = $item;
+		}
+
+		public function showHeaderMenu($menuName = 'left') {
+			$menu = $this->menu[$menuName];
+
+			if (is_array($menu)) {
+				foreach ($menu as &$m) {
+					if (is_callable($m['active'])) {
+						$m['active'] = call_user_func($m['active'], $this);
+					}
+				}
+			}
 
 			$this->twig->display('header_menu.tpl', ['menu' => $menu]);
 		}

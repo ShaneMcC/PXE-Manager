@@ -6,15 +6,10 @@ class NullAuthProvider extends AuthProvider {
 	}
 
 	public function isAuthenticated() {
-		return true;
+		return false;
 	}
 
 	public function getPermissions() {
-		$permissions = [];
-		foreach (array_keys(AuthProvider::$VALID_PERMISSIONS) as $p) {
-			$permissions[$p] = true;
-		}
-
-		return $permissions;
+		return [];
 	}
 }

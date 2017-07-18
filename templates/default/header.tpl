@@ -28,6 +28,10 @@
 
       <div class="collapse navbar-collapse" id="navbar">
       	{{ showHeaderMenu() }}
+
+        <div class="navbar-nav">
+          {{ showHeaderMenu('right') }}
+        </div>
       </div>
     </nav>
     {% endblock %}

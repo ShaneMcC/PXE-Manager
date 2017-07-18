@@ -1,7 +1,10 @@
 <?php
 	class SiteRoutes implements RouteProvider {
 
-		public function addUnauthedRoutes($router, $displayEngine, $api) {
+		public function init($config, $router, $displayEngine) {
+		}
+
+		public function addRoutes($authProvider, $router, $displayEngine, $api) {
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/'), 'title' => 'Home', 'active' => function($de) { return $de->getPageID() == 'home'; }]);
 
 			$router->get('/', function() use ($displayEngine) {
@@ -23,8 +26,5 @@
 				header('HTTP/1.1 404 Not Found');
 				$displayEngine->setPageID('404')->setTitle('Error 404')->display('404.tpl');
 			});
-		}
-
-		public function addAuthedRoutes($authProvider, $router, $displayEngine, $api) {
 		}
 	}

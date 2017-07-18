@@ -6,7 +6,10 @@
 			$displayEngine->display('servers/unknown.tpl');
 		}
 
-		public function addUnauthedRoutes($router, $displayEngine, $api) {
+		public function init($config, $router, $displayEngine) {
+		}
+
+		public function addRoutes($authProvider, $router, $displayEngine, $api) {
 			$router->get('/servers/([0-9]+)/service/([^/]+)/([^/]+)', function($serverid, $servicehash, $action) use ($router, $displayEngine, $api) {
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
@@ -53,9 +56,7 @@
 					die();
 				}
 			});
-		}
 
-		public function addAuthedRoutes($authProvider, $router, $displayEngine, $api) {
 			if (!$authProvider->checkPermissions(['view_servers'])) { return; }
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/servers'), 'title' => 'Servers', 'active' => function($de) { return $de->getPageID() == 'servers'; }]);
 

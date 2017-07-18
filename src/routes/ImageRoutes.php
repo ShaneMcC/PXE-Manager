@@ -6,10 +6,10 @@
 			$displayEngine->display('images/unknown.tpl');
 		}
 
-		public function addUnauthedRoutes($router, $displayEngine, $api) {
+		public function init($config, $router, $displayEngine) {
 		}
 
-		public function addAuthedRoutes($authProvider, $router, $displayEngine, $api) {
+		public function addRoutes($authProvider, $router, $displayEngine, $api) {
 			if (!$authProvider->checkPermissions(['view_images'])) { return; }
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/images'), 'title' => 'Images', 'active' => function($de) { return $de->getPageID() == 'images'; }]);
 

@@ -27,27 +27,27 @@
 		session::set('csrftoken', genUUID());
 	}
 
-	$authProvider = getAuthProvider();
-	if (session::exists('logindata')) {
-		$authProvider->checkSession(session::get('logindata'));
-	}
-
 	// Routes
 	$routeProviders = [];
 	$routeProviders[] = new SiteRoutes();
 	$routeProviders[] = new ImageRoutes();
 	$routeProviders[] = new ServerRoutes();
 
-	if ($authProvider instanceof RouteProvider) {
-		$routeProviders[] = $authProvider;
+	if (getAuthProvider() instanceof RouteProvider) {
+		$routeProviders[] = getAuthProvider();
 	}
 
 	foreach ($routeProviders as $routeProvider) {
-		$routeProvider->addUnauthedRoutes($router, $displayEngine, $api);
+		$routeProvider->init($config, $router, $displayEngine);
+	}
 
-		if ($authProvider->isAuthenticated()) {
-			$routeProvider->addAuthedRoutes($authProvider, $router, $displayEngine, $api);
-		}
+	// Check login data
+	if (session::exists('logindata')) {
+		getAuthProvider()->checkSession(session::get('logindata'));
+	}
+
+	foreach ($routeProviders as $routeProvider) {
+		$routeProvider->addRoutes(getAuthProvider(), $router, $displayEngine, $api);
 	}
 
 	// Check CSRF Tokens.

@@ -22,18 +22,23 @@
 		global $__AUTHPROVIDER, $config;
 
 		if ($__AUTHPROVIDER === null) {
-			if (isset($config['authProvider']['name']) && class_exists($config['authProvider']['name'])) {
-				try {
-					$provider = new $config['authProvider']['name']();
-					if ($provider instanceof AuthProvider) {
-						$__AUTHPROVIDER = $provider;
-					}
-				} catch (Exception $ex) {
-					$__AUTHPROVIDER = null;
+			if (isset($config['authProvider']['name'])) {
+				if (class_exists($config['authProvider']['name'])) {
+					try {
+						$provider = new $config['authProvider']['name']();
+						if ($provider instanceof AuthProvider) {
+							$__AUTHPROVIDER = $provider;
+						}
+					} catch (Exception $ex) { }
 				}
+			} else {
+				// Use full-auth provider if no specific provider has been
+				// requested.
+				$__AUTHPROVIDER = new FullAuthProvider();
 			}
 
 			if ($__AUTHPROVIDER === null) {
+				// If we didn't get a valid provider, use the NullAuthProvider
 				$__AUTHPROVIDER = new NullAuthProvider();
 			}
 		}
