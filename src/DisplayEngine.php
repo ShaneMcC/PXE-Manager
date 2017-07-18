@@ -233,11 +233,11 @@
 		}
 
 		public function showHeaderMenu($menuName = 'left') {
-			$menu = $this->menu[$menuName];
+			$menu = isset($this->menu[$menuName]) ? $this->menu[$menuName] : [];
 
 			if (is_array($menu)) {
 				foreach ($menu as &$m) {
-					if (is_callable($m['active'])) {
+					if (isset($m['active']) && is_callable($m['active'])) {
 						$m['active'] = call_user_func($m['active'], $this);
 					}
 				}
