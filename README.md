@@ -12,23 +12,13 @@ With the exception of the dynamic files/urls created by the web app, all other f
 
 Currently all access is unauthenticated. This will change in future.
 
-## Deploying:
+## Deploying
 
-Requires PHP 7.1 or later.
+See the [Install Guide](https://github.com/ShaneMcC/PXE-Manager/wiki/Install-Guide) for information on how to deploy pxe-mananger.
 
- - Clone the repo
- - Run `composer install` from within the checkout
- - Set any custom settings within `config.local.php`
- - Create the `template_c` directory and sqlite db file and make them writable by the webserver user
- - Ensure the webserver user can write to `/tftpboot/pxelinux.cfg/`
- - run `php admin/init.php` to create/update the database schema
- - Point apache at the ./public directory
+## Updating
 
-## Updating:
-
- - `git pull` from within the repo checkout
- - Run `composer install`
- - run `php admin/init.php` to update the database schema (this will kepe any current database entries)
+You can update pxe-manager by pulling an updated copy of the repo (`git pull`) and then re-running `composer install` and `php admin/init.php` (this will not overwrite your database, it will just apply any schema changes required.)
 
 ## Pull Requests
 Pull requests are appreciated and welcome.
