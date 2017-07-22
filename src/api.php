@@ -67,7 +67,7 @@ class API {
 		$search = Server::getSearch($this->db);
 
 		if ($asArray) {
-			$search->join('bootableimages', '`bootableimages`.`id` = `servers`.`image`');
+			$search->join('bootableimages', '`bootableimages`.`id` = `servers`.`image`', 'LEFT');
 			$search->select('bootableimages', 'name', 'imagename');
 		}
 

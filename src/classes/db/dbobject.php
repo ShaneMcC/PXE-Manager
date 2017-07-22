@@ -281,6 +281,7 @@ abstract class DBObject implements Serializable, JsonSerializable {
 	 */
 	public function delete() {
 		if (!$this->isKnown()) { return FALSE; }
+		$this->preDelete();
 		$query = sprintf('DELETE FROM %s WHERE `%s` = :key', static::$_table, static::$_key);
 		$statement = $this->myDB->getPDO()->prepare($query);
 		$params[':key'] = $this->getData(static::$_key);
@@ -288,7 +289,7 @@ abstract class DBObject implements Serializable, JsonSerializable {
 		if (!$result) {
 			$this->lastError = $statement->errorInfo();
 		}
-
+		$this->postDelete($result);
 		return $result;
 	}
 
@@ -309,6 +310,12 @@ abstract class DBObject implements Serializable, JsonSerializable {
 
 	/** Hook for after the object is saved to the database. */
 	public function postSave($result) { }
+
+	/** Hook for before the object is deleted from the database. */
+	public function preDelete() { }
+
+	/** Hook for after the object is deleted from the database. */
+	public function postDelete($result) { }
 
 	/**
 	 * Serialise this object.

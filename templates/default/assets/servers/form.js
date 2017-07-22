@@ -41,6 +41,7 @@ $(function() {
 		} else if ($(this).data('action') == "cancel") {
 			$('#formcontrols button[data-action="saveserver"]').addClass('hidden');
 			cancelEdit($('table#serverinfo td[data-name]'));
+			getCurrentVariables();
 
 			$(this).data('action', 'editserver');
 			$(this).html('Edit Server');
@@ -189,21 +190,25 @@ function cancelEdit(element) {
 	$(element).each(function (index) {
 		var field = $(this);
 		var fieldType = field.data('type');
+		var fieldName = field.data('name');
+		var fieldValue = field.data('value')
 
 		if (fieldType == 'textfield') {
-			field.html('<pre>' + escapeHtml(field.data('value')) + '</pre>');
+			field.html('<pre>' + escapeHtml(fieldValue) + '</pre>');
 		} else if (fieldType == 'yesno') {
 
 			var badgeYes = field.data('badge-yes');
 			var badgeNo = field.data('badge-no');
 
 			if (field.data('value') == "Yes") {
-				field.html('<span class="badge badge-' + badgeYes + '">' + escapeHtml(field.data('value')) + '</span>');
+				field.html('<span class="badge badge-' + badgeYes + '">' + escapeHtml(fieldValue) + '</span>');
 			} else {
-				field.html('<span class="badge badge-' + badgeNo + '">' + escapeHtml(field.data('value')) + '</span>');
+				field.html('<span class="badge badge-' + badgeNo + '">' + escapeHtml(fieldValue) + '</span>');
 			}
+		} else if (fieldName == 'image' && fieldValue == '') {
+			field.html('<em>No Image</em>');
 		} else {
-			field.html(escapeHtml(field.data('value')));
+			field.html(escapeHtml(fieldValue));
 		}
 	});
 }

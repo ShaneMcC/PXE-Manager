@@ -108,11 +108,11 @@
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
 
+				$displayEngine->setVar('server', $server->toArray());
+				$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName() . ' :: Preview');
+
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
-					$displayEngine->setVar('server', $server->toArray());
-					$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName() . ' :: Preview');
-
 					$te = $server->getDisplayEngine();
 
 					$displayEngine->setVar('pxedata', $te->renderString($image->getPXEData()));

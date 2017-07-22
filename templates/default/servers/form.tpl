@@ -44,8 +44,8 @@
 
 		<tr>
 			<th>Enabled</th>
-			<td class="mono" data-type="yesno" data-name="enabled" data-badge-yes="success" data-badge-no="danger" data-value="{{ server.enabled | yesno }}">
-				{% if server.enabled == 'true' %}
+			<td class="mono" data-type="yesno" data-name="enabled" data-badge-yes="success" data-badge-no="danger" data-value="{{ (image and server.enabled) | yesno }}">
+				{% if image and server.enabled == 'true' %}
 					<span class="badge badge-success">Yes</span>
 				{% else %}
 					<span class="badge badge-danger">No</span>

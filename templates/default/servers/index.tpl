@@ -25,10 +25,14 @@
 				{{ server.name }}
 			</td>
 			<td class="image">
-				{{ server.imagename }}
+				{% if server.imagename %}
+					{{ server.imagename }}
+				{% else %}
+					<em>No Image</em>
+				{% endif %}
 			</td>
 			<td class="enabled">
-				{% if server.enabled == 'true' %}
+				{% if server.imagename and server.enabled == 'true' %}
 					<span class="badge badge-success">
 						Yes
 					</span>

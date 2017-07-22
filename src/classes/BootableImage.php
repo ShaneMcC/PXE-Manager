@@ -16,6 +16,9 @@ class BootableImage extends DBObject {
 	protected static $_VARIABLE_TYPES = ['ipv4', 'ipv6', 'ip', 'integer', 'string', 'text', 'yesno', 'selectoption'];
 	protected static $_VARIABLE_HASDATA = ['string', 'selectoption'];
 
+	// Used to update servers after we are deleted.
+	protected $myServers = [];
+
 	public function __construct($db) {
 		parent::__construct($db);
 	}
@@ -105,14 +108,19 @@ class BootableImage extends DBObject {
 			}
 		}
 
-		foreach ($this->getData('variables') as $var => $vardata) {
-			if (!in_array($vardata['type'], self::$_VARIABLE_TYPES)) {
-				throw new ValidationFailed('Unknown variable type "'. $vardata['type'] .'" for: '. $var);
-			}
+		$vars = $this->getData('variables');
+		if (is_array($vars)) {
+			foreach ($vars as $var => $vardata) {
+				if (!in_array($vardata['type'], self::$_VARIABLE_TYPES)) {
+					throw new ValidationFailed('Unknown variable type "'. $vardata['type'] .'" for: '. $var);
+				}
 
-			if ($vardata['type'] == 'selectoption' && empty($vardata['data'])) {
-				throw new ValidationFailed('SelectOption variable type must have data for: '. $var);
+				if ($vardata['type'] == 'selectoption' && empty($vardata['data'])) {
+					throw new ValidationFailed('SelectOption variable type must have data for: '. $var);
+				}
 			}
+		} else if (!empty($vars)) {
+			throw new ValidationFailed('Invalid variables data.');
 		}
 
 		return TRUE;
@@ -181,6 +189,17 @@ class BootableImage extends DBObject {
 		if (!$result) { return; }
 
 		foreach ($this->getServers() as $server) {
+			$server->generateConfig();
+		}
+	}
+
+	public function preDelete() {
+		$this->myServers = $this->getServers();
+	}
+
+	public function postDelete($result) {
+		if (!$result) { return; }
+		foreach ($this->myServers as $server) {
 			$server->generateConfig();
 		}
 	}
