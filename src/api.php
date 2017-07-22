@@ -37,7 +37,14 @@ class API {
 			if (is_array($data['var'])) {
 				foreach ($data['var'] as $vardata) {
 					if (array_key_exists('delete', $vardata)) { continue; }
-					$image->setVariable($vardata['name'], $vardata['description'], isset($vardata['type']) ? $vardata['type'] : 'string', isset($vardata['data']) ? $vardata['data'] : '');
+
+					$name = $vardata['name'];
+					$desc = $vardata['description'];
+					$type = isset($vardata['type']) ? $vardata['type'] : 'string';
+					$data = isset($vardata['data']) ? $vardata['data'] : '';
+					$required = isset($vardata['required']) ? $vardata['required'] : true;
+
+					$image->setVariable($name, $desc, $type, $data, $required);
 				}
 			}
 		}

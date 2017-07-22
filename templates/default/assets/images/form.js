@@ -107,6 +107,48 @@ function setEditable(element) {
 			});
 			select += '</select>';
 			field.html(select);
+		} else if (fieldType == 'yesno') {
+			var radioButtons = '';
+			var badgeYes = field.data('badge-yes');
+			var badgeNo = field.data('badge-no');
+
+			radioButtons += '<div class="btn-group" data-toggle="buttons">';
+			radioButtons += '  <label class="btn btn-sm" data-active="btn-' + badgeYes + '" data-inactive="btn-outline-' + badgeYes + '" data-toggle-class>';
+			radioButtons += '    <input type="radio" name="' + key + '" value="true" autocomplete="off" ' + (value == "Yes" ? 'checked' : '') + '>Yes';
+			radioButtons += '  </label>';
+			radioButtons += '  <label class="btn btn-sm" data-active="btn-' + badgeNo + '" data-inactive="btn-outline-' + badgeNo + '" data-toggle-class>';
+			radioButtons += '    <input type="radio" name="' + key + '" value="false" autocomplete="off" ' + (value == "No" ? 'checked' : '') + '>No';
+			radioButtons += '  </label>';
+			radioButtons += '</div>';
+			radioButtons = $(radioButtons);
+			field.html(radioButtons);
+
+
+			// Change state.
+			$('input[type=radio]', radioButtons).change(function() {
+				var container = $(this).parent('label').parent('div');
+
+				$('label[data-toggle-class]', container).each(function() {
+					if ($(this).find('input[type=radio]:checked').length == 0) {
+						$(this).removeClass($(this).attr('data-active'));
+						$(this).addClass($(this).attr('data-inactive'));
+					} else {
+						$(this).addClass($(this).attr('data-active'));
+						$(this).removeClass($(this).attr('data-inactive'));
+					}
+				});
+			});
+
+			// Set initial state
+			$('label[data-toggle-class]', radioButtons).each(function() {
+				if ($(this).find('input[type=radio]:checked').length == 0) {
+					$(this).removeClass($(this).attr('data-active'));
+					$(this).addClass($(this).attr('data-inactive'));
+				} else {
+					$(this).addClass($(this).attr('data-active'));
+					$(this).removeClass($(this).attr('data-inactive'));
+				}
+			});
 		} else {
 			field.html('<input type="text" class="form-control form-control-sm" name="' + key + '" value="' + escapeHtml(value) + '">');
 		}
@@ -139,6 +181,7 @@ function addVar() {
 	row += '	<td data-name="description" data-value=""></td>';
 	row += '	<td data-name="data" data-value=""></td>';
 	row += '	<td data-name="type" data-type="select" data-options="variableTypes" data-value="string"></td>';
+	row += '	<td class="required" data-type="yesno" data-name="required" data-badge-yes="success" data-badge-no="danger" data-value="Yes">';
 	row += '	<td class="actions editonly">';
 	row += '		<button type="button" class="btn btn-sm btn-danger" data-action="deleteVar" role="button">Delete</button>';
 	row += '	</td>';

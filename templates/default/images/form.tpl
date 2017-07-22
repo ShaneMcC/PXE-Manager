@@ -35,6 +35,7 @@
 							<th class="description">Description</th>
 							<th class="data">Data</th>
 							<th class="type">Type</th>
+							<th class="required">Required</th>
 							<th class="actions editonly" style="display: none">Actions</th>
 						</tr>
 						{% set varid = 0 %}
@@ -48,6 +49,13 @@
 										{{ variableTypes[vardata.type] }}
 									{% else %}
 										{{ vardata.type }}
+									{% endif %}
+								</td>
+								<td class="required" data-type="yesno" data-name="required" data-badge-yes="success" data-badge-no="danger" data-value="{{ vardata.required | yesno }}">
+									{% if vardata.required %}
+										<span class="badge badge-success">Yes</span>
+									{% else %}
+										<span class="badge badge-danger">No</span>
 									{% endif %}
 								</td>
 								<td class="actions editonly" style="display: none">
