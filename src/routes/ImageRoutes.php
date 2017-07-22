@@ -46,6 +46,32 @@
 					$displayEngine->display('images/create.tpl');
 				});
 
+				$router->post('/images/([0-9]+)/duplicate.json', function($imageid) use ($router, $displayEngine, $api) {
+					$image = $api->getBootableImage($imageid);
+					if (!($image instanceof BootableImage)) {
+						header('Content-Type: application/json');
+						echo json_encode(['error' => 'Unknown Source Image.']);
+						return;
+					} else {
+						$data = $image->toArray();
+						$data['name'] = $_POST['newname'];
+
+						[$result,$resultdata] = $api->createBootableImage($data);
+					}
+
+					if ($result) {
+						$displayEngine->flash('success', '', 'Image has been duplicated.');
+
+						header('Content-Type: application/json');
+						echo json_encode(['success' => 'Image has been duplicated.', 'location' => $displayEngine->getURL('/images/' . $resultdata)]);
+						return;
+					} else {
+						header('Content-Type: application/json');
+						echo json_encode(['error' => 'There was an error duplicating this image: ' . $resultdata]);
+						return;
+					}
+				});
+
 				$router->post('/images/create.json', function() use ($router, $displayEngine, $api) {
 					$this->doCreateOrEdit($api, $displayEngine, NULL, $_POST);
 				});

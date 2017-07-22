@@ -24,8 +24,39 @@
 			</td>
 			<td class="actions">
 				<a href="{{ url('/images/' ~ image.id) }}" class="btn btn-success">View</a>
+				{% if hasPermission(['edit_images']) %}
+					<a href="#" data-action="duplicate" data-imageid="{{ image.id }}" data-imagename="{{ image.name }}" class="btn btn-primary">Duplicate</a>
+				{% endif %}
 			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+
+{% if hasPermission(['edit_images']) %}
+	{% embed 'blocks/modal_confirm.tpl' with {'id': 'duplicateImageModal', 'csrftoken': csrftoken} only %}
+		{% block title %}
+			Duplicate Image
+		{% endblock %}
+
+		{% block body %}
+			<div class="errorLocation"></div>
+			<form id="duplicateImageForm" method="post" action="">
+				<input type="hidden" name="csrftoken" value="{{ csrftoken }}">
+				<div class="form-group row">
+					<label for="newname" class="col-4 col-form-label">New Name</label>
+					<div class="col-8">
+						<input class="form-control" type="text" value="" id="newname" name="newname">
+					</div>
+				</div>
+			</form>
+		{% endblock %}
+
+		{% block buttons %}
+			<button type="button" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+			<button type="button" data-action="ok" class="btn btn-success">Ok</button>
+		{% endblock %}
+	{% endembed %}
+{% endif %}
+
+<script src="{{ url('/assets/images/index.js') }}"></script>

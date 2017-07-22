@@ -30,6 +30,32 @@ $(function() {
 	});
 });
 
+function postForm(formid, errorLocation) {
+	if (errorLocation == undefined) {
+		errorLocation = 'div#flashContainer';
+	}
+
+	$('html,body').scrollTop(0);
+	$(errorLocation + ' .alert').remove()
+
+	$.ajax({
+		url: $(formid).attr('action'),
+		type: $(formid).attr('method'),
+		data: $(formid).serialize(),
+		success: function(data) {
+			if (data['success']) {
+				window.location = data['location'];
+			} else {
+				showFlashLocation(errorLocation, 'error', undefined, data['error'] !== undefined ? data['error'] : 'Unknown Error.');
+			}
+		},
+		error: function(xhr, err) {
+			showFlashLocation(errorLocation, 'error', undefined, 'Unknown Error.');
+		}
+	});
+	return false;
+}
+
 function escapeRegExp(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
@@ -52,6 +78,10 @@ function escapeHtml(string) {
 }
 
 function showFlash(type, title, message) {
+	showFlashLocation('div#flashContainer', type, title, message)
+}
+
+function showFlashLocation(location, type, title, message) {
 	if (type == 'error') { type = 'danger'; }
 
 	var html = '';
@@ -65,6 +95,6 @@ function showFlash(type, title, message) {
 	html = html + '			'+message;
 	html = html + '	</div>';
 
-	$('div#flashContainer').append($(html));
-	$('div#flashContainer .alert').alert()
+	$(location).append($(html));
+	$(location + ' .alert').alert()
 }
