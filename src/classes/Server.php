@@ -156,6 +156,13 @@ class Server extends DBObject {
 			}
 		}
 
+		$image = $this->getBootableImage();
+		if ($image instanceof BootableImage) {
+			$image->validateVariables($this->getValidVariables());
+		} else {
+			throw new ValidationFailed('Unknown Image.');
+		}
+
 		return TRUE;
 	}
 

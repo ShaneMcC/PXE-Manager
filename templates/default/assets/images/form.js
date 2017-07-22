@@ -72,8 +72,12 @@ $(function() {
 
 var options = {};
 var options = {"variableTypes": {"ipv4": "IPv4 Address",
+                                 "ipv6": "IPv6 Address",
+                                 "ip": "IPv4 or IPv6 Address",
                                  "string": "Text String",
+                                 "integer": "Integer",
                                  "text": "Multi-Line Text Data",
+                                 "selectoption": "Select Option",
                                  "yesno": "Boolean Value",
                                 }
               };
@@ -133,6 +137,7 @@ function addVar() {
 	row += '<tr data-varid="new_' + varid + '" class="newvar">';
 	row += '	<td data-name="name" data-value=""></td>';
 	row += '	<td data-name="description" data-value=""></td>';
+	row += '	<td data-name="data" data-value=""></td>';
 	row += '	<td data-name="type" data-type="select" data-options="variableTypes" data-value="string"></td>';
 	row += '	<td class="actions editonly">';
 	row += '		<button type="button" class="btn btn-sm btn-danger" data-action="deleteVar" role="button">Delete</button>';

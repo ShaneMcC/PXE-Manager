@@ -10,7 +10,11 @@
 
 {% set variableTypes = [] %}
 {% set variableTypes = variableTypes | merge({"ipv4": "IPv4 Address"}) %}
+{% set variableTypes = variableTypes | merge({"ipv6": "IPv6 Address"}) %}
+{% set variableTypes = variableTypes | merge({"ip": "IPv4 or IPv6 Address"}) %}
 {% set variableTypes = variableTypes | merge({"string": "Text String"}) %}
+{% set variableTypes = variableTypes | merge({"integer": "Integer"}) %}
+{% set variableTypes = variableTypes | merge({"selectoption": "Select Option"}) %}
 {% set variableTypes = variableTypes | merge({"text": "Multi-Line Text Data"}) %}
 {% set variableTypes = variableTypes | merge({"yesno": "Boolean Value"}) %}
 
@@ -29,6 +33,7 @@
 						<tr>
 							<th class="name">Name</th>
 							<th class="description">Description</th>
+							<th class="data">Data</th>
 							<th class="type">Type</th>
 							<th class="actions editonly" style="display: none">Actions</th>
 						</tr>
@@ -37,6 +42,7 @@
 							<tr data-varid="{{ varid }}">
 								<td class="name" data-name="name" data-value="{{ var }}">{{ var }}</td>
 								<td class="description" data-name="description" data-value="{{ vardata.description }}">{{ vardata.description }}</td>
+								<td class="data" data-name="data" data-value="{{ vardata.data }}">{{ vardata.data }}</td>
 								<td class="type" data-name="type" data-type="select" data-options="variableTypes" data-raw-value="{{ vardata.type }}" {% if variableTypes[vardata.type] %}data-value="{{ variableTypes[vardata.type] }}"{% endif %}>
 									{% if variableTypes[vardata.type] %}
 										{{ variableTypes[vardata.type] }}

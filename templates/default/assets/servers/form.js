@@ -100,26 +100,37 @@ function setEditable(element) {
 		var value = (field.data('raw-value') !== undefined) ? field.data('raw-value') : field.data('value');
 		var key = field.data('name');
 		var fieldType = field.data('type');
+		var fieldData = field.data('data');
 
 		if (fieldType == 'textfield' || fieldType == 'text') {
 			var rows = field.data('rows');
 			if (rows === undefined) { rows = 5; }
 			field.html('<textarea rows="' + rows + '" class="form-control mono" name="' + key + '">' + escapeHtml(value) + '</textarea>');
-		} else if (fieldType == 'select') {
-			var selectOptions = field.data('options');
+		} else if (fieldType == 'select' || fieldType == 'selectoption') {
+			var selectOptions = [];
 			var select = '';
 			var selectedVal = undefined;
+			var optionsData = field.data('options');
+
+			if (options[optionsData] !== undefined) {
+				selectOptions = options[optionsData];
+			} else {
+				selectOptions = {};
+				$.each(fieldData.split("|"), function(index, chunk) {
+					selectOptions[chunk] = chunk;
+				});
+			}
 
 			select += '<select class="form-control form-control-sm" name="' + key + '">';
-			$.each(options[selectOptions], function(optKey, desc) {
+			$.each(selectOptions, function(optKey, desc) {
 				if (value == optKey || selectedVal == undefined) { selectedVal = optKey; }
 				select += '	<option ' + (value == optKey ? 'selected' : '') + ' value="' + optKey + '">' + desc + '</option>';
 			});
 			select += '</select>';
-			getCurrentVariables(selectedVal);
-			field.html(select);
 
-			if (selectOptions == "images") {
+			field.html(select);
+			if (key == 'image') {
+				getCurrentVariables(selectedVal);
 				$("select", field).change(function() {
 					getCurrentVariables($("option:selected", this).val());
 				});
@@ -166,6 +177,8 @@ function setEditable(element) {
 					$(this).removeClass($(this).attr('data-inactive'));
 				}
 			});
+		} else if (fieldType == 'integer') {
+			field.html('<input type="number" class="form-control form-control-sm" name="' + key + '" value="' + escapeHtml(value) + '">');
 		} else {
 			field.html('<input type="text" class="form-control form-control-sm" name="' + key + '" value="' + escapeHtml(value) + '">');
 		}

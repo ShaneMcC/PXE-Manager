@@ -14,7 +14,7 @@
 						{% endif %}
 					</td>
 				{% else %}
-					<td data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] }}">
+					<td data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] }}" data-data="{{ vardata.data }}">
 						{% if vardata.type == 'text' %}
 							<pre>{{ server.variables[var] }}</pre>
 						{% else %}
