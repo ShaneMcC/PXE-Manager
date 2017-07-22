@@ -42,7 +42,7 @@
 				<a href="{{ url('/servers/' ~ server.id) }}" class="btn btn-success">View</a>
 				<a href="{{ url('/servers/' ~ server.id ~ '/preview') }}" class="btn btn-primary">Preview</a>
 				{% if hasPermission(['edit_servers']) %}
-					<a href="#" data-action="duplicate" data-serverid="{{ server.id }}" data-servername="{{ server.name }}" class="btn btn-primary">Duplicate</a>
+					<a href="{{ url('/servers/' ~ server.id ~ '/duplicate') }}" data-action="duplicate" data-serverid="{{ server.id }}" data-servername="{{ server.name }}" class="btn btn-primary">Duplicate</a>
 				{% endif %}
 			</td>
 		</tr>

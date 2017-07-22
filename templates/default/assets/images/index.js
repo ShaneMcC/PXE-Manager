@@ -4,7 +4,6 @@ $(function() {
 		var imagename = $(this).data('imagename');
 
 		$('#duplicateImageForm').attr('action', '{{ url('/images/') }}' + imageid + '/duplicate.json');
-		$('#duplicateImageForm input[name="imageid"]').val();
 		$('#duplicateImageForm input[name="newname"]').val(imagename + " (Duplicate)");
 
 		var okButton = $('#duplicateImageModal button[data-action="ok"]');

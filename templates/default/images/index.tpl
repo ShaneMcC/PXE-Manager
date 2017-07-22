@@ -25,7 +25,7 @@
 			<td class="actions">
 				<a href="{{ url('/images/' ~ image.id) }}" class="btn btn-success">View</a>
 				{% if hasPermission(['edit_images']) %}
-					<a href="#" data-action="duplicate" data-imageid="{{ image.id }}" data-imagename="{{ image.name }}" class="btn btn-primary">Duplicate</a>
+					<a href="{{ url('/images/' ~ image.id ~ '/duplicate') }}" data-action="duplicate" data-imageid="{{ image.id }}" data-imagename="{{ image.name }}" class="btn btn-primary">Duplicate</a>
 				{% endif %}
 			</td>
 		</tr>

@@ -153,6 +153,16 @@
 					}
 				});
 
+				$router->get('/servers/([0-9]+)/duplicate', function($serverid) use ($router, $displayEngine, $api) {
+					$server = $api->getServer($serverid);
+					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+
+					$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName() . ' :: Duplicate');
+					$displayEngine->setVar('server', $server);
+
+					$displayEngine->display('servers/duplicate.tpl');
+				});
+
 				$router->post('/servers/([0-9]+)/duplicate.json', function($serverid) use ($router, $displayEngine, $api) {
 					$server = $api->getServer($serverid);
 					if (!($server instanceof Server)) {

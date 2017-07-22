@@ -46,6 +46,16 @@
 					$displayEngine->display('images/create.tpl');
 				});
 
+				$router->get('/images/([0-9]+)/duplicate', function($imageid) use ($router, $displayEngine, $api) {
+					$image = $api->getBootableImage($imageid);
+					if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
+
+					$displayEngine->setPageID('images')->setTitle('Bootable Images :: ' . $image->getName() . ' :: Duplicate');
+					$displayEngine->setVar('image', $image);
+
+					$displayEngine->display('images/duplicate.tpl');
+				});
+
 				$router->post('/images/([0-9]+)/duplicate.json', function($imageid) use ($router, $displayEngine, $api) {
 					$image = $api->getBootableImage($imageid);
 					if (!($image instanceof BootableImage)) {
