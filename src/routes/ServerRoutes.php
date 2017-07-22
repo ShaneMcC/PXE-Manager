@@ -153,6 +153,33 @@
 					}
 				});
 
+				$router->post('/servers/([0-9]+)/duplicate.json', function($serverid) use ($router, $displayEngine, $api) {
+					$server = $api->getServer($serverid);
+					if (!($server instanceof Server)) {
+						header('Content-Type: application/json');
+						echo json_encode(['error' => 'Unknown Source Server.']);
+						return;
+					} else {
+						$data = $server->toArray();
+						$data['name'] = $_POST['newname'];
+						$data['macaddr'] = $_POST['newmac'];
+
+						[$result,$resultdata] = $api->createServer($data);
+					}
+
+					if ($result) {
+						$displayEngine->flash('success', '', 'Server has been duplicated.');
+
+						header('Content-Type: application/json');
+						echo json_encode(['success' => 'Server has been duplicated.', 'location' => $displayEngine->getURL('/servers/' . $resultdata)]);
+						return;
+					} else {
+						header('Content-Type: application/json');
+						echo json_encode(['error' => 'There was an error duplicating this server: ' . $resultdata]);
+						return;
+					}
+				});
+
 				$router->post('/servers/create.json', function() use ($router, $displayEngine, $api) {
 					$this->doCreateOrEdit($api, $displayEngine, NULL, $_POST);
 				});

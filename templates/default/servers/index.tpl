@@ -41,8 +41,46 @@
 			<td class="actions">
 				<a href="{{ url('/servers/' ~ server.id) }}" class="btn btn-success">View</a>
 				<a href="{{ url('/servers/' ~ server.id ~ '/preview') }}" class="btn btn-primary">Preview</a>
+				{% if hasPermission(['edit_servers']) %}
+					<a href="#" data-action="duplicate" data-serverid="{{ server.id }}" data-servername="{{ server.name }}" class="btn btn-primary">Duplicate</a>
+				{% endif %}
 			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+
+{% if hasPermission(['edit_servers']) %}
+	{% embed 'blocks/modal_confirm.tpl' with {'id': 'duplicateServerModal', 'csrftoken': csrftoken} only %}
+		{% block title %}
+			Duplicate Server
+		{% endblock %}
+
+		{% block body %}
+			<div class="errorLocation"></div>
+			<form id="duplicateServerForm" method="post" action="">
+				<input type="hidden" name="csrftoken" value="{{ csrftoken }}">
+				<div class="form-group row">
+					<label for="newname" class="col-4 col-form-label">Name</label>
+					<div class="col-8">
+						<input class="form-control" type="text" value="" id="newname" name="newname">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="newmac" class="col-4 col-form-label">MAC Address</label>
+					<div class="col-8">
+						<input class="form-control" type="text" value="" id="newmac" name="newmac">
+					</div>
+				</div>
+			</form>
+		{% endblock %}
+
+		{% block buttons %}
+			<button type="button" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+			<button type="button" data-action="ok" class="btn btn-success">Ok</button>
+		{% endblock %}
+	{% endembed %}
+{% endif %}
+
+<script src="{{ url('/assets/servers/index.js') }}"></script>

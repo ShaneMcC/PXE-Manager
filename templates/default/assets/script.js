@@ -44,7 +44,7 @@ function postForm(formid, errorLocation) {
 		data: $(formid).serialize(),
 		success: function(data) {
 			if (data['success']) {
-				window.location = data['location'];
+				window.location = data['location'] !== undefined ? data['location'] : window.location;
 			} else {
 				showFlashLocation(errorLocation, 'error', undefined, data['error'] !== undefined ? data['error'] : 'Unknown Error.');
 			}

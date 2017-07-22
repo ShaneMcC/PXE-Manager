@@ -149,9 +149,9 @@ class Server extends DBObject {
 	 * @throws ValidationFailed if there is an error.
 	 */
 	public function validate() {
-		$required = ['image'];
+		$required = ['image', 'name', 'macaddr'];
 		foreach ($required as $r) {
-			if (!$this->hasData($r)) {
+			if (!$this->hasData($r) || empty($this->getData($r))) {
 				throw new ValidationFailed('Missing required field: '. $r);
 			}
 		}
