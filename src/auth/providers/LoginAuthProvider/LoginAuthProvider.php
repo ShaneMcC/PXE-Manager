@@ -12,6 +12,11 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 		$this->config = $config;
 		$displayEngine->addTemplateDirectory(__DIR__ . '/templates/', 'LoginAuthProvider');
 
+		$possiblePermissions = isset($this->config['authProvider']['default']) ? $this->config['authProvider']['default'] : [];
+
+		$this->setPermissions($this->calculatePermissions($possiblePermissions));
+		$this->setAuthenticated(false);
+
 		$this->providerInit();
 	}
 
@@ -44,6 +49,23 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 
 	public function getPermissions() {
 		return $this->permissions;
+	}
+
+	protected function calculatePermissions($allowedPermissions) {
+		$permissions = [];
+
+		if (is_array($allowedPermissions)) {
+			foreach (array_keys(AuthProvider::$VALID_PERMISSIONS) as $p) {
+			// Check if permission matches a permission in the array.
+				foreach ($allowedPermissions as $permission) {
+					if (preg_match('#' . str_replace('#', '\\#', $permission) . '#', $p)) {
+						$permissions[$p] = true;
+					}
+				}
+			}
+		}
+
+		return $permissions;
 	}
 
 	protected function setAuthenticated($authenticated) {

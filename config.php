@@ -29,15 +29,15 @@
 	// authentication. This includes "Service" urls and /pxedata/<MAC>
 	$config['authProvider']['name'] = 'FullAuthProvider';
 
+	// Default permissions for anyone not authenticated?
+	// By default we allow view access.
+	$config['authProvider']['default'] = ['view_(servers|images)'];
+
 	// Alternative providers:
 	//
 	// - PasswordAuthProvider - Grants permissions based on a given password,
 	//
 	// $config['authProvider']['name'] = 'PasswordAuthProvider';
-
-	// Default permissions for anyone not authenticated?
-	// By default we allow view access.
-	$config['PasswordAuthProvider']['default'] = ['view_(servers|images)'];
 
 	// If using PasswordAuthProvider, what passwords are valid?
 	// This is an array of password => [<permissions>] where <permissions>
