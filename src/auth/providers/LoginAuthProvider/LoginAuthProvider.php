@@ -56,7 +56,7 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 
 		if (is_array($allowedPermissions)) {
 			foreach (array_keys(AuthProvider::$VALID_PERMISSIONS) as $p) {
-			// Check if permission matches a permission in the array.
+				// Check if permission matches a permission in the array.
 				foreach ($allowedPermissions as $permission) {
 					if (preg_match('#' . str_replace('#', '\\#', $permission) . '#', $p)) {
 						$permissions[$p] = true;

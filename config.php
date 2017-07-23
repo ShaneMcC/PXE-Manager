@@ -36,10 +36,14 @@
 	// Alternative providers:
 	//
 	// - PasswordAuthProvider - Grants permissions based on a given password,
-	//
+	// - LDAPAuthProvider - Grants permissions based on ldap login and groups.
+
+	// =========================================================================
+	// Password Auth Provider
+	// =========================================================================
 	// $config['authProvider']['name'] = 'PasswordAuthProvider';
 
-	// If using PasswordAuthProvider, what passwords are valid?
+	// What passwords are valid?
 	// This is an array of password => [<permissions>] where <permissions>
 	// are regex entries, any permission name that matches an entry is granted.
 	//
@@ -49,8 +53,41 @@
 	// These permissions are used *instead* of the default not in addition to
 	// so must include all the permissions you want the password to grant.
 	$config['PasswordAuthProvider']['passwords'] = ['admin123' => ['.*'],
-	                                                'user123' => ['view_.*', '.*_servers']
+	                                                'user123' => ['view_.*', 'edit_servers']
 	                                               ];
+
+	// =========================================================================
+	// LDAP Auth Provider
+	// =========================================================================
+	// $config['authProvider']['name'] = 'LDAPAuthProvider';
+
+	// Server to authenticate with?
+	$config['LDAPAuthProvider']['server'] = 'ldap.localhost.localdomain';
+
+	// LDAP Bind User
+	$config['LDAPAuthProvider']['binduser'] = 'CN=PXE Manager,OU=Applications,DC=localhost,DC=localdomain';
+	// LDAP Bind Password
+	$config['LDAPAuthProvider']['bindpass'] = 'SomePassword';
+
+	// Base DN to check for users.
+	$config['LDAPAuthProvider']['basedn'] = 'OU=Users,DC=localhost,DC=localdomain';
+
+	// Property to use for username?
+	// This will probably be 'sAMAccountName' for Active Directory
+	$config['LDAPAuthProvider']['usernameprop'] = 'uid';
+
+	// This is an array of Group => [<permissions>] where <permissions>
+	// are regex entries, any permission name that matches an entry is granted.
+	//
+	// As examples, "PXE Admin" can do anything, but "PXE User" can only edit
+	// servers but not images.
+	//
+	// These permissions are used *instead* of the default not in addition to
+	// so must include all the permissions you want the password to grant.
+	$config['LDAPAuthProvider']['permissions'] = ['CN=PXE Admin,OU=Groups,DC=localhost,DC=localdomain' => ['.*'],
+	                                              'CN=PXE User,OU=Groups,DC=localhost,DC=localdomain' => ['view_.*', 'edit_servers'],
+	                                             ];
+
 
 	if (file_exists(dirname(__FILE__) . '/config.local.php')) {
 		include(dirname(__FILE__) . '/config.local.php');
