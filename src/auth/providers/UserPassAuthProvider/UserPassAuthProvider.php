@@ -54,86 +54,30 @@ class UserPassAuthProvider extends LoginAuthProvider implements RouteProvider, D
 	}
 
 	public function addRoutes($authProvider, $router, $displayEngine, $api) {
-		parent::addRoutes($authProvider, $router, $displayEngine, $api);
-
 		if ($authProvider->isAuthenticated()) {
+			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/users/changepass'), 'title' => 'Change Password', 'active' => function($de) { return $de->getPageID() == 'changepass'; }], 'right');
 
-			if (!$authProvider->checkPermissions(['view_users'])) { return; }
+			$router->get('/users/changepass', function() use ($displayEngine) {
+				$displayEngine->setTitle('Change Password');
+				$displayEngine->setPageID('changepass');
 
-			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/users'), 'title' => 'Users', 'active' => function($de) { return $de->getPageID() == 'users'; }]);
-
-			$router->get('/users', function() use ($displayEngine) {
-				$displayEngine->setTitle('Users');
-				$displayEngine->setPageID('users');
-
-				$users = UserPassAuthProvider_User::find(DB::get(), []);
-
-				$displayEngine->setVar('myuser', $this->currentUser);
-				$displayEngine->setVar('users', $users);
-				$displayEngine->setVar('validPermissions', array_keys(AuthProvider::$VALID_PERMISSIONS));
-				$displayEngine->display('userpassauthprovider_list.tpl');
+				$displayEngine->display('userpassauthprovider_changepass.tpl');
 			});
 
-			if (!$authProvider->checkPermissions(['edit_users'])) { return; }
-
-			$router->post('/users/action/setPermission/([0-9]+)', function($userid) use ($displayEngine) {
+			$router->post('/users/changepass', function() use ($displayEngine) {
 				$result = NULL;
-				$user = UserPassAuthProvider_User::load(DB::get(), $userid);
-
-				if ($user instanceof UserPassAuthProvider_User) {
-					foreach ($_POST['permissions'] as $perm => $value) {
-						$user->setPermission($perm, $value);
-					}
-					$user->save();
-					$result = ['response' => $user->toArray()];
-				}
-
-				header('Content-Type: application/json');
-				echo json_encode($result);
-			});
-
-			$router->post('/users/action/(unsuspend|suspend)/([0-9]+)', function($type, $userid) use ($displayEngine) {
-				$result = NULL;
-				$user = UserPassAuthProvider_User::load(DB::get(), $userid);
-
-				if ($user instanceof UserPassAuthProvider_User) {
-					$user->setEnabled($type == "unsuspend");
-					$user->save();
-					$result = ['response' => $user->toArray()];
-				}
-
-				header('Content-Type: application/json');
-				echo json_encode($result);
-			});
-
-
-			$router->post('/users/delete/(.*)', function($userid) use ($displayEngine, $api) {
-				$result = NULL;
-				$user = UserPassAuthProvider_User::load(DB::get(), $userid);
-
-				if ($user instanceof UserPassAuthProvider_User) {
-					$user->delete();
-					$result = ['response' => $user->toArray()];
-				}
-
-				header('Content-Type: application/json');
-				echo json_encode($result);
-			});
-
-			$router->post('/users/create', function() use ($displayEngine, $api) {
+				$user = $this->currentUser;
 				$canUpdate = true;
 
-				$fields = ['username' => 'You must specify an email address for the user',
-				           'realname' => 'You must specify a name for the user',
-				           'password' => 'You must specify a password for the user',
-				           'confirmpassword' => 'You must confirm the password for the user',
-				          ];
+				$fields = [];
 
+				$fields['password'] = 'You must specify a password';
+				$fields['confirmpassword'] = 'You must confirm the password';
 
 				foreach ($fields as $field => $error) {
 					if (!array_key_exists($field, $_POST) || empty($_POST[$field])) {
 						$canUpdate = false;
-						$displayEngine->flash('error', '', 'There was an error creating the user: ' . $error);
+						$displayEngine->flash('error', '', 'There was an error: ' . $error);
 						break;
 					}
 				}
@@ -143,34 +87,154 @@ class UserPassAuthProvider extends LoginAuthProvider implements RouteProvider, D
 
 				if ($canUpdate && $pass != $confirmpass) {
 					$canUpdate = false;
-					$displayEngine->flash('error', '', 'There was an error creating the user: Passwords do not match.');
-					return;
+					$displayEngine->flash('error', '', 'There was an error: Passwords do not match.');
 				}
 
 				if ($canUpdate) {
-					$user = new UserPassAuthProvider_User(DB::get());
-					$user->setUsername($_POST['username']);
 					$user->setPassword($_POST['password']);
-					$user->setRealname($_POST['realname']);
-					$user->setEnabled(true);
+					$user->save();
 
-					try {
-						$user->validate();
-						$user->save();
-
-						$displayEngine->flash('success', '', 'New user has been created');
-					} catch (Exception $ex) {
-						$displayEngine->flash('error', '', 'There was an error creating the user: ' . $ex->getMessage());
-					}
+					$displayEngine->flash('success', '', 'Password changed.');
+				} else {
+					header('Location: ' . $displayEngine->getURL('/users/changepass'));
+					return;
 				}
 
-				header('Location: ' . $displayEngine->getURL('/users'));
-				return;
+				header('Location: ' . $displayEngine->getURL('/'));
 			});
 
+			if ($authProvider->checkPermissions(['view_users'])) {
+				$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/users'), 'title' => 'Users', 'active' => function($de) { return $de->getPageID() == 'users'; }]);
 
+				$router->get('/users', function() use ($displayEngine) {
+					$displayEngine->setTitle('Users');
+					$displayEngine->setPageID('users');
+
+					$users = UserPassAuthProvider_User::find(DB::get(), []);
+
+					$displayEngine->setVar('myuser', $this->currentUser);
+					$displayEngine->setVar('users', $users);
+					$displayEngine->setVar('validPermissions', array_keys(AuthProvider::$VALID_PERMISSIONS));
+					$displayEngine->display('userpassauthprovider_list.tpl');
+				});
+			}
+
+			if ($authProvider->checkPermissions(['edit_users'])) {
+				$router->post('/users/action/setPermission/([0-9]+)', function($userid) use ($displayEngine) {
+					$result = NULL;
+					$user = UserPassAuthProvider_User::load(DB::get(), $userid);
+
+					if ($user instanceof UserPassAuthProvider_User) {
+						foreach ($_POST['permissions'] as $perm => $value) {
+							$user->setPermission($perm, $value);
+						}
+						$user->save();
+						$arr = $user->toArray();
+						unset($arr['password']);
+						$result = ['response' => $arr];
+					}
+
+					header('Content-Type: application/json');
+					echo json_encode($result);
+				});
+
+				$router->post('/users/action/(unsuspend|suspend)/([0-9]+)', function($type, $userid) use ($displayEngine) {
+					$result = NULL;
+					$user = UserPassAuthProvider_User::load(DB::get(), $userid);
+
+					if ($user instanceof UserPassAuthProvider_User) {
+						$user->setEnabled($type == "unsuspend");
+						$user->save();
+						$arr = $user->toArray();
+						unset($arr['password']);
+						$result = ['response' => $arr];
+					}
+
+					header('Content-Type: application/json');
+					echo json_encode($result);
+				});
+
+				$router->post('/users/delete/(.*)', function($userid) use ($displayEngine, $api) {
+					$result = NULL;
+					$user = UserPassAuthProvider_User::load(DB::get(), $userid);
+
+					if ($user instanceof UserPassAuthProvider_User) {
+						if ($user->delete()) {
+							$result = ['response' => 'deleted'];
+						}
+					}
+
+					header('Content-Type: application/json');
+					echo json_encode($result);
+				});
+
+				$router->post('/users/(create|edit/([0-9]+))', function($type, $userid = -1) use ($displayEngine, $api) {
+					$canUpdate = true;
+
+					$fields = ['username' => 'You must specify an email address for the user',
+					           'realname' => 'You must specify a name for the user',
+					          ];
+
+					if ($type == 'create') {
+						$fields['password'] = 'You must specify a password for the user';
+						$fields['confirmpassword'] = 'You must confirm the password for the user';
+					}
+
+
+					foreach ($fields as $field => $error) {
+						if (!array_key_exists($field, $_POST) || empty($_POST[$field])) {
+							$canUpdate = false;
+							$displayEngine->flash('error', '', 'There was an error: ' . $error);
+							break;
+						}
+					}
+
+					$pass = isset($_POST['password']) ? $_POST['password'] : NULL;
+					$confirmpass = isset($_POST['confirmpassword']) ? $_POST['confirmpassword'] : NULL;
+
+					if ($canUpdate && $pass != $confirmpass) {
+						$canUpdate = false;
+						$displayEngine->flash('error', '', 'There was an error: Passwords do not match.');
+						header('Location: ' . $displayEngine->getURL('/users'));
+						return;
+					}
+
+					if ($canUpdate) {
+						if ($type == 'create') {
+							$user = new UserPassAuthProvider_User(DB::get());
+						} else {
+							$user = UserPassAuthProvider_User::load(DB::get(), $userid);
+						}
+						$user->setUsername($_POST['username']);
+						if (isset($_POST['password']) && !empty($_POST['password'])) {
+							$user->setPassword($_POST['password']);
+						}
+						$user->setRealname($_POST['realname']);
+						if ($type == 'create') {
+							$user->setEnabled(true);
+						}
+
+						try {
+							$user->validate();
+							$user->save();
+
+							if ($type == 'create') {
+								$displayEngine->flash('success', '', 'New user has been created');
+							} else {
+								$displayEngine->flash('success', '', 'User has been edited');
+							}
+						} catch (Exception $ex) {
+							$displayEngine->flash('error', '', 'There was an error: ' . $ex->getMessage());
+						}
+					}
+
+					header('Location: ' . $displayEngine->getURL('/users'));
+					return;
+				});
+			}
 		}
 
+		parent::addRoutes($authProvider, $router, $displayEngine, $api);
 	}
 
 	public function getVersionField() {

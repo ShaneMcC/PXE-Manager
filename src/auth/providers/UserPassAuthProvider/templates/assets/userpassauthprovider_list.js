@@ -163,6 +163,32 @@ $(function() {
 		},
 	});
 
+	$("#edituser").validate({
+		highlight: function(element) {
+			$(element).closest('.form-group').addClass('has-danger');
+		},
+		unhighlight: function(element) {
+			$(element).closest('.form-group').removeClass('has-danger');
+		},
+		errorClass: 'form-control-feedback',
+		rules: {
+			password: {
+				required: false,
+				minlength: 6,
+			},
+			confirmpassword: {
+				required: false,
+				equalTo: "#editpassword",
+			},
+			username: {
+				required: true,
+			},
+			realname: {
+				required: true
+			}
+		},
+	});
+
 	$('button[data-action="addNewUser"]').click(function () {
 		var okButton = $('#createUser button[data-action="ok"]');
 		okButton.text("Create");
@@ -182,5 +208,39 @@ $(function() {
 		});
 
 		$('#createUser').modal({'backdrop': 'static'});
+	});
+
+
+
+	$('button[data-action="edituser"]').click(function () {
+		var okButton = $('#changeUser button[data-action="ok"]');
+		okButton.text("Edit");
+
+		okButton.off('click').click(function () {
+			if ($("#edituser").valid()) {
+				$("#edituser").submit();
+				$('#changeUser').modal('hide');
+			}
+		});
+
+		$("#edituser")[0].reset();
+
+		var user = $(this).data('id');
+		var row = $(this).closest('tr');
+
+		$("#edituser").attr('action', "{{ url('/users/edit/') }}" + user);
+
+		var username = $('td.username', row).data('username');
+		var realname = $('td.realname', row).data('realname');
+
+		$("#editusername").val(username);
+		$("#editrealname").val(realname);
+
+		var cancelButton = $('#changeUser button[data-action="cancel"]');
+		cancelButton.off('click').click(function () {
+			$("#edituser").validate().resetForm();
+		});
+
+		$('#changeUser').modal({'backdrop': 'static'});
 	});
 });

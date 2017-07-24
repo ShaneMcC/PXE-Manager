@@ -29,10 +29,10 @@
 			<td class="id">
 				{{ userinfo.id }}
 			</td>
-			<td class="username">
+			<td class="username" data-username="{{ userinfo.username }}">
 				{{ userinfo.username }}
 			</td>
-			<td class="realname">
+			<td class="realname" data-realname="{{ userinfo.realname }}">
 				{{ userinfo.realname }}
 			</td>
 			<td class="permissions">
@@ -79,8 +79,9 @@
 			{% if hasPermission(['edit_users']) %}
 				<td class="actions">
 					{% if userinfo.id != myuser.id %}
-						<button data-action="deleteuser" data-id="{{ userinfo.id }}" class="btn btn-sm btn-danger">Delete</a>
+						<button data-action="deleteuser" data-id="{{ userinfo.id }}" class="btn btn-sm btn-danger">Delete</button>
 					{% endif %}
+					<button data-action="edituser" data-id="{{ userinfo.id }}" class="btn btn-sm btn-success">Edit</button>
 				</td>
 			{% endif %}
 		</tr>
@@ -132,6 +133,50 @@
 					<label for="confirmpassword" class="col-3 col-form-label">Confirm Password</label>
 					<div class="col-9">
 						<input class="form-control" type="password" value="" id="confirmpassword" name="confirmpassword">
+					</div>
+				</div>
+			</form>
+		{% endblock %}
+
+		{% block buttons %}
+			<button type="button" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+			<button type="button" data-action="ok" class="btn btn-success">Ok</button>
+		{% endblock %}
+	{% endembed %}
+
+	{% embed 'blocks/modal_confirm.tpl' with {'id': 'changeUser', 'large': true, 'csrftoken': csrftoken} only %}
+		{% block title %}
+			Edit User
+		{% endblock %}
+
+		{% block body %}
+			<form id="edituser" method="post" action="">
+				<input type="hidden" name="csrftoken" value="{{csrftoken}}">
+
+				<div class="form-group row">
+					<label for="username" class="col-3 col-form-label">Username</label>
+					<div class="col-9">
+						<input class="form-control" type="username" value="" id="editusername" name="username">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="realname" class="col-3 col-form-label">Real Name</label>
+					<div class="col-9">
+						<input class="form-control" type="text" value="" id="editrealname" name="realname">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="password" class="col-3 col-form-label">Password</label>
+					<div class="col-9">
+						<input class="form-control" type="password" value="" id="editpassword" name="password">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="confirmpassword" class="col-3 col-form-label">Confirm Password</label>
+					<div class="col-9">
+						<input class="form-control" type="password" value="" id="editconfirmpassword" name="confirmpassword">
 					</div>
 				</div>
 			</form>
