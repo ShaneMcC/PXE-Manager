@@ -75,7 +75,7 @@ function setImageData(data) {
 }
 
 function getCurrentVariables(imageid) {
-	serverid = $('#serverform').data('server-id');
+	serverid = $('#serverinfo').data('server-id');
 	if (serverid == undefined) { serverid = -1; }
 
 	var url = '{{ url("/servers") }}/' + serverid + '/variables';
@@ -88,7 +88,7 @@ function getCurrentVariables(imageid) {
 		success: function(data) {
 			$("#variablesContainer").html(data);
 
-			if ($('button[data-action="editserver"]').data('action') == "cancel" || $('button[data-action="editserver"]').length == 0) {
+			if ($('button[data-action="editserver"]').data('action') == "cancel" || ($('button[data-action="editserver"]').length == 0 && $('button[data-action="saveserver"]').length != 0)) {
 				setEditable($("td[data-name]", $("#variablesContainer")));
 			}
 		}

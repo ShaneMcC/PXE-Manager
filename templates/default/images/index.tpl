@@ -17,7 +17,9 @@
 		</tr>
 	</thead>
 	<tbody>
+		{% set found = false %}
 		{% for image in images %}
+		{% set found = true %}
 		<tr data-searchable-value="{{ image.name }}">
 			<td class="image">
 				{{ image.name }}
@@ -30,6 +32,14 @@
 			</td>
 		</tr>
 		{% endfor %}
+
+		{% if not found %}
+			<tr>
+				<td class="nonefound" colspan="2">
+					<em>There are no images</em>
+				</td>
+			</tr>
+		{% endif %}
 	</tbody>
 </table>
 

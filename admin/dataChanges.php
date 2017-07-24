@@ -61,6 +61,45 @@ ALTER TABLE `bootableimages` ADD `postinstall` TEXT;
 DBQUERY
 );
 
+			// ------------------------------------------------------------------------
+			// Fix invalid Constraint
+			// ------------------------------------------------------------------------
+			$dataChanges[4] = new DBChange(<<<DBQUERY
+PRAGMA foreign_keys = OFF;
+
+CREATE TABLE `servers2` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `name` VARCHAR(250) NOT NULL,
+  `macaddr` VARCHAR(250) NOT NULL,
+  `image` INTEGER NOT NULL,
+  `variables` TEXT NULL,
+  `enabled` BOOL NOT NULL,
+  CONSTRAINT `fk_image` FOREIGN KEY (`image`) REFERENCES `bootableimages`(`id`) ON DELETE SET NULL
+);
+
+INSERT INTO servers2 (id, name, macaddr, image, variables, enabled) SELECT id, name, macaddr, image, variables, enabled FROM servers;
+DROP TABLE servers;
+ALTER TABLE servers2 RENAME TO servers;
+PRAGMA foreign_keys = ON;
+
+CREATE UNIQUE INDEX `servers_macaddr` ON `servers`(`macaddr`);
+DBQUERY
+);
+			// ------------------------------------------------------------------------
+			// Server Logs
+			// ------------------------------------------------------------------------
+			$dataChanges[5] = new DBChange(<<<DBQUERY
+CREATE TABLE `serverlogs` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `server` INTEGER NOT NULL,
+  `time` INTEGER NOT NULL,
+  `type` TEXT NOT NULL,
+  `entry` TEXT NOT NULL,
+  CONSTRAINT `fk_server` FOREIGN KEY (`server`) REFERENCES `servers`(`id`) ON DELETE CASCADE
+);
+DBQUERY
+);
+
 			return $dataChanges;
 		}
 	}

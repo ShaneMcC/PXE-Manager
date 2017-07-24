@@ -131,6 +131,25 @@
 		}
 
 		/**
+		 * Delete rows based on this object.
+		 *
+		 * @return Array of matching rows.
+		 */
+		public function delete() {
+			list($query, $params) = $this->buildQuery('DELETE');
+
+			$statement = $this->_pdo->prepare($query);
+			$result = $statement->execute($params);
+
+			if ($result) {
+				return TRUE;
+			} else {
+				$this->lastError = $statement->errorInfo();
+				return FALSE;
+			}
+		}
+
+		/**
 		 * Get rows based on this object.
 		 *
 		 * @param $index (Default: FALSE) If set to a key id, this will set the
@@ -173,7 +192,7 @@
 		 *
 		 * @return Array [$query, $params] of built query.
 		 */
-		public function buildQuery() {
+		public function buildQuery($queryType = 'SELECT') {
 			// Keys we are requesting
 			$keys = [];
 
@@ -235,7 +254,14 @@
 			}
 
 			// Start off the query!
-			$query = sprintf('SELECT %s FROM %s', implode(', ', $keys), $this->_table);
+			$queryType = strtoupper($queryType);
+			if ($queryType == 'SELECT') {
+				$query = sprintf('SELECT %s FROM %s', implode(', ', $keys), $this->_table);
+			} else if ($queryType == 'DELETE') {
+				$query = sprintf('DELETE FROM %s', $this->_table);
+			} else {
+				return FALSE;
+			}
 
 			// Add in any joins.
 			if (count($this->joins) > 0) {

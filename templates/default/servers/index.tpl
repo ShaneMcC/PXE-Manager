@@ -19,7 +19,9 @@
 		</tr>
 	</thead>
 	<tbody>
+		{% set found = false %}
 		{% for server in servers %}
+		{% set found = true %}
 		<tr data-searchable-value="{{ server.name }}||{{ server.imagename }}">
 			<td class="server">
 				{{ server.name }}
@@ -51,6 +53,14 @@
 			</td>
 		</tr>
 		{% endfor %}
+
+		{% if not found %}
+			<tr>
+				<td class="nonefound" colspan="4">
+					<em>There are no servers</em>
+				</td>
+			</tr>
+		{% endif %}
 	</tbody>
 </table>
 

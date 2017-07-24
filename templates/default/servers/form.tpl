@@ -1,6 +1,6 @@
 {% if hasPermission(['edit_servers']) %}
 	{% if server %}
-		<form method="post" id="serverform" data-server-id="{{ server.id }}" action="{{ url("#{pathprepend}/servers/#{server.id}/edit.json") }}">
+		<form method="post" id="serverform" action="{{ url("#{pathprepend}/servers/#{server.id}/edit.json") }}">
 	{% else %}
 		<form method="post" id="serverform" action="{{ url("#{pathprepend}/servers/create.json") }}">
 	{% endif %}
@@ -8,25 +8,25 @@
 {% endif %}
 
 
-<table id="serverinfo" class="table table-striped table-bordered">
+<table id="serverinfo" class="table table-striped table-bordered" {% if server %}data-server-id="{{ server.id }}"{% endif %}>
 	<tbody>
 		<tr>
 			<th>Name</th>
-			<td class="mono" data-type="string" data-name="name" data-value="{{ server.name }}">
+			<td data-type="string" data-name="name" data-value="{{ server.name }}">
 				{{ server.name }}
 			</td>
 		</tr>
 
 		<tr>
 			<th>MAC Address</th>
-			<td class="mono" data-type="string" data-name="macaddr" data-value="{{ server.macaddr }}">
+			<td data-type="string" data-name="macaddr" data-value="{{ server.macaddr }}">
 				{{ server.macaddr }}
 			</td>
 		</tr>
 
 		<tr>
 			<th>Boot Image</th>
-			<td class="mono" data-type="select" data-options="images" data-name="image" data-raw-value="{{ server.image }}" data-value="{{ image.name }}">
+			<td data-type="select" data-options="images" data-name="image" data-raw-value="{{ server.image }}" data-value="{{ image.name }}">
 				{% if image %}
 					{{ image.name }}
 				{% else %}
@@ -44,7 +44,7 @@
 
 		<tr>
 			<th>Enabled</th>
-			<td class="mono" data-type="yesno" data-name="enabled" data-badge-yes="success" data-badge-no="danger" data-value="{{ (image and server.enabled) | yesno }}">
+			<td data-type="yesno" data-name="enabled" data-badge-yes="success" data-badge-no="danger" data-value="{{ (image and server.enabled) | yesno }}">
 				{% if image and server.enabled == 'true' %}
 					<span class="badge badge-success">Yes</span>
 				{% else %}

@@ -6,7 +6,7 @@
 				<th>{{ vardata.description }}</th>
 
 				{% if vardata.type == 'yesno' %}
-					<td class="mono" data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] | yesno }}" data-badge-yes="success" data-badge-no="danger">
+					<td data-name="var[{{ var }}]" data-type="{{ vardata.type }}" data-value="{{ server.variables[var] | yesno }}" data-badge-yes="success" data-badge-no="danger">
 						{% if server.variables[var] == 'true' %}
 							<span class="badge badge-success">Yes</span>
 						{% else %}

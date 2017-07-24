@@ -56,6 +56,10 @@ pre.preview {
   padding: 10px;
 }
 
+.mono {
+  font-family: Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+
 /**********************************************************************
  * Headers
  **********************************************************************/
@@ -185,4 +189,14 @@ table#serverlist th.enabled, table#serverlist td.enabled {
 
 table#serverlist th.image, table#serverlist td.image {
   width: 300px;
+}
+
+
+
+table#serverlogs th.time, table#serverlist td.time {
+  width: 350px;
+}
+
+table#serverlogs th.type, table#serverlist td.type {
+  width: 100px;
 }

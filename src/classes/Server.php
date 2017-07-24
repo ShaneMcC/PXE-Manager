@@ -8,7 +8,6 @@ class Server extends DBObject {
 	                             'variables' => NULL,
 	                             'enabled' => FALSE,
 	                            ];
-	protected $variables = [];
 	protected static $_json_fields = ['variables'];
 
 	protected static $_key = 'id';
@@ -85,6 +84,14 @@ class Server extends DBObject {
 		return BootableImage::load($this->getDB(), $this->getData('image'));
 	}
 
+	public function getServerLogs() {
+		return ServerLog::getSearch($this->getDB())->where('server', $this->getID())->find();
+	}
+
+	public function clearServerLogs() {
+		return ServerLog::getSearch($this->getDB())->where('server', $this->getID())->delete();
+	}
+
 	public function getValidVariables() {
 		// Ensure that our getVariable() function only returns variables
 		// that are valid for this image.
@@ -131,6 +138,12 @@ class Server extends DBObject {
 		$twig->addFunction(new Twig_Function('getServiceURL', function () use ($de) {
 			return $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash());
 		}));
+
+		$twig->addFunction(new Twig_Function('getLogUrl', function ($type, $entry) use ($de) {
+			return $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash() . '/serverlog/' . $type) . '/?entry=' . urlencode($entry);
+		}));
+
+
 
 		return $de;
 	}

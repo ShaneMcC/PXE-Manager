@@ -22,7 +22,7 @@
 	<tbody>
 		<tr class="name">
 			<th>Name</th>
-			<td class="mono" data-type="string" data-name="name" data-value="{{ image.name }}">{{ image.name }}</td>
+			<td data-type="string" data-name="name" data-value="{{ image.name }}">{{ image.name }}</td>
 		</tr>
 
 		<tr class="variables">
@@ -146,6 +146,9 @@ In addition to variables, there are other functions that can be used:
 <ul>
 	<li>
 		<code>{% verbatim %}{{ getServiceURL() }}{% endverbatim %}</code> - Get the service-url. (Used for example to disable a server after deployment: <code>{% verbatim %}wget {{ getServiceURL() }}/disable{% endverbatim %}</code>)
+	</li>
+	<li>
+		<code>{% verbatim %}{{ getLogUrl('type', 'entry') }}{% endverbatim %}</code> - Shorthand to get the URL to log an event. (Eg: <code>{% verbatim %}wget -qO /dev/null "{{ getLogUrl('info', 'Started "POST"') }}"{% endverbatim %}</code>)
 	</li>
 	<li>
 		<code>{% verbatim %}{{ getScriptURL() }}{% endverbatim %}</code> - Shorthand to get the URL for the <code>/script</code> service (kickstart/preseed data).

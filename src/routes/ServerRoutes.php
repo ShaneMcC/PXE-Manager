@@ -4,44 +4,70 @@
 		public function showUnknown($displayEngine) {
 			$displayEngine->setPageID('servers')->setTitle('Servers :: Unknown');
 			$displayEngine->display('servers/unknown.tpl');
+			die();
 		}
 
 		public function init($config, $router, $displayEngine) {
 		}
 
+		public function checkServiceHash($api, $displayEngine, $serverid, $servicehash) {
+			$server = $api->getServer($serverid);
+			if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+
+			if ($servicehash != $server->getServiceHash()) {
+				return $this->showUnknown($displayEngine);
+			}
+
+			return $server;
+		}
+
 		public function addRoutes($authProvider, $router, $displayEngine, $api) {
-			$router->get('/servers/([0-9]+)/service/([^/]+)/([^/]+)', function($serverid, $servicehash, $action) use ($router, $displayEngine, $api) {
-				$server = $api->getServer($serverid);
-				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
 
-				if ($servicehash != $server->getServiceHash()) {
-					return $this->showUnknown($displayEngine);
+			$router->get('/servers/([0-9]+)/service/([^/]+)/disable', function($serverid, $servicehash) use ($router, $displayEngine, $api) {
+				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
+				$server->setEnabled(false)->save();
+				die('OK');
+			});
+
+			$router->get('/servers/([0-9]+)/service/([^/]+)/script', function($serverid, $servicehash) use ($router, $displayEngine, $api) {
+				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
+				$image = $server->getBootableImage();
+				if ($image instanceof BootableImage) {
+					die($server->getDisplayEngine()->renderString($image->getScript()));
+				} else {
+					die();
 				}
+			});
 
-				if ($action == 'disable') {
-					$server->setEnabled(false)->save();
-					die('OK');
-				} else if ($action == 'script') {
-					$image = $server->getBootableImage();
-					if ($image instanceof BootableImage) {
-						die($server->getDisplayEngine()->renderString($image->getScript()));
-					} else {
-						die();
-					}
-				} else if ($action == 'postinstall') {
-					$image = $server->getBootableImage();
-					if ($image instanceof BootableImage) {
-						die($server->getDisplayEngine()->renderString($image->getPostInstall()));
-					} else {
-						die();
-					}
-				} else if ($action == 'pxedata') {
-					$image = $server->getBootableImage();
-					if ($image instanceof BootableImage) {
-						die($server->getDisplayEngine()->renderString($image->getPXEData()));
-					} else {
-						die();
-					}
+			$router->get('/servers/([0-9]+)/service/([^/]+)/postinstall', function($serverid, $servicehash) use ($router, $displayEngine, $api) {
+				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
+				$image = $server->getBootableImage();
+				if ($image instanceof BootableImage) {
+					die($server->getDisplayEngine()->renderString($image->getPostInstall()));
+				} else {
+					die();
+				}
+			});
+
+			$router->get('/servers/([0-9]+)/service/([^/]+)/pxedata', function($serverid, $servicehash) use ($router, $displayEngine, $api) {
+				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
+				$image = $server->getBootableImage();
+				if ($image instanceof BootableImage) {
+					die($server->getDisplayEngine()->renderString($image->getPXEData()));
+				} else {
+					die();
+				}
+			});
+
+			$router->match('GET|POST', '/servers/([0-9]+)/service/([^/]+)/serverlog/([a-z]+)', function($serverid, $servicehash, $logtype) use ($router, $displayEngine, $api) {
+				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
+
+				[$result,$resultdata] = $api->createServerLog($serverid, $logtype, isset($_REQUEST['entry']) ? $_REQUEST['entry'] : null);
+
+				if ($result) {
+					echo 'OK';
+				} else {
+					echo 'ERROR: ' . $resultdata;
 				}
 			});
 
@@ -55,34 +81,6 @@
 				} else {
 					die();
 				}
-			});
-
-			if (!$authProvider->checkPermissions(['view_servers'])) { return; }
-			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/servers'), 'title' => 'Servers', 'active' => function($de) { return $de->getPageID() == 'servers'; }]);
-
-			$router->get('/servers', function() use ($displayEngine, $api) {
-				$displayEngine->setPageID('servers')->setTitle('Servers');
-
-				$servers = $api->getServers(true);
-				$displayEngine->setVar('servers', $servers);
-
-				$displayEngine->display('servers/index.tpl');
-			});
-
-			$router->get('/servers/([0-9]+)', function($serverid) use ($router, $displayEngine, $api) {
-				$server = $api->getServer($serverid);
-				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
-
-				$displayEngine->setVar('server', $server->toArray());
-
-				$image = $server->getBootableImage();
-				if ($image instanceof BootableImage) {
-					$displayEngine->setVar('image', $image->toArray());
-				}
-
-				$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName());
-
-				$displayEngine->display('servers/view.tpl');
 			});
 
 			$router->get('/servers/(-1|[0-9]+)/variables(?:/([0-9]+)?)?', function($serverid, $imageid = NULL) use ($router, $displayEngine, $api) {
@@ -102,6 +100,36 @@
 				}
 
 				$displayEngine->displayRaw('servers/variables.tpl');
+			});
+
+			if (!$authProvider->checkPermissions(['view_servers'])) { return; }
+
+			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/servers'), 'title' => 'Servers', 'active' => function($de) { return $de->getPageID() == 'servers'; }]);
+
+			$router->get('/servers', function() use ($displayEngine, $api) {
+				$displayEngine->setPageID('servers')->setTitle('Servers');
+
+				$servers = $api->getServers(true);
+				$displayEngine->setVar('servers', $servers);
+
+				$displayEngine->display('servers/index.tpl');
+			});
+
+			$router->get('/servers/([0-9]+)', function($serverid) use ($router, $displayEngine, $api) {
+				$server = $api->getServer($serverid);
+				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+
+				$displayEngine->setVar('server', $server->toArray());
+				$displayEngine->setVar('serverlogs', $server->getServerLogs());
+
+				$image = $server->getBootableImage();
+				if ($image instanceof BootableImage) {
+					$displayEngine->setVar('image', $image->toArray());
+				}
+
+				$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName());
+
+				$displayEngine->display('servers/view.tpl');
 			});
 
 			$router->get('/servers/([0-9]+)/preview', function($serverid) use ($router, $displayEngine, $api) {
@@ -130,6 +158,28 @@
 					$displayEngine->setPageID('servers')->setTitle('Servers :: Create');
 
 					$displayEngine->display('servers/create.tpl');
+				});
+
+				$router->post('/servers/([0-9]+)/clearlogs', function($serverid) use ($router, $displayEngine, $api) {
+					$server = $api->getServer($serverid);
+					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+
+					if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
+						$result = $server->clearServerLogs();
+
+						if ($result) {
+							$displayEngine->flash('success', '', 'Logs for server ' . $server->getName() . ' have been deleted.');
+							header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
+							return;
+						} else {
+							$displayEngine->flash('error', '', 'There was an error deleting the server logs.');
+							header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
+							return;
+						}
+					} else {
+						header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
+						return;
+					}
 				});
 
 				$router->post('/servers/([0-9]+)/delete', function($serverid) use ($router, $displayEngine, $api) {

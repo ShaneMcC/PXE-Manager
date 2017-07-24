@@ -41,10 +41,10 @@ class API {
 					$name = $vardata['name'];
 					$desc = $vardata['description'];
 					$type = isset($vardata['type']) ? $vardata['type'] : 'string';
-					$data = isset($vardata['data']) ? $vardata['data'] : '';
+					$thisdata = isset($vardata['data']) ? $vardata['data'] : '';
 					$required = isset($vardata['required']) ? $vardata['required'] : true;
 
-					$image->setVariable($name, $desc, $type, $data, $required);
+					$image->setVariable($name, $desc, $type, $thisdata, $required);
 				}
 			}
 		}
@@ -118,6 +118,25 @@ class API {
 
 			$server->save();
 			return [true, $server->getID()];
+		} catch (Exception $ex) {
+			return [false, $ex->getMessage()];
+		}
+	}
+
+	public function createServerLog($serverid, $logtype, $entry = NULL) {
+		$log = new ServerLog($this->db);
+		$log->setServer($serverid);
+		$log->setTime(time());
+		$log->setType($logtype);
+		if ($entry !== null) {
+			$log->setEntry($entry);
+		}
+
+		try {
+			$log->validate();
+
+			$log->save();
+			return [true, $log->getID()];
 		} catch (Exception $ex) {
 			return [false, $ex->getMessage()];
 		}
