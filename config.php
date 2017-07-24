@@ -88,6 +88,11 @@
 	                                              'CN=PXE User,OU=Groups,DC=localhost,DC=localdomain' => ['view_.*', 'edit_servers'],
 	                                             ];
 
+	// =========================================================================
+	// User/Pass Auth Provider
+	// =========================================================================
+	// $config['authProvider']['name'] = 'UserPassAuthProvider';
+
 
 	if (file_exists(dirname(__FILE__) . '/config.local.php')) {
 		include(dirname(__FILE__) . '/config.local.php');
