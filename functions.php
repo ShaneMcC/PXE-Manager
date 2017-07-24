@@ -106,3 +106,14 @@
 	function isValidMac($mac) {
 		return preg_match('/^([A-F0-9]{2}[:|\-|\.]?){6}$/i', $mac);
 	}
+
+
+	class bcrypt {
+		public static function hash($password, $work_factor = 0) {
+			if ($work_factor > 0) { $options = ['cost' => $work_factor]; }
+			return password_hash($password, PASSWORD_DEFAULT);
+		}
+		public static function check($password, $stored_hash, $legacy_handler = NULL) {
+			return password_verify($password, $stored_hash);
+		}
+	}

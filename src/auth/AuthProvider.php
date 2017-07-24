@@ -1,12 +1,12 @@
 <?php
 
 abstract class AuthProvider {
-	protected static $VALID_PERMISSIONS = ['view_images' => 'View Images',
-	                                       'edit_images' => 'Edit Images',
+	public static $VALID_PERMISSIONS = ['view_images' => 'View Images',
+	                                    'edit_images' => 'Edit Images',
 
-	                                       'view_servers' => 'View Servers',
-	                                       'edit_servers' => 'Edit Servers',
-	                                      ];
+	                                    'view_servers' => 'View Servers',
+	                                    'edit_servers' => 'Edit Servers',
+	                                   ];
 
 	abstract public function checkSession($sessionData);
 	abstract public function isAuthenticated();

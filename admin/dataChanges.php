@@ -19,8 +19,8 @@
 			$dataChanges[1] = new DBChange(<<<DBQUERY
 CREATE TABLE IF NOT EXISTS `__MetaData` (
   `key` VARCHAR(255) NOT NULL,
-  `value` VARCHAR(255) NOT NULL
-,  PRIMARY KEY (`key`)
+  `value` VARCHAR(255) NOT NULL,
+   PRIMARY KEY (`key`)
 );
 DBQUERY
 );

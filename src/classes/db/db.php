@@ -68,11 +68,11 @@ class DB {
 
 		$currentVersion = (int)$this->getMetaData($versionField, 0);
 
-		echo 'Current Version: ', $currentVersion, "\n";
+		echo $versionField, ' Current Version: ', $currentVersion, "\n";
 
 		foreach ($changes as $version => $change) {
 			if ($version <= $currentVersion) { continue; }
-			echo 'Updating to version ', $version, ': ';
+			echo $versionField, ' Updating to version ', $version, ': ';
 
 			if ($change->run($this->getPDO())) {
 				$this->setMetaData($versionField, $version);

@@ -1,0 +1,53 @@
+/**********************************************************************
+ * User
+ **********************************************************************/
+table#userlist th.id, table#userlist td.id {
+  width: 50px;
+}
+
+table#userlist th.username, table#userlist td.username {
+  width: 400px;
+}
+
+table#userlist th.realname, table#userlist td.realname {
+  width: 325px;
+}
+
+table#userlist th.permissions, table#userlist td.permissions {
+
+}
+
+table#userlist th.state, table#userlist td.state {
+  width: 150px;
+}
+
+table#userlist th.actions, table#userlist td.actions {
+  width: 200px;
+}
+
+table#userlist td.permissions table {
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+table#userlist td.permissions table tr {
+  background: none;
+}
+
+table#userlist td.permissions table td {
+  background: none;
+  border: none;
+}
+
+table#userlist td.permissions table td.name {
+  width: 180px;
+}
+
+table#userlist td.permissions table td.value {
+  width: 40px;
+}
+
+table#userlist td.permissions table td.actions {
+  width: 60px;
+}
