@@ -7,6 +7,7 @@ class BootableImage extends DBObject {
 	                             'pxedata' => NULL,
 	                             'script' => NULL,
 	                             'postinstall' => NULL,
+	                             'lastmodified' => 0,
 	                            ];
 	protected static $_json_fields = ['variables'];
 
@@ -61,6 +62,10 @@ class BootableImage extends DBObject {
 		return $this->setData('postinstall', $value);
 	}
 
+	public function setLastModified($value) {
+		return $this->setData('lastmodified', $value);
+	}
+
 	public function getID() {
 		return $this->getData('id');
 	}
@@ -88,6 +93,10 @@ class BootableImage extends DBObject {
 
 	public function getPostInstall() {
 		return $this->getData('postinstall');
+	}
+
+	public function getLastModified() {
+		return $this->getData('lastmodified');
 	}
 
 	public function getServers() {
@@ -183,6 +192,12 @@ class BootableImage extends DBObject {
 		}
 
 		return TRUE;
+	}
+
+	public function preSave() {
+		if ($this->hasChanged()) {
+			$this->setLastModified(time());
+		}
 	}
 
 	public function postSave($result) {

@@ -7,6 +7,7 @@ class Server extends DBObject {
 	                             'image' => NULL,
 	                             'variables' => NULL,
 	                             'enabled' => FALSE,
+	                             'lastmodified' => 0,
 	                            ];
 	protected static $_json_fields = ['variables'];
 
@@ -51,6 +52,10 @@ class Server extends DBObject {
 		return $this->setData('enabled', parseBool($value));
 	}
 
+	public function setLastModified($value) {
+		return $this->setData('lastmodified', $value);
+	}
+
 	public function getID() {
 		return $this->getData('id');
 	}
@@ -78,6 +83,10 @@ class Server extends DBObject {
 
 	public function getEnabled() {
 		return parseBool($this->getData('enabled'));
+	}
+
+	public function getLastModified() {
+		return $this->getData('lastmodified');
 	}
 
 	public function getBootableImage() {
@@ -143,7 +152,7 @@ class Server extends DBObject {
 			return $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash() . '/serverlog/' . $type) . '/?entry=' . urlencode($entry);
 		}));
 
-
+		$twig->setLoader(new BootableImageTwigLoader($this->getDB()));
 
 		return $de;
 	}
@@ -177,6 +186,12 @@ class Server extends DBObject {
 		}
 
 		return TRUE;
+	}
+
+	public function preSave() {
+		if ($this->hasChanged()) {
+			$this->setLastModified(time());
+		}
 	}
 
 	public function postSave($result) {

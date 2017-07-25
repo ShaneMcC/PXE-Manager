@@ -163,6 +163,13 @@
 			$this->twig->display($template, $this->vars);
 		}
 
+
+		public function render($template) {
+			$this->setExtraVars();
+
+			return $this->twig->load($template)->render($this->vars);
+		}
+
 		public function renderString($string) {
 			$this->setExtraVars();
 

@@ -100,6 +100,16 @@ CREATE TABLE `serverlogs` (
 DBQUERY
 );
 
+			// ------------------------------------------------------------------------
+			// Last Modified Times
+			// ------------------------------------------------------------------------
+			$dataChanges[6] = new DBChange(<<<DBQUERY
+ALTER TABLE `bootableimages` ADD `lastmodified` INT;
+
+ALTER TABLE `servers` ADD `lastmodified` INT;
+DBQUERY
+);
+
 			return $dataChanges;
 		}
 	}

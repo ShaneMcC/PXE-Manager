@@ -33,7 +33,7 @@
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
-					die($server->getDisplayEngine()->renderString($image->getScript()));
+					die($server->getDisplayEngine()->render($image->getID() . '/script'));
 				} else {
 					die();
 				}
@@ -43,7 +43,7 @@
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
-					die($server->getDisplayEngine()->renderString($image->getPostInstall()));
+					die($server->getDisplayEngine()->render($image->getID() . '/postinstall'));
 				} else {
 					die();
 				}
@@ -53,7 +53,7 @@
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
-					die($server->getDisplayEngine()->renderString($image->getPXEData()));
+					die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
 				} else {
 					die();
 				}
@@ -77,7 +77,7 @@
 
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
-					die($server->getDisplayEngine()->renderString($image->getPXEData()));
+					die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
 				} else {
 					die();
 				}
@@ -143,9 +143,9 @@
 				if ($image instanceof BootableImage) {
 					$te = $server->getDisplayEngine();
 
-					$displayEngine->setVar('pxedata', $te->renderString($image->getPXEData()));
-					$displayEngine->setVar('kickstart', $te->renderString($image->getScript()));
-					$displayEngine->setVar('postinstall', $te->renderString($image->getPostInstall()));
+					$displayEngine->setVar('pxedata', $te->render($image->getID() . '/pxedata'));
+					$displayEngine->setVar('kickstart', $te->render($image->getID() . '/script'));
+					$displayEngine->setVar('postinstall', $te->render($image->getID() . '/postinstall'));
 
 					$displayEngine->setVar('validvars', $server->getValidVariables());
 				}

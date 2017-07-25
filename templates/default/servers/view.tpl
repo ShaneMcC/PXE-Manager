@@ -1,4 +1,5 @@
 <H1>Server :: {{ server.name }}</H1>
+<small><em><Strong>Last Modified:</Strong> {{ image.lastmodified | date }}</em></small><br><br>
 
 {% embed 'servers/form.tpl' %}
 	{% block left_buttons %}
