@@ -249,9 +249,7 @@ class BootableImage extends DBObject {
 	public function postSave($result) {
 		if (!$result) { return; }
 
-		foreach ($this->getServers() as $server) {
-			$server->generateConfig();
-		}
+		$this->generateServers();
 	}
 
 	public function preDelete() {
@@ -260,7 +258,16 @@ class BootableImage extends DBObject {
 
 	public function postDelete($result) {
 		if (!$result) { return; }
-		foreach ($this->myServers as $server) {
+
+		$this->generateServers();
+	}
+
+	private function generateServers() {
+		// TODO: Find any servers that use this image, or any image that
+		//       references this, and regenerate them.
+		// foreach ($this->getServers() as $server) {
+
+		foreach (Server::getSearch($this->db)->find() as $server) {
 			$server->generateConfig();
 		}
 	}
