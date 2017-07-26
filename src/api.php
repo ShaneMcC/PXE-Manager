@@ -35,8 +35,9 @@ class API {
 		if (isset($data['var'])) {
 			$image->setVariables([]);
 			if (is_array($data['var'])) {
-				foreach ($data['var'] as $vardata) {
+				foreach ($data['var'] as $key => $vardata) {
 					if (array_key_exists('delete', $vardata)) { continue; }
+					if (!array_key_exists('name', $vardata)) { $vardata['name'] = $key; }
 
 					$name = $vardata['name'];
 					$desc = $vardata['description'];

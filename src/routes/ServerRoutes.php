@@ -225,6 +225,7 @@
 						$data = $server->toArray();
 						$data['name'] = $_POST['newname'];
 						$data['macaddr'] = $_POST['newmac'];
+						$data['var'] = $data['variables'];
 
 						[$result,$resultdata] = $api->createServer($data);
 					}
@@ -232,8 +233,7 @@
 					if ($result) {
 						$displayEngine->flash('success', '', 'Server has been duplicated.');
 
-						header('Content-Type: application/json');
-						echo json_encode(['success' => 'Server has been duplicated.', 'location' => $displayEngine->getURL('/servers/' . $resultdata)]);
+						header('Location: ' . $displayEngine->getURL('/servers/' . $resultdata));
 						return;
 					} else {
 						header('Content-Type: application/json');

@@ -56,7 +56,7 @@ class BootableImageTwigLoader implements Twig_LoaderInterface {
 				$data = [$image->getPostInstall(), $image->getLastModified()];
 			}
 		} else {
-			throw new Twig_Error_Loader('Unknown image ID: ' . $imageid);
+			throw new Twig_Error_Loader('Unknown image ID: ' . $imageid . ' (Looking for: ' . $name . ')');
 		}
 
 		if ($data === FALSE) {
