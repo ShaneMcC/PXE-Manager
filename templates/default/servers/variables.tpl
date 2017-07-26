@@ -1,7 +1,7 @@
 <table id="variables" class="table table-striped table-bordered">
 	<tbody>
 		<input type="hidden" name="var" value="">
-		{% for var,vardata in image.variables %}
+		{% for var,vardata in image.requiredvariables %}
 			<tr>
 				<th>{{ vardata.description }}</th>
 

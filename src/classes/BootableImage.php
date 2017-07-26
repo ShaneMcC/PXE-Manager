@@ -79,6 +79,52 @@ class BootableImage extends DBObject {
 		return is_array($vars) ? $vars : [];
 	}
 
+	public function getRequiredVariables() {
+		$vars = [];
+
+		foreach ($this->getAllImageIDs() as $id) {
+			$i = BootableImage::load($this->getDB(), $id);
+			$vars = $vars + $i->getVariables();
+		}
+
+		return $vars;
+	}
+
+	private function getAllImageIDs() {
+		$de = getDisplayEngine();
+		$twig = $de->getTwig();
+		$loader = new BootableImageTwigLoader($this->getDB());
+		$twig->setLoader($loader);
+
+		$lookedAt = [];
+		$wanted = [];
+
+		$wanted[] = $this->getID();
+
+		while (!empty($wanted)) {
+			$lookAt = array_shift($wanted);
+			$lookedAt[] = $lookAt;
+
+			foreach (['pxedata', 'script', 'postinstall'] as $bit) {
+				$tokens = $twig->tokenize($loader->getSourceContext($lookAt . '/' . $bit));
+				while (!$tokens->isEOF()) {
+					$token = $tokens->getCurrent();
+					$tokens->next();
+
+					if ($token->getValue() == 'extends' || $token->getValue() == 'use' || $token->getValue() == 'include') {
+						$want = explode('/', strtolower($tokens->getCurrent()->getValue()))[0];
+
+						if (!in_array($want, $wanted)) {
+							$wanted[] = $want;
+						}
+					}
+				}
+			}
+		}
+
+		return $lookedAt;
+	}
+
 	public function getVariable($name) {
 		return $this->getData('variables')[strtolower($name)];
 	}
@@ -136,7 +182,7 @@ class BootableImage extends DBObject {
 	}
 
 	public function validateVariables($vars) {
-		$myVars = $this->getData('variables');
+		$myVars = $this->getRequiredVariables();
 
 		foreach ($vars as $var => $value) {
 			if (!array_key_exists($var, $myVars)) {

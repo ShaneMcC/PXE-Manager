@@ -50,7 +50,7 @@ class BootableImageTwigLoader implements Twig_LoaderInterface {
 		if ($image instanceof BootableImage) {
 			if ($template == 'pxedata') {
 				$data = [$image->getPXEData(), $image->getLastModified()];
-			} else if ($template == 'script') {
+			} else if ($template == 'script' || $template == 'kickstart' || $template == 'preseed') {
 				$data = [$image->getScript(), $image->getLastModified()];
 			} else if ($template == 'postinstall') {
 				$data = [$image->getPostInstall(), $image->getLastModified()];

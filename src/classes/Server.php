@@ -109,11 +109,13 @@ class Server extends DBObject {
 
 		$image = $this->getBootableImage();
 		if ($image instanceof BootableImage) {
-			foreach ($image->getVariables() as $v => $vd) {
+			foreach ($image->getRequiredVariables() as $v => $vd) {
 				if (array_key_exists($v, $myVars)) {
 					$validVars[$v] = $myVars[$v];
 
 					if ($vd['type'] == 'yesno') { $validVars[$v] = parseBool($validVars[$v]); }
+				} else {
+					$validVars[$v] = '';
 				}
 			}
 		}
@@ -223,7 +225,7 @@ class Server extends DBObject {
 			$de = $this->getDisplayEngine();
 			$serviceURL = $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash());
 
-			foreach (explode("\n", $de->renderString($image->getPXEData())) as $line) {
+			foreach (explode("\n", $de->render($image->getID() . '/pxedata')) as $line) {
 				if ($first && $line == "#!ipxe") {
 					$contents[] = '    KERNEL ipxe.lkrn';
     				$contents[] = '    APPEND dhcp && chain --autofree ' . $serviceURL . '/pxedata';

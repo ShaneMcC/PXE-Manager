@@ -96,7 +96,9 @@
 				}
 
 				if ($image instanceof BootableImage) {
-					$displayEngine->setVar('image', $image->toArray());
+					$arr = $image->toArray();
+					$arr['requiredvariables'] = $image->getRequiredVariables();
+					$displayEngine->setVar('image', $arr);
 				}
 
 				$displayEngine->displayRaw('servers/variables.tpl');
