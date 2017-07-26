@@ -267,7 +267,7 @@ class BootableImage extends DBObject {
 		//       references this, and regenerate them.
 		// foreach ($this->getServers() as $server) {
 
-		foreach (Server::getSearch($this->db)->find() as $server) {
+		foreach (Server::getSearch($this->getDB())->find() as $server) {
 			$server->generateConfig();
 		}
 	}
