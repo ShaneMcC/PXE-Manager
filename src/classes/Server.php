@@ -1,5 +1,8 @@
 <?php
 
+use shanemcc\phpdb\DBObject;
+use shanemcc\phpdb\ValidationFailed;
+
 class Server extends DBObject {
 	protected static $_fields = ['id' => NULL,
 	                             'name' => NULL,

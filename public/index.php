@@ -1,6 +1,8 @@
 <?php
 	require_once(__DIR__ . '/../functions.php');
 
+	use shanemcc\phpdb\DB;
+
 	// Router for requests
 	$router = new \Bramus\Router\Router();
 

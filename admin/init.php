@@ -3,6 +3,9 @@
 	require_once(dirname(__FILE__) . '/../functions.php');
 	require_once(dirname(__FILE__) . '/dataChanges.php');
 
+	use shanemcc\phpdb\DB;
+	use shanemcc\phpdb\DBChanger;
+
 	DB::get()->runChanges(new DataChanges());
 
 	$authProvider = getAuthProvider();

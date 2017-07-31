@@ -1,5 +1,8 @@
 <?php
 
+use shanemcc\phpdb\DBObject;
+use shanemcc\phpdb\ValidationFailed;
+
 class BootableImage extends DBObject {
 	protected static $_fields = ['id' => NULL,
 	                             'name' => NULL,

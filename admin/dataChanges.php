@@ -1,6 +1,9 @@
 <?php
 	require_once(dirname(__FILE__) . '/../functions.php');
 
+	use shanemcc\phpdb\DBChange;
+	use shanemcc\phpdb\DBChanger;
+
 	class DataChanges implements DBChanger {
 
 		public function getVersionField() {

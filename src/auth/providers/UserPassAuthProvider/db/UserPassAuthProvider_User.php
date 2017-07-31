@@ -1,5 +1,8 @@
 <?php
 
+use shanemcc\phpdb\DBObject;
+use shanemcc\phpdb\ValidationFailed;
+
 class UserPassAuthProvider_User extends DBObject {
 	protected static $_fields = ['id' => NULL,
 	                             'username' => NULL,

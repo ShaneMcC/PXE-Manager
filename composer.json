@@ -13,7 +13,8 @@
     "require": {
         "php": ">=7.1",
         "bramus/router": "~1.0",
-        "twig/twig": "~2.0"
+        "twig/twig": "~2.0",
+        "shanemcc/php-db": "0.1"
     },
     "autoload": {
         "classmap": [

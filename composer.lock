@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c81e43e0f7a75933257500c6a7adfa61",
-    "content-hash": "384d08c1e5fd244039f42a69210531de",
+    "hash": "96a9b85942a86182b81d55825f262d6c",
+    "content-hash": "d51bdeb2f7f50b3a7cd3930a68ca09b6",
     "packages": [
         {
             "name": "bramus/router",
@@ -52,6 +52,44 @@
                 "routing"
             ],
             "time": "2016-05-26 19:40:20"
+        },
+        {
+            "name": "shanemcc/php-db",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ShaneMcC/php-db.git",
+                "reference": "f7a165ca5419989f3b54fb6d401d43d7b1b168ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/f7a165ca5419989f3b54fb6d401d43d7b1b168ec",
+                "reference": "f7a165ca5419989f3b54fb6d401d43d7b1b168ec",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "shanemcc\\phpdb\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shane Mc Cormack",
+                    "email": "shanemcc@gmail.com",
+                    "homepage": "http://www.dataforce.org.uk/"
+                }
+            ],
+            "description": "Basic PHP ORM",
+            "homepage": "https://github.com/shanemcc/php-db",
+            "time": "2017-07-31 03:20:10"
         },
         {
             "name": "symfony/polyfill-mbstring",

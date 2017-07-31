@@ -1,5 +1,8 @@
 <?php
 
+use shanemcc\phpdb\DB;
+use shanemcc\phpdb\DBChanger;
+
 class UserPassAuthProvider extends LoginAuthProvider implements RouteProvider, DBChanger {
 	protected $currentUser = NULL;
 

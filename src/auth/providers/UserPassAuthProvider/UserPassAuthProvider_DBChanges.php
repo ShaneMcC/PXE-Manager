@@ -1,5 +1,8 @@
 <?php
 
+use shanemcc\phpdb\DBChange;
+use shanemcc\phpdb\DBChanger;
+
 	class UserPassAuthProvider_DBChanges implements DBChanger {
 
 		public function getVersionField() {
