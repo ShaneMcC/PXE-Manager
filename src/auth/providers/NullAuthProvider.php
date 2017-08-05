@@ -6,7 +6,7 @@ class NullAuthProvider extends AuthProvider {
 	}
 
 	public function isAuthenticated() {
-		return false;
+		return true;
 	}
 
 	public function getPermissions() {

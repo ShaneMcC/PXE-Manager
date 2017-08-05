@@ -18,8 +18,9 @@ abstract class AuthProvider {
 	 *
 	 * @param $permissions Permissions required.
 	 */
-	public function checkPermissions($permissions) {
-		$access = $this->getPermissions();
+	public final function checkPermissions($permissions) {
+		global $config;
+		$access = $this->isAuthenticated() ? $this->getPermissions() : $this->calculatePermissions($config['authProvider']['default']);
 
 		if (!is_array($permissions)) { $permissions = array($permissions); }
 		foreach ($permissions as $permission) {
@@ -29,6 +30,23 @@ abstract class AuthProvider {
 		}
 
 		return true;
+	}
+
+	protected function calculatePermissions($allowedPermissions) {
+		$permissions = [];
+
+		if (is_array($allowedPermissions)) {
+			foreach (array_keys(AuthProvider::$VALID_PERMISSIONS) as $p) {
+				// Check if permission matches a permission in the array.
+				foreach ($allowedPermissions as $permission) {
+					if (preg_match('#' . str_replace('#', '\\#', $permission) . '#', $p)) {
+						$permissions[$p] = true;
+					}
+				}
+			}
+		}
+
+		return $permissions;
 	}
 
 	public function handle404($router, $displayEngine, $wanted) { return false; }
