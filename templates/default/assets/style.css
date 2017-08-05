@@ -171,6 +171,10 @@ table#imagelist th.actions, table#imagelist td.actions {
   width: 350px;
 }
 
+table#imagelist th.imageid, table#imagelist td.imageid {
+  width: 50px;
+}
+
 /**********************************************************************
  * Server Info
  **********************************************************************/
@@ -191,7 +195,9 @@ table#serverlist th.image, table#serverlist td.image {
   width: 300px;
 }
 
-
+table#serverlist th.imageid, table#serverlist td.imageid {
+  width: 50px;
+}
 
 table#serverlogs th.time, table#serverlist td.time {
   width: 350px;

@@ -12,6 +12,7 @@
 <table id="imagelist" class="table table-striped table-bordered">
 	<thead>
 		<tr>
+			<th class="imageid">ID</th>
 			<th class="image">Image</th>
 			<th class="actions">Actions</th>
 		</tr>
@@ -21,6 +22,9 @@
 		{% for image in images %}
 		{% set found = true %}
 		<tr data-searchable-value="{{ image.name }}">
+			<td class="imageid">
+				{{ image.id }}
+			</td>
 			<td class="image">
 				{{ image.name }}
 			</td>
