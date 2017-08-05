@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
     <link href="{{ url('assets/style.css') }}" rel="stylesheet">
+    <link href="{{ url('assets/style-local.css') }}" rel="stylesheet">
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>

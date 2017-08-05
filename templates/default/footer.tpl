@@ -10,5 +10,6 @@
 		</footer>
 
 		<script src="{{ url('/assets/script.js') }}"></script>
+		<script src="{{ url('/assets/script-local.js') }}"></script>
 	</body>
 </html>
