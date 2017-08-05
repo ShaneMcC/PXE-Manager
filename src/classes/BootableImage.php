@@ -109,7 +109,21 @@ class BootableImage extends DBObject {
 			$lookedAt[] = $lookAt;
 
 			foreach (['pxedata', 'script', 'postinstall'] as $bit) {
-				$tokens = $twig->tokenize($loader->getSourceContext($lookAt . '/' . $bit));
+				$name = $lookAt . '/' . $bit;
+
+				if ($lookAt == $this->getID()) {
+					if ($bit == 'pxedata') {
+						$code = new Twig_Source($this->getPXEData(), $name);
+					} else if ($bit == 'script' || $bit == 'kickstart' || $bit == 'preseed') {
+						$code = new Twig_Source($this->getScript(), $name);
+					} else if ($bit == 'postinstall') {
+						$code = new Twig_Source($this->getPostInstall(), $name);
+					}
+				} else {
+					$code = $loader->getSourceContext($name);
+				}
+
+				$tokens = $twig->tokenize($code);
 				while (!$tokens->isEOF()) {
 					$token = $tokens->getCurrent();
 					$tokens->next();
@@ -117,7 +131,9 @@ class BootableImage extends DBObject {
 					if ($token->getValue() == 'extends' || $token->getValue() == 'use' || $token->getValue() == 'include') {
 						$want = explode('/', strtolower($tokens->getCurrent()->getValue()))[0];
 
-						if (!in_array($want, $wanted)) {
+						if (in_array($want, $lookedAt)) {
+							throw new Exception('Recursion Error (Found ' . $want . ' already).');
+						} else if (!in_array($want, $wanted)) {
 							$wanted[] = $want;
 						}
 					}
@@ -179,6 +195,13 @@ class BootableImage extends DBObject {
 			}
 		} else if (!empty($vars)) {
 			throw new ValidationFailed('Invalid variables data.');
+		}
+
+		// Check that any inheritance makes sense.
+		try {
+			$this->getAllImageIDs();
+		} catch (Exception $e) {
+			throw new ValidationFailed($e->getMessage());
 		}
 
 		return TRUE;
