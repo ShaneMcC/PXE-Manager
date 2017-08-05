@@ -17,6 +17,7 @@
 {% set variableTypes = variableTypes | merge({"selectoption": "Select Option"}) %}
 {% set variableTypes = variableTypes | merge({"text": "Multi-Line Text Data"}) %}
 {% set variableTypes = variableTypes | merge({"yesno": "Boolean Value"}) %}
+{% set variableTypes = variableTypes | merge({"none": "Hidden Option"}) %}
 
 <table id="imageinfo" class="table table-striped table-bordered">
 	<tbody>

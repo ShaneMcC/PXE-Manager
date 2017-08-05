@@ -17,8 +17,8 @@ class BootableImage extends DBObject {
 	protected static $_key = 'id';
 	protected static $_table = 'bootableimages';
 
-	protected static $_VARIABLE_TYPES = ['ipv4', 'ipv6', 'ip', 'integer', 'string', 'text', 'yesno', 'selectoption'];
-	protected static $_VARIABLE_HASDATA = ['string', 'selectoption'];
+	protected static $_VARIABLE_TYPES = ['ipv4', 'ipv6', 'ip', 'integer', 'string', 'text', 'yesno', 'selectoption', 'none'];
+	protected static $_VARIABLE_HASDATA = ['string', 'selectoption', 'none'];
 
 	// Used to update servers after we are deleted.
 	protected $myServers = [];
@@ -219,7 +219,7 @@ class BootableImage extends DBObject {
 			$myData = isset($myVars[$var]['data']) ? $myVars[$var]['data'] : '';
 			$valueRequired = isset($myVars[$var]['required']) ? parseBool($myVars[$var]['required']) : true;
 
-			if ($value === '') {
+			if ($value === '' && $myType != 'none') {
 				if ($valueRequired) {
 					throw new ValidationFailed('Variable value required for: '. $myDesc);
 				} else {

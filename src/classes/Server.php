@@ -117,6 +117,7 @@ class Server extends DBObject {
 					$validVars[$v] = $myVars[$v];
 
 					if ($vd['type'] == 'yesno') { $validVars[$v] = parseBool($validVars[$v]); }
+					if ($vd['type'] == 'none') { $validVars[$v] = $vd['data']; }
 				} else {
 					$validVars[$v] = '';
 				}
