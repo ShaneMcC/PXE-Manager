@@ -140,7 +140,7 @@ table#variables {
 }
 
 table#variables th.handle, table#variables td.handle {
-  width: 50px;
+  width: 40px;
 }
 
 table#variables th.name, table#variables td.name {
