@@ -233,7 +233,8 @@
 					if ($result) {
 						$displayEngine->flash('success', '', 'Server has been duplicated.');
 
-						header('Location: ' . $displayEngine->getURL('/servers/' . $resultdata));
+						header('Content-Type: application/json');
+						echo json_encode(['success' => 'Server has been duplicated.', 'location' => $displayEngine->getURL('/servers/' . $resultdata)]);
 						return;
 					} else {
 						header('Content-Type: application/json');

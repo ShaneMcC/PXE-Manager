@@ -17,7 +17,7 @@
 	</div>
 </form>
 
-<a href="{{ url('/servers/' ~ server.id) }}" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+<a href="{{ url('/servers') }}" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</a>
 <a href="#" data-action="ok" class="btn btn-success">Duplicate</a>
 
 <script src="{{ url('/assets/servers/duplicate.js') }}"></script>

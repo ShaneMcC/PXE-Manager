@@ -10,7 +10,7 @@
 	</div>
 </form>
 
-<a href="{{ url('/images/' ~ image.id) }}" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+<a href="{{ url('/images/') }}" data-action="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</a>
 <a href="#" data-action="ok" class="btn btn-success">Duplicate</a>
 
 <script src="{{ url('/assets/images/duplicate.js') }}"></script>

@@ -73,7 +73,9 @@
 					if ($result) {
 						$displayEngine->flash('success', '', 'Image has been duplicated.');
 
-						header('Location: ' . $displayEngine->getURL('/images/' . $resultdata));
+
+						header('Content-Type: application/json');
+						echo json_encode(['success' => 'Image has been duplicated.', 'location' => $displayEngine->getURL('/images/' . $resultdata)]);
 						return;
 					} else {
 						header('Content-Type: application/json');
