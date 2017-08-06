@@ -26,10 +26,11 @@
 				$wanted = $_SERVER['REQUEST_URI'];
 				$wanted = preg_replace('#^' . preg_quote($displayEngine->getBasePath()) . '#', '/', $wanted);
 				$wanted = preg_replace('#^/+#', '/', $wanted);
+				$wanted = ltrim($wanted, '/');
 
 				// Remember wanted pages for post-login if we have
 				// an auth provider that cares.
-				if (!preg_match('#^/?(assets)/#', $wanted) && $wanted != 'favicon.ico') {
+				if (!preg_match('#^(assets)/#', $wanted) && $wanted != 'favicon.ico') {
 					session::set('wantedPage', $wanted);
 				}
 
