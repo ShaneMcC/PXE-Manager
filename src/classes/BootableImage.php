@@ -85,7 +85,7 @@ class BootableImage extends DBObject {
 	public function getRequiredVariables() {
 		$vars = [];
 
-		foreach ($this->getAllImageIDs() as $id) {
+		foreach ($this->findParents() as $id) {
 			$i = BootableImage::load($this->getDB(), $id);
 			$vars = $vars + $i->getVariables();
 		}
@@ -93,7 +93,7 @@ class BootableImage extends DBObject {
 		return $vars;
 	}
 
-	private function getAllImageIDs() {
+	public function findParents() {
 		$de = getDisplayEngine();
 		$twig = $de->getTwig();
 		$loader = new BootableImageTwigLoader($this->getDB());
@@ -142,6 +142,28 @@ class BootableImage extends DBObject {
 		}
 
 		return $lookedAt;
+	}
+
+	public function findChildren() {
+		if ($this->getID() == NULL) { return []; }
+
+		$dependants = [];
+		$skip = [$this->getID()];
+		foreach (BootableImage::getSearch($this->getDB())->find() as $image) {
+			if (in_array($image->getID(), $skip)) { continue; }
+
+			$parents = $image->findParents();
+			if (in_array($this->getID(), $parents)) {
+				// If we're in the parents list, count this image as a dependant
+				$dependants[] = $image->getID();
+			} else {
+				// If we're not in the list, add this image and all images in
+				// the list to the ignore list.
+				$skip = array_merge($skip, $parents);
+			}
+		}
+
+		return $dependants;
 	}
 
 	public function getVariable($name) {
@@ -199,7 +221,7 @@ class BootableImage extends DBObject {
 
 		// Check that any inheritance makes sense.
 		try {
-			$this->getAllImageIDs();
+			$this->findParents();
 		} catch (Exception $e) {
 			throw new ValidationFailed($e->getMessage());
 		}
@@ -279,22 +301,33 @@ class BootableImage extends DBObject {
 	}
 
 	public function preDelete() {
+		$dependants = $this->findChildren();
+		if (!empty($dependants)) {
+			throw new ValidationFailed('This image can not be deleted, it has dependants: ' . implode(', ', $dependants));
+		}
+
 		$this->myServers = $this->getServers();
 	}
 
 	public function postDelete($result) {
 		if (!$result) { return; }
 
-		$this->generateServers();
+		foreach ($this->myServers as $server) {
+			$server->generateConfig();
+		}
 	}
 
 	private function generateServers() {
-		// TODO: Find any servers that use this image, or any image that
-		//       references this, and regenerate them.
-		// foreach ($this->getServers() as $server) {
-
-		foreach (Server::getSearch($this->getDB())->find() as $server) {
+		// Find any servers that use this image, or any of our child images and
+		// regenerate them.
+		foreach ($this->getServers() as $server) {
 			$server->generateConfig();
+		}
+
+		foreach ($this->findChildren() as $imageID) {
+			foreach (BootableImage::load($this->getDB(), $imageID)->getServers() as $server) {
+				$server->generateConfig();
+			}
 		}
 	}
 }

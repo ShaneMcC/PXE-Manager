@@ -189,13 +189,20 @@
 					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
 
 					if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
-						$result = $server->delete();
+						$errorReason = '';
+						try {
+							$result = $server->delete();
+						} catch (Exception $e) {
+							$result = FALSE;
+							$errorReason = $e->getMessage();
+						}
+
 						if ($result) {
 							$displayEngine->flash('success', '', 'Server ' . $server->getName() . ' has been deleted.');
 							header('Location: ' . $displayEngine->getURL('/servers'));
 							return;
 						} else {
-							$displayEngine->flash('error', '', 'There was an error deleting the server.');
+							$displayEngine->flash('error', '', trim('There was an error deleting the server. ' . $errorReason));
 							header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
 							return;
 						}

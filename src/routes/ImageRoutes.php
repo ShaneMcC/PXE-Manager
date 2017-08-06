@@ -97,13 +97,20 @@
 					if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
 
 					if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
-						$result = $image->delete();
+						$errorReason = '';
+						try {
+							$result = $image->delete();
+						} catch (Exception $e) {
+							$result = FALSE;
+							$errorReason = $e->getMessage();
+						}
+
 						if ($result) {
 							$displayEngine->flash('success', '', 'Image ' . $image->getName() . ' has been deleted.');
 							header('Location: ' . $displayEngine->getURL('/images'));
 							return;
 						} else {
-							$displayEngine->flash('error', '', 'There was an error deleting the image.');
+							$displayEngine->flash('error', '', trim('There was an error deleting the image. ' . $errorReason));
 							header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
 							return;
 						}
