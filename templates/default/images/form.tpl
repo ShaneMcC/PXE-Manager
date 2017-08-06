@@ -29,7 +29,7 @@
 		<tr class="variables">
 			<th>Variables</th>
 			<td>
-				<table id="variables" class="table table-striped table-bordered">
+				<table id="variables" class="table table-striped table-bordered table-sortable">
 					<tbody>
 						<tr>
 							<th class="name">Name</th>
@@ -41,7 +41,7 @@
 						</tr>
 						{% set varid = 0 %}
 						{% for var,vardata in image.variables %}
-							<tr data-varid="{{ varid }}">
+							<tr class="sortable" data-varid="{{ varid }}">
 								<td class="name" data-name="name" data-value="{{ var }}">{{ var }}</td>
 								<td class="description" data-name="description" data-value="{{ vardata.description }}">{{ vardata.description }}</td>
 								<td class="data" data-name="data" data-value="{{ vardata.data }}">{{ vardata.data }}</td>
@@ -161,3 +161,5 @@ In addition to variables, there are other functions that can be used:
 </div>
 
 <script src="{{ url('/assets/images/form.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
+<link href="{{ url('/assets/images/form.css') }}" rel="stylesheet">

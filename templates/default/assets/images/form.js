@@ -21,11 +21,21 @@ $(function() {
 		return false;
 	});
 
+	$('.table-sortable').sortable({
+		containerSelector: 'table',
+		itemPath: '> tbody',
+		itemSelector: 'tr.sortable',
+		placeholder: '<tr class="placeholders"><td colspan="6"></td></tr>',
+	});
+	$('.table-sortable').sortable("disable");
+
 	$('button[data-action="editimage"]').click(function () {
 		if ($(this).data('action') == "editimage") {
 			$('#formcontrols button[data-action="saveimage"]').removeClass('hidden');
 			setEditable($('table#imageinfo td[data-name]'));
 			$('.editonly').show();
+
+			$('.table-sortable').sortable("enable");
 
 			$(this).data('action', 'cancel');
 			$(this).html('Cancel');
@@ -36,6 +46,8 @@ $(function() {
 			cancelEdit($('table#imageinfo td[data-name]'));
 			$('.editonly').hide();
 			$('tr.newvar').remove();
+
+			$('.table-sortable').sortable("disable");
 
 			$(this).data('action', 'editimage');
 			$(this).html('Edit Image');
@@ -177,7 +189,7 @@ function addVar() {
 	varid = newVarCount++;
 
 	var row = '';
-	row += '<tr data-varid="new_' + varid + '" class="newvar">';
+	row += '<tr data-varid="new_' + varid + '" class="newvar sortable">';
 	row += '	<td data-name="name" data-value=""></td>';
 	row += '	<td data-name="description" data-value=""></td>';
 	row += '	<td data-name="data" data-value=""></td>';

@@ -1,0 +1,21 @@
+body.dragging, body.dragging * {
+	cursor: move !important;
+}
+
+.dragged {
+	position: absolute;
+	opacity: 0.5;
+	z-index: 2000;
+}
+
+.table-sortable tr {
+	cursor: pointer;
+}
+
+.table-sortable tr.placeholders td {
+	background: #F00;
+	height: 5px;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
