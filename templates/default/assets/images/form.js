@@ -25,7 +25,8 @@ $(function() {
 		containerSelector: 'table',
 		itemPath: '> tbody',
 		itemSelector: 'tr.sortable',
-		placeholder: '<tr class="placeholders"><td colspan="6"></td></tr>',
+		placeholder: '<tr class="placeholders"><td colspan="7"></td></tr>',
+		handle: 'td.handle',
 	});
 	$('.table-sortable').sortable("disable");
 
@@ -190,6 +191,7 @@ function addVar() {
 
 	var row = '';
 	row += '<tr data-varid="new_' + varid + '" class="newvar sortable">';
+	row += '	<td class="handle"><span class="draganddrop"></span></td>';
 	row += '	<td data-name="name" data-value=""></td>';
 	row += '	<td data-name="description" data-value=""></td>';
 	row += '	<td data-name="data" data-value=""></td>';

@@ -19,3 +19,33 @@ body.dragging, body.dragging * {
 	margin: 0;
 	padding: 0;
 }
+
+.draganddrop {
+  display: inline-block;
+  border-top: 2px solid #ccc;
+  width: 25px;
+  padding-top: 2px;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+
+.draganddrop:before,
+.draganddrop:after {
+  display: block;
+  content: "";
+  border-top: 2px solid #ccc;
+  padding-top: 2px;
+}
+
+.draganddrop:hover,
+.draganddrop:hover:before,
+.draganddrop:hover:after {
+  border-color: #57b5d6;
+}
+
+.draganddrop:active,
+.draganddrop:active:before,
+.draganddrop:active:after {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}

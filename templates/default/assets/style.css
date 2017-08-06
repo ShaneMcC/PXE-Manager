@@ -139,6 +139,10 @@ table#variables {
   table-layout: fixed;
 }
 
+table#variables th.handle, table#variables td.handle {
+  width: 50px;
+}
+
 table#variables th.name, table#variables td.name {
   width: 150px;
 }

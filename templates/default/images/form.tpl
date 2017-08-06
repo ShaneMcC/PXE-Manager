@@ -32,6 +32,7 @@
 				<table id="variables" class="table table-striped table-bordered table-sortable">
 					<tbody>
 						<tr>
+							<th class="handle editonly" style="display: none"></th>
 							<th class="name">Name</th>
 							<th class="description">Description</th>
 							<th class="data">Data</th>
@@ -42,6 +43,7 @@
 						{% set varid = 0 %}
 						{% for var,vardata in image.variables %}
 							<tr class="sortable" data-varid="{{ varid }}">
+								<td class="handle editonly" style="display: none"><span class="draganddrop"></span></td>
 								<td class="name" data-name="name" data-value="{{ var }}">{{ var }}</td>
 								<td class="description" data-name="description" data-value="{{ vardata.description }}">{{ vardata.description }}</td>
 								<td class="data" data-name="data" data-value="{{ vardata.data }}">{{ vardata.data }}</td>
