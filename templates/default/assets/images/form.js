@@ -81,6 +81,10 @@ $(function() {
 			$(this).html('Delete');
 		}
 	});
+
+	CodeMirror.defineMode("shelltwig", function(config, parserConfig) {
+	  return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "shell"), CodeMirror.getMode(config, "twig"));
+	});
 });
 
 var options = {};
@@ -114,10 +118,14 @@ function setEditable(element) {
 			field.html('<textarea rows="' + rows + '" class="form-control mono" name="' + key + '">' + escapeHtml(value) + '</textarea>');
 
 			if (field.data('codemirror')) {
+				var cmmode = field.data('codemode') !== undefined ? field.data('codemode') : "shelltwig";
+
 				var textarea = $('textarea', field)[0];
 				var editor = CodeMirror.fromTextArea(textarea, {
 					lineNumbers: true,
 					styleActiveLine: true,
+					mode: cmmode,
+					theme: "neat",
 				}).on('change', editor => {
 					textarea.value = editor.getValue();
 				});
