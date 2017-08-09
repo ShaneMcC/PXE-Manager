@@ -78,17 +78,17 @@
 
 		<tr class="pxedata scriptdata">
 			<th>PXE Data</th>
-			<td class="mono" data-rows="5" data-type="textfield" data-name="pxedata" data-value="{{ image.pxedata }}"><pre>{{ image.pxedata }}</pre></td>
+			<td class="mono" data-codemirror="true" data-rows="5" data-type="textfield" data-name="pxedata" data-value="{{ image.pxedata }}"><pre>{{ image.pxedata }}</pre></td>
 		</tr>
 
 		<tr class="script scriptdata">
 			<th>Kickstart/Preseed Data</th>
-			<td class="mono" data-rows="15" data-type="textfield" data-name="script" data-value="{{ image.script }}"><pre>{{ image.script }}</pre></td>
+			<td class="mono" data-codemirror="true" data-rows="15" data-type="textfield" data-name="script" data-value="{{ image.script }}"><pre>{{ image.script }}</pre></td>
 		</tr>
 
 		<tr class="postinstall scriptdata">
 			<th>Post-Install Script</th>
-			<td class="mono" data-rows="15" data-type="textfield" data-name="postinstall" data-value="{{ image.postinstall }}"><pre>{{ image.postinstall }}</pre></td>
+			<td class="mono" data-codemirror="true" data-rows="15" data-type="textfield" data-name="postinstall" data-value="{{ image.postinstall }}"><pre>{{ image.postinstall }}</pre></td>
 		</tr>
 
 		<tr>
@@ -176,3 +176,8 @@ In addition to variables, there are other functions that can be used:
 <script src="{{ url('/assets/images/form.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
 <link href="{{ url('/assets/images/form.css') }}" rel="stylesheet">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/codemirror.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/codemirror.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/mode/twig/twig.js"></script>

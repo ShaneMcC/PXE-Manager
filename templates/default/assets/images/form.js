@@ -112,6 +112,16 @@ function setEditable(element) {
 			var rows = field.data('rows');
 			if (rows === undefined) { rows = 5; }
 			field.html('<textarea rows="' + rows + '" class="form-control mono" name="' + key + '">' + escapeHtml(value) + '</textarea>');
+
+			if (field.data('codemirror')) {
+				var textarea = $('textarea', field)[0];
+				var editor = CodeMirror.fromTextArea(textarea, {
+					lineNumbers: true,
+					styleActiveLine: true,
+				}).on('change', editor => {
+					textarea.value = editor.getValue();
+				});
+			}
 		} else if (fieldType == 'select') {
 			var selectOptions = field.data('options');
 			var select = '';
