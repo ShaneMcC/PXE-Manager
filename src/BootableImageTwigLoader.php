@@ -34,6 +34,9 @@ class BootableImageTwigLoader implements Twig_LoaderInterface {
 		}
 	}
 
+	public function injectTemplate($name, $contents) {
+		$this->cache[strtolower($name)] = [$contents, time()];
+	}
 
 	public function getTemplate($name) {
 		$data = FALSE;

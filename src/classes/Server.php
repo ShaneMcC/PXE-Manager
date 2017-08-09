@@ -128,7 +128,7 @@ class Server extends DBObject {
 	}
 
 	public function getDisplayEngine($injectVars = true) {
-		$de = getDisplayEngine();
+		$de = $this->getBootableImage()->getImageDisplayEngine();
 
 		$validVars = $this->getValidVariables();
 		if ($injectVars) {
@@ -157,8 +157,6 @@ class Server extends DBObject {
 		$twig->addFunction(new Twig_Function('getLogUrl', function ($type, $entry) use ($de) {
 			return $de->getFullURL('/servers/' . $this->getID() . '/service/' . $this->getServiceHash() . '/serverlog/' . $type) . '/?entry=' . urlencode($entry);
 		}));
-
-		$twig->setLoader(new BootableImageTwigLoader($this->getDB()));
 
 		return $de;
 	}

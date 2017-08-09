@@ -94,10 +94,9 @@ class BootableImage extends DBObject {
 	}
 
 	public function findParents() {
-		$de = getDisplayEngine();
+		$de = $this->getImageDisplayEngine(true);
 		$twig = $de->getTwig();
-		$loader = new BootableImageTwigLoader($this->getDB());
-		$twig->setLoader($loader);
+		$loader = $twig->getLoader();
 
 		$lookedAt = [];
 		$wanted = [];
@@ -109,19 +108,7 @@ class BootableImage extends DBObject {
 			$lookedAt[] = $lookAt;
 
 			foreach (['pxedata', 'script', 'postinstall'] as $bit) {
-				$name = $lookAt . '/' . $bit;
-
-				if ($lookAt == $this->getID()) {
-					if ($bit == 'pxedata') {
-						$code = new Twig_Source($this->getPXEData(), $name);
-					} else if ($bit == 'script' || $bit == 'kickstart' || $bit == 'preseed') {
-						$code = new Twig_Source($this->getScript(), $name);
-					} else if ($bit == 'postinstall') {
-						$code = new Twig_Source($this->getPostInstall(), $name);
-					}
-				} else {
-					$code = $loader->getSourceContext($name);
-				}
+				$code = $loader->getSourceContext($lookAt . '/' . $bit);
 
 				$tokens = $twig->tokenize($code);
 				while (!$tokens->isEOF()) {
@@ -226,7 +213,45 @@ class BootableImage extends DBObject {
 			throw new ValidationFailed($e->getMessage());
 		}
 
+		// Check that template parses properly.
+		$de = $this->getImageDisplayEngine(true);
+		$twig = $de->getTwig();
+		$twig->addFunction(new Twig_Function('getVariable', function ($var, $default = '') { return ''; }));
+		$twig->addFunction(new Twig_Function('getScriptURL', function () { return ''; }));
+		$twig->addFunction(new Twig_Function('getPostInstallURL', function () { return ''; }));
+		$twig->addFunction(new Twig_Function('getServiceURL', function () { return ''; }));
+		$twig->addFunction(new Twig_Function('getLogUrl', function ($type, $entry) { return ''; }));
+
+		foreach (['pxedata' => 'PXEData', 'script' => 'Preseed/Kickstart', 'postinstall' => 'Post-Install'] as $bit => $nice) {
+			$name = $this->getID() . '/' . $bit;
+			try {
+				ob_start();
+				$de->render($name);
+			} catch (Exception $ex) {
+				throw new ValidationFailed('Error with ' . $nice . ': ' . $ex->getMessage());
+			} finally {
+				ob_end_clean();
+			}
+		}
+
 		return TRUE;
+	}
+
+	public function getImageDisplayEngine($injectTemplates = false) {
+		$de = getDisplayEngine();
+		$twig = $de->getTwig();
+		$loader = new BootableImageTwigLoader($this->getDB());
+		$twig->setLoader($loader);
+
+		if ($injectTemplates) {
+			$loader->injectTemplate($this->getID() . '/pxedata', $this->getPXEData());
+			$loader->injectTemplate($this->getID() . '/kickstart', $this->getScript());
+			$loader->injectTemplate($this->getID() . '/preseed', $this->getScript());
+			$loader->injectTemplate($this->getID() . '/script', $this->getScript());
+			$loader->injectTemplate($this->getID() . '/postinstall', $this->getPostInstall());
+		}
+
+		return $de;
 	}
 
 	public function validateVariables($vars) {
