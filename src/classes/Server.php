@@ -138,6 +138,31 @@ class Server extends DBObject {
 		}
 
 		$twig = $de->getTwig();
+		$twig->addFunction(new Twig_Function('getServerInfo', function ($var, $default = '') {
+			switch (strtolower($var)) {
+				case 'name':
+					return $this->getName();
+				case 'id':
+					return $this->getID();
+				case 'hash':
+					return $this->getServiceHash();
+				case 'mac':
+				case 'macaddress':
+				case 'macaddr':
+					return $this->getMacAddr();
+				case 'image':
+				case 'bootimage':
+					return $this->getBootableImage()->getName();
+				case 'imageid':
+				case 'bootimageid':
+					return $this->getBootableImage()->getID();
+				case 'enabled':
+					return $this->getEnabled();
+				default:
+					return $default;
+			}
+		}));
+
 		$twig->addFunction(new Twig_Function('getVariable', function ($var, $default = '') use ($validVars) {
 			return array_key_exists($var, $validVars) && $validVars[$var] !== "" ? $validVars[$var] : $default;
 		}));

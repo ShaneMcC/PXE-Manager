@@ -216,6 +216,7 @@ class BootableImage extends DBObject {
 		// Check that template parses properly.
 		$de = $this->getImageDisplayEngine(true);
 		$twig = $de->getTwig();
+		$twig->addFunction(new Twig_Function('getServerInfo', function ($var, $default = '') { return ''; }));
 		$twig->addFunction(new Twig_Function('getVariable', function ($var, $default = '') { return ''; }));
 		$twig->addFunction(new Twig_Function('getScriptURL', function () { return ''; }));
 		$twig->addFunction(new Twig_Function('getPostInstallURL', function () { return ''; }));
