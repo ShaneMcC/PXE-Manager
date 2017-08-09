@@ -44,3 +44,7 @@ body.dragging, body.dragging * {
 	cursor: -webkit-grabbing;
 	cursor: -moz-grabbing;
 }
+
+.CodeMirror {
+	border: 1px solid #ddd;
+}

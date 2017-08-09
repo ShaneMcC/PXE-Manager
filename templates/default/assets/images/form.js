@@ -124,10 +124,20 @@ function setEditable(element) {
 				var editor = CodeMirror.fromTextArea(textarea, {
 					lineNumbers: true,
 					styleActiveLine: true,
+					lineWrapping: true,
 					mode: cmmode,
 					theme: "neat",
-				}).on('change', editor => {
+				});
+
+				editor.on('change', editor => {
 					textarea.value = editor.getValue();
+				});
+
+				$(editor.getWrapperElement()).resizable({
+					resize: function() {
+						editor.setSize($(this).width(), $(this).height());
+						editor.refresh();
+					}
 				});
 			}
 		} else if (fieldType == 'select') {
