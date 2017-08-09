@@ -91,6 +91,17 @@
 			<td class="mono" data-rows="15" data-type="textfield" data-name="postinstall" data-value="{{ image.postinstall }}"><pre>{{ image.postinstall }}</pre></td>
 		</tr>
 
+		<tr>
+			<th>Available for use?</th>
+			<td data-type="yesno" data-name="available" data-badge-yes="success" data-badge-no="danger" data-value="{{ (not image or image.available) | yesno }}">
+				{% if (not image or image.available) %}
+					<span class="badge badge-success">Yes</span>
+				{% else %}
+					<span class="badge badge-danger">No</span>
+				{% endif %}
+			</td>
+		</tr>
+
 	</tbody>
 </table>
 </form>

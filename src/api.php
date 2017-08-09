@@ -53,6 +53,7 @@ class API {
 		if (isset($data['pxedata'])) { $image->setPXEData($data['pxedata']); }
 		if (isset($data['script'])) { $image->setScript($data['script']); }
 		if (isset($data['postinstall'])) { $image->setPostInstall($data['postinstall']); }
+		if (isset($data['available'])) { $image->setAvailable($data['available']); }
 
 		try {
 			$image->validate();

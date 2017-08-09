@@ -113,6 +113,14 @@ ALTER TABLE `servers` ADD `lastmodified` INT;
 DBQUERY
 );
 
+			// ------------------------------------------------------------------------
+			// Available BootableImages
+			// ------------------------------------------------------------------------
+			$dataChanges[7] = new DBChange(<<<DBQUERY
+ALTER TABLE `bootableimages` ADD `available` BOOL NOT NULL DEFAULT 1;
+DBQUERY
+);
+
 			return $dataChanges;
 		}
 	}

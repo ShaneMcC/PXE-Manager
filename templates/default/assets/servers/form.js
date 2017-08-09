@@ -63,11 +63,15 @@ var imageData = {}
 function setImageData(data) {
 	imageData = data;
 
+	originalImage = $('td[data-name="image"]').data("raw-value");
+
 	options["images"] = { };
 
 	for (var k in data["images"]) {
 		if (data["images"].hasOwnProperty(k)) {
-			options["images"][k] = data["images"][k]["name"];
+			if (data["images"][k]["available"] || k == originalImage) {
+				options["images"][k] = data["images"][k]["name"];
+			}
 		}
 	}
 

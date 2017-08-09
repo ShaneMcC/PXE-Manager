@@ -186,6 +186,12 @@ class Server extends DBObject {
 		return $de;
 	}
 
+	public function toArray() {
+		$arr = parent::toArray();
+		$arr['enabled'] = parseBool($arr['enabled']);
+		return $arr;
+	}
+
 	public function getServiceHash() {
 		$hashData = $this->toArray();
 		unset($hashData['enabled']);

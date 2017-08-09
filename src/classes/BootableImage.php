@@ -11,6 +11,7 @@ class BootableImage extends DBObject {
 	                             'script' => NULL,
 	                             'postinstall' => NULL,
 	                             'lastmodified' => 0,
+	                             'available' => FALSE,
 	                            ];
 	protected static $_json_fields = ['variables'];
 
@@ -63,6 +64,10 @@ class BootableImage extends DBObject {
 
 	public function setPostInstall($value) {
 		return $this->setData('postinstall', $value);
+	}
+
+	public function setAvailable($value) {
+		return $this->setData('available', parseBool($value));
 	}
 
 	public function setLastModified($value) {
@@ -169,12 +174,22 @@ class BootableImage extends DBObject {
 		return $this->getData('postinstall');
 	}
 
+	public function getAvailable() {
+		return parseBool($this->getData('available'));
+	}
+
 	public function getLastModified() {
 		return $this->getData('lastmodified');
 	}
 
 	public function getServers() {
 		return Server::getSearch($this->getDB())->where('image', $this->getID())->find();
+	}
+
+	public function toArray() {
+		$arr = parent::toArray();
+		$arr['available'] = parseBool($arr['available']);
+		return $arr;
 	}
 
 	/**
