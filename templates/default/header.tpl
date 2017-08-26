@@ -28,7 +28,7 @@
       <a class="navbar-brand" href="{{ url('/') }}">{{ sitename }}</a>
 
       <div class="collapse navbar-collapse" id="navbar">
-      	{{ showHeaderMenu() }}
+        {{ showHeaderMenu() }}
 
         <div class="navbar-nav">
           {{ showHeaderMenu('right') }}

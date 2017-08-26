@@ -261,7 +261,7 @@ class Server extends DBObject {
 			foreach (explode("\n", $de->render($image->getID() . '/pxedata')) as $line) {
 				if ($first && $line == "#!ipxe") {
 					$contents[] = '    KERNEL ipxe.lkrn';
-    				$contents[] = '    APPEND dhcp && chain --autofree ' . $serviceURL . '/pxedata';
+					$contents[] = '    APPEND dhcp && chain --autofree ' . $serviceURL . '/pxedata';
 					break;
 				} else if ($first && $line == "#!pxelinux") {
 					$contents = [];
