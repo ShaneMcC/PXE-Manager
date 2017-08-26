@@ -263,6 +263,10 @@ class Server extends DBObject {
 					$contents[] = '    KERNEL ipxe.lkrn';
     				$contents[] = '    APPEND dhcp && chain --autofree ' . $serviceURL . '/pxedata';
 					break;
+				} else if ($first && $line == "#!pxelinux") {
+					$contents = [];
+					$first = false;
+					continue;
 				}
 
 				$contents[] = '    ' . $line;
