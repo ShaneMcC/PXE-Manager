@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "96a9b85942a86182b81d55825f262d6c",
-    "content-hash": "d51bdeb2f7f50b3a7cd3930a68ca09b6",
+    "hash": "a32e584b41eae021f2f0898baee988a9",
+    "content-hash": "25dd6270306c9bec97c120e929576855",
     "packages": [
         {
             "name": "bramus/router",
@@ -55,16 +55,16 @@
         },
         {
             "name": "shanemcc/php-db",
-            "version": "0.1",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ShaneMcC/php-db.git",
-                "reference": "f7a165ca5419989f3b54fb6d401d43d7b1b168ec"
+                "reference": "01a2d3ba52ec7c19b54a834c38250ca3bd5ead40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/f7a165ca5419989f3b54fb6d401d43d7b1b168ec",
-                "reference": "f7a165ca5419989f3b54fb6d401d43d7b1b168ec",
+                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/01a2d3ba52ec7c19b54a834c38250ca3bd5ead40",
+                "reference": "01a2d3ba52ec7c19b54a834c38250ca3bd5ead40",
                 "shasum": ""
             },
             "require": {
@@ -89,20 +89,20 @@
             ],
             "description": "Basic PHP ORM",
             "homepage": "https://github.com/shanemcc/php-db",
-            "time": "2017-07-31 03:20:10"
+            "time": "2017-08-30 22:17:04"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937"
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f29dca382a6485c3cbe6379f0c61230167681937",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
                 "shasum": ""
             },
             "require": {
@@ -114,7 +114,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -148,7 +148,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09 14:24:12"
+            "time": "2017-06-14 15:44:48"
         },
         {
             "name": "twig/twig",
@@ -220,16 +220,16 @@
     "packages-dev": [
         {
             "name": "filp/whoops",
-            "version": "2.1.9",
+            "version": "2.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f"
+                "reference": "ffbbd2c06c64b08fb47974eed5dbce4ca2bb0eec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f",
-                "reference": "b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/ffbbd2c06c64b08fb47974eed5dbce4ca2bb0eec",
+                "reference": "ffbbd2c06c64b08fb47974eed5dbce4ca2bb0eec",
                 "shasum": ""
             },
             "require": {
@@ -277,7 +277,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2017-06-03 18:33:07"
+            "time": "2017-08-03 18:23:40"
         },
         {
             "name": "psr/log",
@@ -328,20 +328,20 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v3.3.5",
+            "version": "v3.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "0f32b62d21991700250fed5109b092949007c5b3"
+                "reference": "89fcb5a73e0ede2be2512234c4e40457bb22b35f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/0f32b62d21991700250fed5109b092949007c5b3",
-                "reference": "0f32b62d21991700250fed5109b092949007c5b3",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/89fcb5a73e0ede2be2512234c4e40457bb22b35f",
+                "reference": "89fcb5a73e0ede2be2512234c4e40457bb22b35f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9",
+                "php": "^5.5.9|>=7.0.8",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "conflict": {
@@ -392,7 +392,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2017-07-10 14:18:27"
+            "time": "2017-08-27 14:52:21"
         }
     ],
     "aliases": [],
