@@ -189,6 +189,9 @@ class Server extends DBObject {
 	public function toArray() {
 		$arr = parent::toArray();
 		$arr['enabled'] = parseBool($arr['enabled']);
+		$arr['lastmodified'] = (int)$arr['lastmodified'];
+		$arr['id'] = (int)$arr['id'];
+		asort($arr);
 		return $arr;
 	}
 
