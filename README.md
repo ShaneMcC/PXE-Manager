@@ -26,7 +26,7 @@ I can be found idling on various different IRC Networks, but the best way to get
 
 ## Comments, Questions, Bugs, Feature Requests etc.
 
-Bugs and Feature Requests should be raised on the [[https://github.com/ShaneMcC/PXE-Manager/issues|issue tracker on github]], and I'm happy to recieve code pull requests via github.
+Bugs and Feature Requests should be raised on the [issue tracker on github](https://github.com/ShaneMcC/PXE-Manager/issues), and I'm happy to recieve code pull requests via github.
 
 I can be found idling on various different IRC Networks, but the best way to get in touch would be to message "Dataforce" on Quakenet, or drop me a mail (email address is in my [github profile](https://github.com/ShaneMcC))
 
