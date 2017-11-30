@@ -60,7 +60,12 @@
 		// Pre-Login, we don't have a CSRF Token assigned.
 		if (!session::exists('csrftoken')) { return; }
 
-		if ($json) { $_POST = json_decode(file_get_contents("php://input"), true); }
+		if ($json) {
+			$jsonData = json_decode(file_get_contents("php://input"), true);
+			if (is_array($jsonData)) {
+				$_POST = $jsonData;
+			}
+		}
 
 		if (isset($_SERVER['HTTP_X_CSRFTOKEN']) && (!array_key_exists('csrftoken', $_POST) || empty($_POST['csrftoken']))) {
 			$_POST['csrftoken'] = $_SERVER['HTTP_X_CSRFTOKEN'];
