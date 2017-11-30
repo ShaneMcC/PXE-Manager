@@ -78,7 +78,7 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 		if ($authProvider->isAuthenticated()) {
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/logout'), 'title' => 'Logout'], 'right');
 
-			$router->get('/logout(.json)?', function($json = false) use ($displayEngine) {
+			$router->get('/(?:api/)?logout(.json)?', function($json = false) use ($displayEngine) {
 				session::clear();
 				if ($json) {
 					header('Content-Type: application/json');
@@ -90,7 +90,7 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 			});
 
 
-			$router->match('GET|POST', '/login(.json)?', function($json = false) use ($displayEngine) {
+			$router->match('GET|POST', '/(?:api/0.1/)?login(.json)?', function($json = false) use ($displayEngine) {
 				if ($json) {
 					header('Content-Type: application/json');
 					echo json_encode(['error' => 'You are already logged in.']);
@@ -103,7 +103,7 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 		} else {
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/login'), 'title' => 'Login', 'active' => function($de) { return $de->getPageID() == 'login'; }], 'right');
 
-			$router->get('/login(.json)?', function($json = false) use ($displayEngine) {
+			$router->get('/(?:api/)?login(.json)?', function($json = false) use ($displayEngine) {
 				if ($json) {
 					header('Content-Type: application/json');
 					echo json_encode(['fields' => $this->fields, 'csrftoken' => session::get('csrftoken')]);
@@ -115,7 +115,7 @@ abstract class LoginAuthProvider extends AuthProvider implements RouteProvider {
 				}
 			});
 
-			$router->post('/login(.json)?', function($json = false) use ($displayEngine, $api) {
+			$router->post('/(?:api/)?login(.json)?', function($json = false) use ($displayEngine, $api) {
 				$checkAuth = $this->checkAuth($_POST);
 
 				if ($json) { header('Content-Type: application/json'); }

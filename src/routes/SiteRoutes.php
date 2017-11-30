@@ -40,7 +40,7 @@
 				}
 			});
 
-			$router->get('/user.json', function () use ($authProvider) {
+			$router->get('/(?:api/0.1/)?user.json', function () use ($authProvider) {
 				header('Content-Type: application/json');
 
 				$data = [];
