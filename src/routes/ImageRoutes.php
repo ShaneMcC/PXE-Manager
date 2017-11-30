@@ -35,6 +35,18 @@
 				$displayEngine->display('images/index.tpl');
 			});
 
+			$router->get('/images/available.json', function() use ($displayEngine, $api) {
+				header('Content-Type: application/json');
+				$data = ['images' => []];
+				foreach ($api->getBootableImages() as $i) {
+					if ($i->getAvailable()) {
+						$data['images'][] = $i;
+					}
+				}
+
+				echo json_encode($data);
+			});
+
 			$router->get('/images/([0-9]+)(.json)?', function($imageid, $json = false) use ($router, $displayEngine, $api) {
 				$image = $api->getBootableImage($imageid);
 				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, $json); }
