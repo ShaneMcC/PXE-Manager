@@ -1,5 +1,6 @@
 <?php
 	class ServerRoutes implements RouteProvider {
+		private $config = [];
 
 		public function showUnknown($displayEngine, $json = false) {
 			if ($json) {
@@ -13,6 +14,7 @@
 		}
 
 		public function init($config, $router, $displayEngine) {
+			$this->config = $config;
 		}
 
 		public function checkServiceHash($api, $displayEngine, $serverid, $servicehash) {
@@ -76,17 +78,23 @@
 				}
 			});
 
-			$router->get('/pxedata/([^/]+)', function($macaddr) use ($router, $displayEngine, $api) {
-				$server = $api->getServerFromMAC($macaddr);
-				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+			if ($this->config['allowInsecurePXEData']) {
+				$router->get('/pxedata/([^/]+)', function($macaddr) use ($router, $displayEngine, $api) {
+					$server = $api->getServerFromMAC($macaddr);
+					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
 
-				$image = $server->getBootableImage();
-				if ($image instanceof BootableImage) {
-					die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
-				} else {
-					die();
-				}
-			});
+					$image = $server->getBootableImage();
+					if ($image instanceof BootableImage) {
+						die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
+					} else {
+						die();
+					}
+				});
+			} else {
+				$router->get('/pxedata/([^/]+)', function($macaddr) use ($router, $displayEngine, $api) {
+					die('This functionality has been disabled.');
+				});
+			}
 
 			$router->get('/servers/(-1|[0-9]+)/variables(?:/([0-9]+)?)?', function($serverid, $imageid = NULL) use ($router, $displayEngine, $api) {
 				$server = $api->getServer($serverid);
@@ -122,6 +130,7 @@
 					foreach ($api->getServers() as $server) {
 						$s = $server->toArray();
 						$s['variables'] = $server->getValidVariables();
+						$s['servicehash'] = $server->getServiceHash();
 						$data[] = $s;
 					}
 					echo json_encode($data);
@@ -132,6 +141,21 @@
 				$displayEngine->setVar('servers', $servers);
 
 				$displayEngine->display('servers/index.tpl');
+			});
+
+			$router->get('/servers/mac/([^/]+?)(.json)?', function($macaddr, $json = false) use ($router, $displayEngine, $api) {
+				$server = $api->getServerFromMAC($macaddr);
+				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
+
+				if ($json) {
+					header('Content-Type: application/json');
+					$data = ['server' => $server->toArray(), 'logs' => $server->getServerLogs()];
+					$data['server']['variables'] = $server->getValidVariables();
+					$data['server']['servicehash'] = $server->getServiceHash();
+					echo json_encode($data);
+				} else {
+					header('Location: ' . $displayEngine->getURL('/servers/' . $server->getID()));
+				}
 			});
 
 			$router->get('/servers/([0-9]+)(.json)?', function($serverid, $json = false) use ($router, $displayEngine, $api) {
@@ -150,6 +174,7 @@
 					header('Content-Type: application/json');
 					$data = ['server' => $server->toArray(), 'logs' => $server->getServerLogs()];
 					$data['server']['variables'] = $server->getValidVariables();
+					$data['server']['servicehash'] = $server->getServiceHash();
 					echo json_encode($data);
 					return;
 				}

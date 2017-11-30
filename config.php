@@ -24,6 +24,11 @@
 	// Where to output per-server pxe configs.
 	$config['tftppath'] = getEnvOrDefault('TFTPPATH', '/var/lib/tftpboot/');
 
+	// Allow accessing /pxedata/<macaddress> to get PXEData?
+	// This should be disabled unless you know what you are doing.
+	// (See: https://github.com/ShaneMcC/PXE-Manager/issues/23)
+	$config['allowInsecurePXEData'] = false;
+
 	// Name of auth provider to use.
 	// Note: URLs required for main functionality are always available without
 	// authentication. This includes "Service" urls and /pxedata/<MAC>

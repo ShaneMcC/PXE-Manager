@@ -1,5 +1,6 @@
 <?php
 	class ImageRoutes implements RouteProvider {
+		private $config = [];
 
 		public function showUnknown($displayEngine, $json = false) {
 			if ($json) {
@@ -12,6 +13,7 @@
 		}
 
 		public function init($config, $router, $displayEngine) {
+			$this->config = $config;
 		}
 
 		public function addRoutes($authProvider, $router, $displayEngine, $api) {
