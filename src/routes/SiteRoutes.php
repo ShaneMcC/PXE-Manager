@@ -39,5 +39,16 @@
 					$displayEngine->setPageID('404')->setTitle('Error 404')->display('404.tpl');
 				}
 			});
+
+			$router->get('/user.json', function () use ($authProvider) {
+				header('Content-Type: application/json');
+
+				$data = [];
+				$data['authenticated'] = $authProvider->isAuthenticated();
+				$data['permissions'] = $authProvider->getPermissions();
+				$data['csrftoken'] = session::get('csrftoken');
+
+				echo json_encode($data);
+			});
 		}
 	}

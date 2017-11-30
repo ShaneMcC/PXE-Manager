@@ -24,6 +24,9 @@
 	$api = new API(DB::get());
 
 	// Session/Authentication
+	if (isset($_SERVER['HTTP_X_SESSION_ID'])) {
+		session_id($_SERVER['HTTP_X_SESSION_ID']);
+	}
 	session::init();
 	if (!session::exists('csrftoken')) {
 		session::set('csrftoken', genUUID());
@@ -53,13 +56,24 @@
 	}
 
 	// Check CSRF Tokens.
-	$router->before('POST', '.*', function() {
+	$router->before('POST', '.*?(.json)?', function($json = false) {
 		// Pre-Login, we don't have a CSRF Token assigned.
 		if (!session::exists('csrftoken')) { return; }
 
+		if ($json) { $_POST = json_decode(file_get_contents("php://input"), true); }
+
+		if (isset($_SERVER['HTTP_X_CSRFTOKEN']) && (!array_key_exists('csrftoken', $_POST) || empty($_POST['csrftoken']))) {
+			$_POST['csrftoken'] = $_SERVER['HTTP_X_CSRFTOKEN'];
+		}
+
 		if (!array_key_exists('csrftoken', $_POST) || empty($_POST['csrftoken']) || $_POST['csrftoken'] != session::get('csrftoken')) {
 			header('HTTP/1.1 403 Forbidden');
-			die('Invalid CSRF Token');
+			if ($json) {
+				header('Content-Type: application/json');
+				die(json_encode(['error' => 'Invalid CSRF Token']));
+			} else {
+				die('Invalid CSRF Token');
+			}
 		}
 	});
 
