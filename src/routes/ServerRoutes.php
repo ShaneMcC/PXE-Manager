@@ -1,9 +1,14 @@
 <?php
 	class ServerRoutes implements RouteProvider {
 
-		public function showUnknown($displayEngine) {
-			$displayEngine->setPageID('servers')->setTitle('Servers :: Unknown');
-			$displayEngine->display('servers/unknown.tpl');
+		public function showUnknown($displayEngine, $json = false) {
+			if ($json) {
+				header('Content-Type: application/json');
+				echo json_encode(['Error' => 'Unknown server.']);
+			} else {
+				$displayEngine->setPageID('servers')->setTitle('Servers :: Unknown');
+				$displayEngine->display('servers/unknown.tpl');
+			}
 			die();
 		}
 
@@ -108,8 +113,20 @@
 
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/servers'), 'title' => 'Servers', 'active' => function($de) { return $de->getPageID() == 'servers'; }]);
 
-			$router->get('/servers', function() use ($displayEngine, $api) {
+			$router->get('/servers(.json)?', function($json = false) use ($displayEngine, $api) {
 				$displayEngine->setPageID('servers')->setTitle('Servers');
+
+				if ($json) {
+					header('Content-Type: application/json');
+					$data = [];
+					foreach ($api->getServers() as $server) {
+						$s = $server->toArray();
+						$s['variables'] = $server->getValidVariables();
+						$data[] = $s;
+					}
+					echo json_encode($data);
+					return;
+				}
 
 				$servers = $api->getServers(true);
 				$displayEngine->setVar('servers', $servers);
@@ -117,9 +134,9 @@
 				$displayEngine->display('servers/index.tpl');
 			});
 
-			$router->get('/servers/([0-9]+)', function($serverid) use ($router, $displayEngine, $api) {
+			$router->get('/servers/([0-9]+)(.json)?', function($serverid, $json = false) use ($router, $displayEngine, $api) {
 				$server = $api->getServer($serverid);
-				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
 
 				$displayEngine->setVar('server', $server->toArray());
 				$displayEngine->setVar('serverlogs', $server->getServerLogs());
@@ -129,17 +146,27 @@
 					$displayEngine->setVar('image', $image->toArray());
 				}
 
+				if ($json) {
+					header('Content-Type: application/json');
+					$data = ['server' => $server->toArray(), 'logs' => $server->getServerLogs()];
+					$data['server']['variables'] = $server->getValidVariables();
+					echo json_encode($data);
+					return;
+				}
+
 				$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName());
 
 				$displayEngine->display('servers/view.tpl');
 			});
 
-			$router->get('/servers/([0-9]+)/preview', function($serverid) use ($router, $displayEngine, $api) {
+			$router->get('/servers/([0-9]+)/preview(.json)?', function($serverid, $json = false) use ($router, $displayEngine, $api) {
 				$server = $api->getServer($serverid);
-				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
 
 				$displayEngine->setVar('server', $server->toArray());
 				$displayEngine->setPageID('servers')->setTitle('Servers :: ' . $server->getName() . ' :: Preview');
+
+				$jsondata = ['server' => $displayEngine->getVar('server')];
 
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
@@ -150,6 +177,14 @@
 					$displayEngine->setVar('postinstall', $te->render($image->getID() . '/postinstall'));
 
 					$displayEngine->setVar('validvars', $server->getValidVariables());
+
+					foreach (['pxedata', 'kickstart', 'postinstall', 'validvars'] as $v) { $jsondata[$v] = $displayEngine->getVar($v); }
+				}
+
+				if ($json) {
+					header('Content-Type: application/json');
+					echo json_encode($jsondata);
+					return;
 				}
 
 				$displayEngine->display('servers/preview.tpl');
@@ -162,6 +197,7 @@
 					$displayEngine->display('servers/create.tpl');
 				});
 
+				// TODO: JSON?
 				$router->post('/servers/([0-9]+)/clearlogs', function($serverid) use ($router, $displayEngine, $api) {
 					$server = $api->getServer($serverid);
 					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
@@ -184,9 +220,10 @@
 					}
 				});
 
-				$router->post('/servers/([0-9]+)/delete', function($serverid) use ($router, $displayEngine, $api) {
+				$router->post('/servers/([0-9]+)/delete(.json)?', function($serverid, $json = FALSE) use ($router, $displayEngine, $api) {
 					$server = $api->getServer($serverid);
-					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
+					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
+					if ($json) { header('Content-Type: application/json'); }
 
 					if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
 						$errorReason = '';
@@ -198,15 +235,21 @@
 						}
 
 						if ($result) {
+							if ($json) { echo json_encode(['success' => 'Server was deleted.']); return; }
+
 							$displayEngine->flash('success', '', 'Server ' . $server->getName() . ' has been deleted.');
 							header('Location: ' . $displayEngine->getURL('/servers'));
 							return;
 						} else {
+							if ($json) { echo json_encode(['Error' => 'Server was not deleted: ' . $errorReason]); return; }
+
 							$displayEngine->flash('error', '', trim('There was an error deleting the server. ' . $errorReason));
 							header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
 							return;
 						}
 					} else {
+						if ($json) { echo json_encode(['Error' => 'Invalid DATA POSTed.']); return; }
+
 						header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
 						return;
 					}

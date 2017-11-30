@@ -1,9 +1,14 @@
 <?php
 	class ImageRoutes implements RouteProvider {
 
-		public function showUnknown($displayEngine) {
-			$displayEngine->setPageID('images')->setTitle('Bootable Images :: Unknown');
-			$displayEngine->display('images/unknown.tpl');
+		public function showUnknown($displayEngine, $json = false) {
+			if ($json) {
+				header('Content-Type: application/json');
+				echo json_encode(['Error' => 'Unknown image.']);
+			} else {
+				$displayEngine->setPageID('images')->setTitle('Bootable Images :: Unknown');
+				$displayEngine->display('images/unknown.tpl');
+			}
 		}
 
 		public function init($config, $router, $displayEngine) {
@@ -13,7 +18,7 @@
 			if (!$authProvider->checkPermissions(['view_images'])) { return; }
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/images'), 'title' => 'Images', 'active' => function($de) { return $de->getPageID() == 'images'; }]);
 
-			$router->get('/images(.json)?', function($json = true) use ($displayEngine, $api) {
+			$router->get('/images(.json)?', function($json = false) use ($displayEngine, $api) {
 				$displayEngine->setPageID('images')->setTitle('Bootable Images');
 
 				$images = $api->getBootableImages();
@@ -28,15 +33,28 @@
 				$displayEngine->display('images/index.tpl');
 			});
 
-			$router->get('/images/([0-9]+)', function($imageid) use ($router, $displayEngine, $api) {
+			$router->get('/images/([0-9]+)(.json)?', function($imageid, $json = false) use ($router, $displayEngine, $api) {
 				$image = $api->getBootableImage($imageid);
-				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
+				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, $json); }
 
 				$displayEngine->setVar('image', $image->toArray());
+				if ($json) {
+					header('Content-Type: application/json');
+					echo json_encode(['image' => $image]);
+					return;
+				}
 
 				$displayEngine->setPageID('images')->setTitle('Bootable Images :: ' . $image->getName());
 
 				$displayEngine->display('images/view.tpl');
+			});
+
+			$router->get('/images/([0-9]+)/requiredvariables.json', function($imageid) use ($router, $displayEngine, $api) {
+				$image = $api->getBootableImage($imageid);
+				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, true); }
+
+				header('Content-Type: application/json');
+				echo json_encode(['requiredvariables' => $image->getRequiredVariables()]);
 			});
 
 			if ($authProvider->checkPermissions(['edit_images'])) {
@@ -92,9 +110,10 @@
 					$this->doCreateOrEdit($api, $displayEngine, $imageid, $_POST);
 				});
 
-				$router->post('/images/([0-9]+)/delete', function($imageid) use ($router, $displayEngine, $api) {
+				$router->post('/images/([0-9]+)/delete(.json)?', function($imageid, $json = false) use ($router, $displayEngine, $api) {
 					$image = $api->getBootableImage($imageid);
-					if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine); }
+					if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, $json); }
+					if ($json) { header('Content-Type: application/json'); }
 
 					if (isset($_POST['confirm']) && parseBool($_POST['confirm'])) {
 						$errorReason = '';
@@ -105,16 +124,23 @@
 							$errorReason = $e->getMessage();
 						}
 
+
 						if ($result) {
+							if ($json) { echo json_encode(['success' => 'Image was deleted.']); return; }
+
 							$displayEngine->flash('success', '', 'Image ' . $image->getName() . ' has been deleted.');
 							header('Location: ' . $displayEngine->getURL('/images'));
 							return;
 						} else {
+							if ($json) { echo json_encode(['Error' => 'Image was not deleted: ' . $errorReason]); return; }
+
 							$displayEngine->flash('error', '', trim('There was an error deleting the image. ' . $errorReason));
 							header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
 							return;
 						}
 					} else {
+						if ($json) { echo json_encode(['Error' => 'Invalid DATA POSTed.']); return; }
+
 						header('Location: ' . $displayEngine->getURL('/images/' . $imageid));
 						return;
 					}
