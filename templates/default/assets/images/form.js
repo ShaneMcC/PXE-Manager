@@ -21,14 +21,14 @@ $(function() {
 		return false;
 	});
 
-	$('.table-sortable').sortable({
+	$('.table-sortable tbody').sortable({
 		containerSelector: 'table',
 		itemPath: '> tbody',
 		itemSelector: 'tr.sortable',
 		placeholder: '<tr class="placeholders"><td colspan="7"></td></tr>',
 		handle: 'td.handle',
 	});
-	$('.table-sortable').sortable("disable");
+	$('.table-sortable tbody').sortable("disable");
 
 	$('button[data-action="editimage"]').click(function () {
 		if ($(this).data('action') == "editimage") {
@@ -36,7 +36,7 @@ $(function() {
 			setEditable($('table#imageinfo td[data-name]'));
 			$('.editonly').show();
 
-			$('.table-sortable').sortable("enable");
+			$('.table-sortable tbody').sortable("enable");
 
 			$(this).data('action', 'cancel');
 			$(this).html('Cancel');
@@ -48,7 +48,7 @@ $(function() {
 			$('.editonly').hide();
 			$('tr.newvar').remove();
 
-			$('.table-sortable').sortable("disable");
+			$('.table-sortable tbody').sortable("disable");
 
 			$(this).data('action', 'editimage');
 			$(this).html('Edit Image');
