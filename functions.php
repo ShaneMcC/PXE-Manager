@@ -20,6 +20,22 @@
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	DB::get()->setPDO($pdo);
 
+	function getUserInfoString() {
+		$result = '';
+		if (getAuthProvider()->isAuthenticated()) {
+			$result .= 'Authenticated user';
+			if (getAuthProvider()->getAuthName() !== FALSE) {
+				$result .= ' (' . getAuthProvider()->getAuthName() . ')';
+			}
+			$result .= ' from ';
+		} else {
+			$result .= 'Unauthenticated user from ';
+		}
+		$result .= $_SERVER['REMOTE_ADDR'];
+
+		return $result;
+	}
+
 	function getAuthProvider() {
 		global $__AUTHPROVIDER, $config;
 

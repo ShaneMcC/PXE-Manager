@@ -1,6 +1,8 @@
 <?php
 
 class LDAPAuthProvider extends LoginAuthProvider implements RouteProvider {
+	protected $currentUser = NULL;
+
 	protected function providerInit() {
 		$this->setFields(['user' => ['type' => 'text', 'label' => 'Username', 'placeholder' => 'Username'],
 		                  'pass' => ['type' => 'password', 'label' => 'Password', 'placeholder' => 'Password'],
@@ -11,6 +13,11 @@ class LDAPAuthProvider extends LoginAuthProvider implements RouteProvider {
 		// If we get this far, assume we are authenticated.
 		$this->setAuthenticated(true);
 		$this->setPermissions($sessionData['permissions']);
+		$this->currentUser = $sessionData['username'];
+	}
+
+	public function getAuthName() {
+		return $this->currentUser;
 	}
 
 	protected function checkAuth($vars) {
@@ -34,7 +41,7 @@ class LDAPAuthProvider extends LoginAuthProvider implements RouteProvider {
 				}
 			}
 
-			return ['permissions' => $this->calculatePermissions($permissions)];
+			return ['permissions' => $this->calculatePermissions($permissions), 'username' => $wantuser];
 		}
 
 		return FALSE;

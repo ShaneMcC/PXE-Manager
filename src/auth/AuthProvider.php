@@ -13,6 +13,16 @@ abstract class AuthProvider {
 	abstract public function getPermissions();
 
 	/**
+	 * If this auth provider provides user identification, this will return
+	 * the current username.
+	 *
+	 * @return Current user username if there is one, else FALSE.
+	 */
+	public function getAuthName() {
+		return FALSE;
+	}
+
+	/**
 	 * Check permissions.
 	 * Check if the user has all of the required permissions.
 	 *

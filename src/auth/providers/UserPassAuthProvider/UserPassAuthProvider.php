@@ -20,12 +20,15 @@ class UserPassAuthProvider extends LoginAuthProvider implements RouteProvider, D
 	protected function providerCheckSession($sessionData) {
 		// If we get this far, assume we are authenticated.
 		$user = UserPassAuthProvider_User::load(DB::get(), $sessionData['userid']);
-
 		if ($user instanceof UserPassAuthProvider_User && $user->isEnabled()) {
 			$this->currentUser = $user;
 			$this->setAuthenticated(true);
 			$this->setPermissions($user->getPermissions());
 		}
+	}
+
+	public function getAuthName() {
+		return $this->currentUser->getUsername();
 	}
 
 	protected function checkAuth($vars) {
