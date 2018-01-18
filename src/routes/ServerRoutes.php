@@ -33,6 +33,7 @@
 			$router->get('/servers/([0-9]+)/service/([^/]+)/disable', function($serverid, $servicehash) use ($router, $displayEngine, $api) {
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$server->setEnabled(false)->save();
+				$api->createServerLog($serverid, 'SYSTEM', 'Server disabled by ' . getUserInfoString());
 				die('OK');
 			});
 
@@ -40,6 +41,7 @@
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
+					$api->createServerLog($serverid, 'SYSTEM', 'kickstart/preseed accessed by ' . getUserInfoString());
 					die($server->getDisplayEngine()->render($image->getID() . '/script'));
 				} else {
 					die();
@@ -50,6 +52,7 @@
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
+					$api->createServerLog($serverid, 'SYSTEM', 'postinstall script accessed by ' . getUserInfoString());
 					die($server->getDisplayEngine()->render($image->getID() . '/postinstall'));
 				} else {
 					die();
@@ -60,6 +63,7 @@
 				$server = $this->checkServiceHash($api, $displayEngine, $serverid, $servicehash);
 				$image = $server->getBootableImage();
 				if ($image instanceof BootableImage) {
+					$api->createServerLog($serverid, 'SYSTEM', 'pxedata accessed by ' . getUserInfoString());
 					die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
 				} else {
 					die();
@@ -85,6 +89,7 @@
 
 					$image = $server->getBootableImage();
 					if ($image instanceof BootableImage) {
+						$api->createServerLog($serverid, 'SYSTEM', 'insecure pxedata accessed by ' . getUserInfoString());
 						die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
 					} else {
 						die();
@@ -337,6 +342,8 @@
 
 			if ($result) {
 				$displayEngine->flash('success', '', 'Your changes have been saved.');
+
+				$api->createServerLog($serverid, 'SYSTEM', 'Server edited by ' . getUserInfoString());
 
 				header('Content-Type: application/json');
 				echo json_encode(['success' => 'Your changes have been saved.', 'location' => $displayEngine->getURL('/servers/' . $resultdata)]);
