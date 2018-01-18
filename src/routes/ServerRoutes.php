@@ -236,6 +236,7 @@
 						$result = $server->clearServerLogs();
 
 						if ($result) {
+							$api->createServerLog($serverid, 'SYSTEM', 'Server logs cleared by ' . getUserInfoString());
 							$displayEngine->flash('success', '', 'Logs for server ' . $server->getName() . ' have been deleted.');
 							header('Location: ' . $displayEngine->getURL('/servers/' . $serverid));
 							return;
