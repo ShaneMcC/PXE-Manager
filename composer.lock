@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6af90d09549f97d925209c7db6aedcf6",
+    "content-hash": "7b8cd626620b64de2858629091dcd77d",
     "packages": [
         {
             "name": "bramus/router",
@@ -54,16 +54,16 @@
         },
         {
             "name": "shanemcc/php-db",
-            "version": "0.2",
+            "version": "0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ShaneMcC/php-db.git",
-                "reference": "01a2d3ba52ec7c19b54a834c38250ca3bd5ead40"
+                "reference": "f94a3a9c2fdf01d4cbfe728ed76f7598ae3d99d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/01a2d3ba52ec7c19b54a834c38250ca3bd5ead40",
-                "reference": "01a2d3ba52ec7c19b54a834c38250ca3bd5ead40",
+                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/f94a3a9c2fdf01d4cbfe728ed76f7598ae3d99d5",
+                "reference": "f94a3a9c2fdf01d4cbfe728ed76f7598ae3d99d5",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
             ],
             "description": "Basic PHP ORM",
             "homepage": "https://github.com/shanemcc/php-db",
-            "time": "2017-08-30T22:17:04+00:00"
+            "time": "2018-11-12T02:55:31+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
