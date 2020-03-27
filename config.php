@@ -18,6 +18,7 @@
 	$config['templates']['cache'] = getEnvOrDefault('TEMPLATE_CACHE', __DIR__ . '/templates_c');
 
 	$config['sitename'] = getEnvOrDefault('SITE_NAME', 'PXE-Manager');
+	$config['overrideURL'] = getEnvOrDefault('OVERRIDE_URL', '');
 	$config['memcached'] = getEnvOrDefault('MEMCACHED', '');
 	$config['securecookies'] = getEnvOrDefault('SECURE_COOKIES', false);
 

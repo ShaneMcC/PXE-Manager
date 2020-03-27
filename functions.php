@@ -84,6 +84,12 @@
 		return $displayEngine;
 	}
 
+	function getOverrideURL() {
+		global $config;
+
+		return $config['overrideURL'];
+	}
+
 	function startsWith($haystack, $needle) {
 		$length = strlen($needle);
 		return (substr($haystack, 0, $length) === $needle);

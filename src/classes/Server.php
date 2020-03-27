@@ -130,6 +130,8 @@ class Server extends DBObject {
 	public function getDisplayEngine($injectVars = true) {
 		$de = $this->getBootableImage()->getImageDisplayEngine();
 
+		$de->setOverrideURL(getOverrideURL());
+
 		$validVars = $this->getValidVariables();
 		if ($injectVars) {
 			foreach ($validVars as $k => $v) {

@@ -8,6 +8,7 @@
 		private $pageID = '';
 		private $customSidebar = FALSE;
 		private $menu;
+		private $overrideURL = '';
 
 		public function __construct($siteconfig) {
 			$config = $siteconfig['templates'];
@@ -102,6 +103,12 @@
 			return $this;
 		}
 
+		public function setOverrideURL($overrideURL) {
+			$this->overrideURL = $overrideURL;
+
+			return $this;
+		}
+
 		public function setTitle($title) {
 			$this->vars['pagetitle'] = $title;
 			return $this;
@@ -136,6 +143,8 @@
 		}
 
 		public function getFullURL($path) {
+			if (!empty($this->overrideURL)) { return $this->overrideURL . '/' . ltrim($path, '/'); }
+
 			return $this->getBaseURL() . $this->getURL($path);
 		}
 
