@@ -126,7 +126,7 @@
 
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/servers'), 'title' => 'Servers', 'active' => function($de) { return $de->getPageID() == 'servers'; }]);
 
-			$router->get('/(?:api/0.1/)?servers(.json|)', function($json = false) use ($displayEngine, $api) {
+			$router->get('/(?:api/0\.1/)?servers(\.json|)', function($json = false) use ($displayEngine, $api) {
 				$json = !empty($json);
 				$displayEngine->setPageID('servers')->setTitle('Servers');
 
@@ -149,7 +149,7 @@
 				$displayEngine->display('servers/index.tpl');
 			});
 
-			$router->get('/(?:api/0.1/)?servers/mac/([^/]+?)(.json|)', function($macaddr, $json = false) use ($router, $displayEngine, $api) {
+			$router->get('/(?:api/0\.1/)?servers/mac/([^/]+?)(\.json|)', function($macaddr, $json = false) use ($router, $displayEngine, $api) {
 				$json = !empty($json);
 				$server = $api->getServerFromMAC($macaddr);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
@@ -165,7 +165,7 @@
 				}
 			});
 
-			$router->get('/(?:api/0.1/)?servers/([0-9]+)(.json|)', function($serverid, $json = false) use ($router, $displayEngine, $api) {
+			$router->get('/(?:api/0\.1/)?servers/([0-9]+)(\.json|)', function($serverid, $json = false) use ($router, $displayEngine, $api) {
 				$json = !empty($json);
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
@@ -192,7 +192,7 @@
 				$displayEngine->display('servers/view.tpl');
 			});
 
-			$router->get('/(?:api/0.1/)?servers/([0-9]+)/preview(.json|)', function($serverid, $json = false) use ($router, $displayEngine, $api) {
+			$router->get('/(?:api/0\.1/)?servers/([0-9]+)/preview(\.json|)', function($serverid, $json = false) use ($router, $displayEngine, $api) {
 				$json = !empty($json);
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
@@ -255,7 +255,7 @@
 					}
 				});
 
-				$router->post('/(?:api/0.1/)?servers/([0-9]+)/delete(.json|)', function($serverid, $json = FALSE) use ($router, $displayEngine, $api) {
+				$router->post('/(?:api/0\.1/)?servers/([0-9]+)/delete(\.json|)', function($serverid, $json = FALSE) use ($router, $displayEngine, $api) {
 					$json = !empty($json);
 					$server = $api->getServer($serverid);
 					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
@@ -301,7 +301,7 @@
 					$displayEngine->display('servers/duplicate.tpl');
 				});
 
-				$router->post('/(?:api/0.1/)?servers/([0-9]+)/duplicate.json', function($serverid) use ($router, $displayEngine, $api) {
+				$router->post('/(?:api/0\.1/)?servers/([0-9]+)/duplicate\.json', function($serverid) use ($router, $displayEngine, $api) {
 					$server = $api->getServer($serverid);
 					if (!($server instanceof Server)) {
 						header('Content-Type: application/json');
@@ -329,11 +329,11 @@
 					}
 				});
 
-				$router->post('/(?:api/0.1/)?servers/create.json', function() use ($router, $displayEngine, $api) {
+				$router->post('/(?:api/0\.1/)?servers/create\.json', function() use ($router, $displayEngine, $api) {
 					$this->doCreateOrEdit($api, $displayEngine, NULL, $_POST);
 				});
 
-				$router->post('/(?:api/0.1/)?servers/([0-9]+)/edit.json', function($serverid) use ($router, $displayEngine, $api) {
+				$router->post('/(?:api/0\.1/)?servers/([0-9]+)/edit\.json', function($serverid) use ($router, $displayEngine, $api) {
 					$this->doCreateOrEdit($api, $displayEngine, $serverid, $_POST);
 				});
 			}
