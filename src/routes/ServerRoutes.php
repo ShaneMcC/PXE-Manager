@@ -126,7 +126,8 @@
 
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/servers'), 'title' => 'Servers', 'active' => function($de) { return $de->getPageID() == 'servers'; }]);
 
-			$router->get('/(?:api/0.1/)?servers(.json)?', function($json = false) use ($displayEngine, $api) {
+			$router->get('/(?:api/0.1/)?servers(.json|)', function($json = false) use ($displayEngine, $api) {
+				$json = !empty($json);
 				$displayEngine->setPageID('servers')->setTitle('Servers');
 
 				if ($json) {
@@ -148,7 +149,8 @@
 				$displayEngine->display('servers/index.tpl');
 			});
 
-			$router->get('/(?:api/0.1/)?servers/mac/([^/]+?)(.json)?', function($macaddr, $json = false) use ($router, $displayEngine, $api) {
+			$router->get('/(?:api/0.1/)?servers/mac/([^/]+?)(.json|)', function($macaddr, $json = false) use ($router, $displayEngine, $api) {
+				$json = !empty($json);
 				$server = $api->getServerFromMAC($macaddr);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
 
@@ -163,7 +165,8 @@
 				}
 			});
 
-			$router->get('/(?:api/0.1/)?servers/([0-9]+)(.json)?', function($serverid, $json = false) use ($router, $displayEngine, $api) {
+			$router->get('/(?:api/0.1/)?servers/([0-9]+)(.json|)', function($serverid, $json = false) use ($router, $displayEngine, $api) {
+				$json = !empty($json);
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
 
@@ -189,7 +192,8 @@
 				$displayEngine->display('servers/view.tpl');
 			});
 
-			$router->get('/(?:api/0.1/)?servers/([0-9]+)/preview(.json)?', function($serverid, $json = false) use ($router, $displayEngine, $api) {
+			$router->get('/(?:api/0.1/)?servers/([0-9]+)/preview(.json|)', function($serverid, $json = false) use ($router, $displayEngine, $api) {
+				$json = !empty($json);
 				$server = $api->getServer($serverid);
 				if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
 
@@ -251,7 +255,8 @@
 					}
 				});
 
-				$router->post('/(?:api/0.1/)?servers/([0-9]+)/delete(.json)?', function($serverid, $json = FALSE) use ($router, $displayEngine, $api) {
+				$router->post('/(?:api/0.1/)?servers/([0-9]+)/delete(.json|)', function($serverid, $json = FALSE) use ($router, $displayEngine, $api) {
+					$json = !empty($json);
 					$server = $api->getServer($serverid);
 					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine, $json); }
 					if ($json) { header('Content-Type: application/json'); }
