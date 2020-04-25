@@ -101,15 +101,7 @@
 				});
 			}
 
-			$router->get('/servers/(-1|[0-9]+)/variables/([0-9]+)', function($serverid, $imageid) use ($router, $displayEngine, $api) {
-				return handleServerVariables($router, $displayEngine, $api, $serverid, $imageid);
-			});
-
-			$router->get('/servers/(-1|[0-9]+)/variables', function($serverid) use ($router, $displayEngine, $api) {
-				return handleServerVariables($router, $displayEngine, $api, $serverid);
-			});
-
-			function handleServerVariables($router, $displayEngine, $api, $serverid, $imageid = NULL) {
+			$handleServerVariables = function($serverid, $imageid = NULL) use ($router, $displayEngine, $api) {
 				$server = $api->getServer($serverid);
 				$image = null;
 
@@ -128,7 +120,15 @@
 				}
 
 				$displayEngine->displayRaw('servers/variables.tpl');
-			}
+			};
+
+			$router->get('/servers/(-1|[0-9]+)/variables/([0-9]+)', function($serverid, $imageid) use ($router, $displayEngine, $api, $handleServerVariables) {
+				return $handleServerVariables($serverid, $imageid);
+			});
+
+			$router->get('/servers/(-1|[0-9]+)/variables', function($serverid) use ($router, $displayEngine, $api, $handleServerVariables) {
+				return $handleServerVariables($serverid);
+			});
 
 			if (!$authProvider->checkPermissions(['view_servers'])) { return; }
 
