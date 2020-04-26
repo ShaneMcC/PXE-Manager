@@ -20,8 +20,7 @@
 			if (!$authProvider->checkPermissions(['view_images'])) { return; }
 			$displayEngine->addMenuItem(['link' => $displayEngine->getURL('/images'), 'title' => 'Images', 'active' => function($de) { return $de->getPageID() == 'images'; }]);
 
-			$router->get('/(?:api/0\.1/)?images(\.json|)', function($json = false) use ($displayEngine, $api) {
-				$json = !empty($json);
+			$router->get('/(?:api/0\.1/)?images(\.json)?', function($json = false) use ($displayEngine, $api) {
 				$displayEngine->setPageID('images')->setTitle('Bootable Images');
 
 				$images = $api->getBootableImages();
@@ -48,8 +47,7 @@
 				echo json_encode($data);
 			});
 
-			$router->get('/(?:api/0\.1/)?images/([0-9]+)(\.json|)', function($imageid, $json = false) use ($router, $displayEngine, $api) {
-				$json = !empty($json);
+			$router->get('/(?:api/0\.1/)?images/([0-9]+)(\.json)?', function($imageid, $json = false) use ($router, $displayEngine, $api) {
 				$image = $api->getBootableImage($imageid);
 				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, $json); }
 
@@ -126,8 +124,7 @@
 					$this->doCreateOrEdit($api, $displayEngine, $imageid, $_POST);
 				});
 
-				$router->post('/(?:api/0\.1/)?images/([0-9]+)/delete(\.json|)', function($imageid, $json = false) use ($router, $displayEngine, $api) {
-					$json = !empty($json);
+				$router->post('/(?:api/0\.1/)?images/([0-9]+)/delete(\.json)?', function($imageid, $json = false) use ($router, $displayEngine, $api) {
 					$image = $api->getBootableImage($imageid);
 					if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, $json); }
 					if ($json) { header('Content-Type: application/json'); }
