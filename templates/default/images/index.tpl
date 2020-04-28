@@ -4,6 +4,7 @@
 
 {% if hasPermission(['edit_images']) %}
 	<div class="float-right">
+		<a href="{{ url('/images/import') }}" class="btn btn-primary">Import Bootable Image</a>
 		<a href="{{ url('/images/create') }}" class="btn btn-success">Add Bootable Image</a>
 	</div>
 	<br><br>
@@ -33,6 +34,7 @@
 				{% if hasPermission(['edit_images']) %}
 					<a href="{{ url('/images/' ~ image.id ~ '/duplicate') }}" data-action="duplicate" data-imageid="{{ image.id }}" data-imagename="{{ image.name }}" class="btn btn-primary">Duplicate</a>
 				{% endif %}
+				<a href="{{ url('/images/export/' ~ image.id) }}" class="btn btn-primary">Export</a>
 			</td>
 		</tr>
 		{% endfor %}

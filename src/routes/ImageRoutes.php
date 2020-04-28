@@ -63,6 +63,26 @@
 				$displayEngine->display('images/view.tpl');
 			});
 
+			$router->get('/(?:api/0\.1/)?images/export/([0-9]+)(\.json)?', function($imageid, $json = false) use ($router, $displayEngine, $api) {
+				$image = $api->getBootableImage($imageid);
+				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, $json); }
+
+				$arr = $image->toArray();
+				unset($arr['id']);
+				unset($arr['lastmodified']);
+
+				if ($json) {
+					header('Content-Type: application/json');
+					echo json_encode($arr);
+					return;
+				}
+
+				$displayEngine->setVar('image', $arr);
+				$displayEngine->setPageID('images')->setTitle('Bootable Images :: ' . $image->getName());
+
+				$displayEngine->display('images/export.tpl');
+			});
+
 			$router->get('/(?:api/0\.1/)?images/([0-9]+)/requiredvariables\.json', function($imageid) use ($router, $displayEngine, $api) {
 				$image = $api->getBootableImage($imageid);
 				if (!($image instanceof BootableImage)) { return $this->showUnknown($displayEngine, true); }
@@ -76,6 +96,30 @@
 					$displayEngine->setPageID('images')->setTitle('Bootable Images :: Create');
 
 					$displayEngine->display('images/create.tpl');
+				});
+
+				$router->get('/images/import', function($json = false) use ($router, $displayEngine, $api) {
+					$displayEngine->setPageID('images')->setTitle('Bootable Images :: Import');
+					$displayEngine->display('images/import.tpl');
+				});
+
+				$router->post('/(?:api/0\.1/)?images/import.json', function() use ($router, $displayEngine, $api) {
+					$data = [];
+					$postData = isset($_POST['image']) ? json_decode($_POST['image'], true) : NULL;
+					$data = $postData;
+
+					if ($postData == NULL) {
+						header('Content-Type: application/json');
+						echo json_encode(['error' => 'There was an error with the data provided: Unable to parse json.']);
+						return;
+					}
+
+					// Fix some names that are different in the export compared to what we expect in doCreateOrEdit.
+					if (isset($data['variables'])) {
+						$data['var'] = $data['variables']; unset($data['variables']);
+					}
+
+					$this->doCreateOrEdit($api, $displayEngine, NULL, $data);
 				});
 
 				$router->get('/images/([0-9]+)/duplicate', function($imageid) use ($router, $displayEngine, $api) {
@@ -164,9 +208,9 @@
 
 		function doCreateOrEdit($api, $displayEngine, $imageid, $data) {
 			if ($imageid !== NULL) {
-				[$result,$resultdata] = $api->editBootableImage($imageid, $_POST);
+				[$result,$resultdata] = $api->editBootableImage($imageid, $data);
 			} else {
-				[$result,$resultdata] = $api->createBootableImage($_POST);
+				[$result,$resultdata] = $api->createBootableImage($data);
 			}
 
 			if ($result) {
