@@ -18,15 +18,15 @@ class Server extends DBObject {
 	protected static $_table = 'servers';
 
 	protected function getFilename() {
-        global $config;
+		global $config;
 
-        $filename = $this->getMacAddr();
-        if (isValidMac($filename)) {
-            $filename = preg_replace('#[^0-9A-F]#i', '', strtolower($filename));
-            $filename = '01-' . join('-', str_split($filename, 2));
-        }
-        return rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . $filename;
-    }
+		$filename = $this->getMacAddr();
+		if (isValidMac($filename)) {
+			$filename = preg_replace('#[^0-9A-F]#i', '', strtolower($filename));
+			$filename = '01-' . join('-', str_split($filename, 2));
+		}
+		return rtrim($config['tftppath'], '/') . '/pxelinux.cfg/' . $filename;
+	}
 
 	public function __construct($db) {
 		parent::__construct($db);
@@ -251,13 +251,12 @@ class Server extends DBObject {
 		$this->generateConfig();
 	}
 
-    public function postDelete($result) {
-        $image = $this->getBootableImage();
-        if ( $image instanceof BootableImage) {
-            $file = $this->getFilename();
-            @unlink($file);
-        }
-    }
+	public function postDelete($result) {
+		$file = $this->getFilename();
+		if (file_exists($file)) {
+			@unlink($file);
+		}
+	}
 
 	public function generateConfig() {
 
