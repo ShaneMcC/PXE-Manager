@@ -6,3 +6,5 @@ admin/test.php
 admin/seed.php
 test.php
 data/*
+.git
+*.sh
