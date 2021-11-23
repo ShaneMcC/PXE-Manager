@@ -29,6 +29,6 @@
     },
     "require-dev": {
         "filp/whoops": "^2.1",
-        "symfony/var-dumper": "^4.1"
+        "symfony/var-dumper": "^5.3"
     }
 }
