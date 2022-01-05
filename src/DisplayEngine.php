@@ -1,4 +1,9 @@
 <?php
+	use Twig\Loader\FilesystemLoader as Twig_Loader_Filesystem;
+	use Twig\Environment as Twig_Environment;
+	use Twig\Extension\DebugExtension as Twig_Extension_Debug;
+	use Twig\TwigFunction as Twig_Function;
+	use Twig\TwigFilter as Twig_Filter;
 
 	class DisplayEngine {
 		private $twig;
