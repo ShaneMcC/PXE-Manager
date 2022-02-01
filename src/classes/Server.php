@@ -2,6 +2,7 @@
 
 use shanemcc\phpdb\DBObject;
 use shanemcc\phpdb\ValidationFailed;
+use Twig\TwigFunction as Twig_Function;
 
 class Server extends DBObject {
 	protected static $_fields = ['id' => NULL,
