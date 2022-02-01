@@ -1,5 +1,10 @@
 <?php
 
+use Twig\Loader\LoaderInterface as Twig_LoaderInterface;
+use Twig\Source as Twig_Source;
+use Twig\Error\LoaderError as Twig_Error_Loader;
+use Twig\TwigFunction as Twig_Function;
+
 class BootableImageTwigLoader implements Twig_LoaderInterface {
 	private $db;
 	private $cache = [];
@@ -8,25 +13,25 @@ class BootableImageTwigLoader implements Twig_LoaderInterface {
 		$this->db = $db;
 	}
 
-	public function getSourceContext($name) {
+	public function getSourceContext(string $name): Twig_Source {
 		[$data, $time] = $this->getTemplate($name);
 
 		return new Twig_Source($data, $name);
 	}
 
-	public function getCacheKey($name) {
+	public function getCacheKey(string $name): string {
 		[$data, $time] = $this->getTemplate($name);
 
 		return $name;
 	}
 
-	public function isFresh($name, $time) {
+	public function isFresh(string $name, int $time): bool {
 		[$data, $lasttime] = $this->getTemplate($name);
 
 		return ($time >= $lasttime);
 	}
 
-	public function exists($name) {
+	public function exists(string $name) {
 		try {
 			return $this->getTemplate($name) !== FALSE;
 		} catch (Twig_Error_Loader $ex) {
