@@ -19,7 +19,7 @@
     "require": {
         "php": ">=7.1",
         "bramus/router": "dev-master",
-        "twig/twig": "~3.3",
+        "twig/twig": "^3.0",
         "shanemcc/php-db": "0.5"
     },
     "autoload": {
