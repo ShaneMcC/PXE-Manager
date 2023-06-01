@@ -205,6 +205,7 @@ class Server extends DBObject {
 		$arr['enabled'] = parseBool($arr['enabled']);
 		$arr['lastmodified'] = (int)$arr['lastmodified'];
 		$arr['id'] = (int)$arr['id'];
+		$arr['image'] = (int)$arr['image'];
 		asort($arr);
 		return $arr;
 	}
