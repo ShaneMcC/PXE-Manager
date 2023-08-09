@@ -19,6 +19,7 @@ jobs:
       - name: Enable auto-merge for Dependabot patch or minor version bumps
         if: ${{steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'}}
         run: |
+          gh label create AutoMerged -c '#B60205' -d 'PR was automatically merged by an action.' 2>/dev/null
           gh pr edit --add-label "AutoMerged" "$PR_URL"
           gh pr merge --auto --rebase "$PR_URL"
         env:
