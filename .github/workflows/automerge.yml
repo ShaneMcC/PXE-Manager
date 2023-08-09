@@ -1,5 +1,7 @@
-name: Dependabot auto-merge patch
-on: pull_request
+name: Dependabot auto-merge minor/patch
+on:
+  workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: write
@@ -8,20 +10,5 @@ permissions:
 
 jobs:
   dependabot:
-    runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
-    steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Enable auto-merge for Dependabot patch or minor version bumps
-        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'}}
-        run: |
-          gh label create AutoMerged -c '#B60205' -d 'PR was automatically merged by an action.' 2>/dev/null
-          gh pr edit --add-label "AutoMerged" "$PR_URL"
-          gh pr merge --auto --rebase "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    uses: ShaneMcC/.github/.github/workflows/automergeMinorOrPatch.yml@master
+    secrets: inherit
