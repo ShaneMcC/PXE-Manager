@@ -10,15 +10,9 @@
             "homepage": "http://www.dataforce.org.uk/"
         }
     ],
-    "repositories":[
-        {
-            "type": "vcs",
-            "url": "https://github.com/ShaneMcC/bramus-router"
-        }
-    ],
     "require": {
         "php": ">=8.1",
-        "bramus/router": "dev-master",
+        "bramus/router": "~1.6",
         "twig/twig": "^3.0",
         "shanemcc/php-db": "0.5.2"
     },

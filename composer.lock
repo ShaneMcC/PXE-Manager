@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "842974951dec45cc43d303f2f0e0064e",
+    "content-hash": "e96458fc948505438b982462464105fe",
     "packages": [
         {
             "name": "bramus/router",
-            "version": "dev-master",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ShaneMcC/bramus-router.git",
-                "reference": "40105ae77448c3ba3bb339c6cd2b4e17fd4c2767"
+                "url": "https://github.com/bramus/router.git",
+                "reference": "55657b76da8a0a509250fb55b9dd24e1aa237eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ShaneMcC/bramus-router/zipball/40105ae77448c3ba3bb339c6cd2b4e17fd4c2767",
-                "reference": "40105ae77448c3ba3bb339c6cd2b4e17fd4c2767",
+                "url": "https://api.github.com/repos/bramus/router/zipball/55657b76da8a0a509250fb55b9dd24e1aa237eba",
+                "reference": "55657b76da8a0a509250fb55b9dd24e1aa237eba",
                 "shasum": ""
             },
             "require": {
@@ -26,26 +26,15 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "~2.14",
                 "phpunit/php-code-coverage": "~2.0",
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~4.8"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "Bramus": "src/"
                 }
             },
-            "scripts": {
-                "test": [
-                    "./vendor/bin/phpunit --colors=always"
-                ],
-                "lint": [
-                    "php-cs-fixer fix --diff --dry-run"
-                ],
-                "fix": [
-                    "php-cs-fixer fix"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -63,9 +52,10 @@
                 "routing"
             ],
             "support": {
-                "source": "https://github.com/ShaneMcC/bramus-router/tree/master"
+                "issues": "https://github.com/bramus/router/issues",
+                "source": "https://github.com/bramus/router/tree/1.6.1"
             },
-            "time": "2020-04-26T00:52:14+00:00"
+            "time": "2021-11-18T19:24:07+00:00"
         },
         {
             "name": "shanemcc/php-db",
@@ -553,9 +543,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bramus/router": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
