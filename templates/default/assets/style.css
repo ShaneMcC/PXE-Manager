@@ -171,6 +171,10 @@ table#imageinfo tr.scriptdata pre {
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
+table#imagelist th.enabled, table#imagelist td.enabled {
+  width: 100px;
+}
+
 table#imagelist th.actions, table#imagelist td.actions {
   width: 350px;
 }
@@ -192,11 +196,15 @@ table#serverlist th.actions, table#serverlist td.actions {
 }
 
 table#serverlist th.enabled, table#serverlist td.enabled {
-  width: 200px;
+  width: 100px;
 }
 
 table#serverlist th.image, table#serverlist td.image {
   width: 300px;
+}
+
+table#serverlist th.macaddr, table#serverlist td.macaddr {
+  width: 175px;
 }
 
 table#serverlist th.imageid, table#serverlist td.imageid {

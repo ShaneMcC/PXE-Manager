@@ -13,8 +13,9 @@
 <table id="imagelist" class="table table-striped table-bordered">
 	<thead>
 		<tr>
-			<th class="imageid">ID</th>
-			<th class="image">Image</th>
+			<th class="imageid" data-sortable="true">ID</th>
+			<th class="image" data-sortable="true">Image</th>
+			<th class="enabled" data-sortable="true">Available</th>
 			<th class="actions">Actions</th>
 		</tr>
 	</thead>
@@ -29,6 +30,19 @@
 			<td class="image">
 				{{ image.name }}
 			</td>
+
+			<td class="enabled">
+				{% if image.available == 'true' %}
+					<span class="badge badge-success">
+						Yes
+					</span>
+				{% else %}
+					<span class="badge badge-danger">
+						No
+					</span>
+				{% endif %}
+			</td>
+
 			<td class="actions">
 				<a href="{{ url('/images/' ~ image.id) }}" class="btn btn-success">View</a>
 				{% if hasPermission(['edit_images']) %}
@@ -48,6 +62,10 @@
 		{% endif %}
 	</tbody>
 </table>
+
+<script>
+	$('#imagelist').bootstrapTable();
+</script>
 
 {% if hasPermission(['edit_images']) %}
 	{% embed 'blocks/modal_confirm.tpl' with {'id': 'duplicateImageModal', 'csrftoken': csrftoken} only %}

@@ -12,9 +12,11 @@
 <table id="serverlist" class="table table-striped table-bordered">
 	<thead>
 		<tr>
-			<th class="server">Server</th>
-			<th class="image">Image</th>
-			<th class="enabled">Enabled</th>
+			<th class="imageid" data-sortable="true">ID</th>
+			<th class="server" data-sortable="true">Server</th>
+			<th class="macaddr" data-sortable="true">MAC Address</th>
+			<th class="image" data-sortable="true">Image</th>
+			<th class="enabled" data-sortable="true">Enabled</th>
 			<th class="actions">Actions</th>
 		</tr>
 	</thead>
@@ -23,8 +25,14 @@
 		{% for server in servers %}
 		{% set found = true %}
 		<tr data-searchable-value="{{ server.name }}||{{ server.imagename }}">
+			<td class="imageid">
+				{{ server.id }}
+			</td>
 			<td class="server">
 				{{ server.name }}
+			</td>
+			<td class="macaddr">
+				{{ server.macaddr }}
 			</td>
 			<td class="image">
 				{% if server.imagename %}
@@ -63,6 +71,10 @@
 		{% endif %}
 	</tbody>
 </table>
+
+<script>
+	$('#serverlist').bootstrapTable();
+</script>
 
 {% if hasPermission(['edit_servers']) %}
 	{% embed 'blocks/modal_confirm.tpl' with {'id': 'duplicateServerModal', 'csrftoken': csrftoken} only %}
