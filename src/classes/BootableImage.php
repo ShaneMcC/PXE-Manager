@@ -91,9 +91,11 @@ class BootableImage extends DBObject {
 	public function getRequiredVariables() {
 		$vars = [];
 
-		foreach ($this->findParents() as $id) {
-			$i = BootableImage::load($this->getDB(), $id);
-			$vars = $vars + $i->getVariables();
+		foreach (array_reverse($this->findParents()) as $id) {
+			$imageVars = BootableImage::load($this->getDB(), $id)->getVariables();
+			foreach ($imageVars as $k => $v) {
+				$vars[$k] = $v;
+			}
 		}
 
 		return $vars;
