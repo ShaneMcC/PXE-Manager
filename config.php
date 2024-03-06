@@ -30,6 +30,10 @@
 	// (See: https://github.com/ShaneMcC/PXE-Manager/issues/23)
 	$config['allowInsecurePXEData'] = false;
 
+	// Similar to the above, but only when the server is marked as enabled.
+	// (See: https://github.com/ShaneMcC/PXE-Manager/issues/164)
+	$config['allowInsecurePXEDataWhenEnabled'] = false;
+
 	// Name of auth provider to use.
 	// Note: URLs required for main functionality are always available without
 	// authentication. This includes "Service" urls and /pxedata/<MAC>

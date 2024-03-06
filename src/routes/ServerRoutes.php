@@ -82,22 +82,26 @@
 				}
 			});
 
-			if ($this->config['allowInsecurePXEData']) {
+			if ($this->config['allowInsecurePXEData'] || $this->config['allowInsecurePXEDataWhenEnabled']) {
 				$router->get('/pxedata/([^/]+)', function($macaddr) use ($router, $displayEngine, $api) {
 					$server = $api->getServerFromMAC($macaddr);
 					if (!($server instanceof Server)) { return $this->showUnknown($displayEngine); }
 
-					$image = $server->getBootableImage();
-					if ($image instanceof BootableImage) {
-						$api->createServerLog($serverid, 'SYSTEM', 'insecure pxedata accessed by ' . getUserInfoString());
-						die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
-					} else {
-						die();
+					$canShowData = $this->config['allowInsecurePXEData'] || ($this->config['allowInsecurePXEDataWhenEnabled'] && $server->getEnabled());
+
+					if ($canShowData) {
+						$image = $server->getBootableImage();
+						if ($image instanceof BootableImage) {
+							$api->createServerLog($server->getID(), 'SYSTEM', 'insecure pxedata accessed by ' . getUserInfoString());
+							die($server->getDisplayEngine()->render($image->getID() . '/pxedata'));
+						}
 					}
+
+					die();
 				});
 			} else {
 				$router->get('/pxedata/([^/]+)', function($macaddr) use ($router, $displayEngine, $api) {
-					die('This functionality has been disabled.');
+					die('# This functionality has been disabled.');
 				});
 			}
 
