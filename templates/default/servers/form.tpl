@@ -28,7 +28,7 @@
 			<th>Boot Image</th>
 			<td data-type="select" data-options="images" data-name="image" data-raw-value="{{ server.image }}" data-value="{{ image.name }}">
 				{% if image %}
-					{{ image.name }}
+					<a href="{{ url('/images/' ~ server.image) }}">{{ image.name }}</a>
 				{% else %}
 					<em>No Image</em>
 				{% endif %}

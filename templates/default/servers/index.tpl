@@ -28,7 +28,7 @@
 			</td>
 			<td class="image">
 				{% if server.imagename %}
-					{{ server.imagename }}
+					<a href="{{ url('/images/' ~ server.image) }}">{{ server.imagename }}</a>
 				{% else %}
 					<em>No Image</em>
 				{% endif %}

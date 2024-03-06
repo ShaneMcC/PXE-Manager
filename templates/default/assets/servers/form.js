@@ -74,8 +74,6 @@ function setImageData(data) {
 			}
 		}
 	}
-
-	console.log(options);
 }
 
 function getCurrentVariables(imageid) {
@@ -196,6 +194,7 @@ function cancelEdit(element) {
 		var fieldType = field.data('type');
 		var fieldName = field.data('name');
 		var fieldValue = field.data('value')
+		var fieldRawValue = field.data('raw-value')
 
 		if (fieldType == 'textfield') {
 			field.html('<pre>' + escapeHtml(fieldValue) + '</pre>');
@@ -211,6 +210,8 @@ function cancelEdit(element) {
 			}
 		} else if (fieldName == 'image' && fieldValue == '') {
 			field.html('<em>No Image</em>');
+		} else if (fieldName == 'image') {
+			field.html('<a href="{{ url('/images/') }}' + escapeHtml(fieldRawValue) + '">' + escapeHtml(fieldValue) + '</a>');
 		} else {
 			field.html(escapeHtml(fieldValue));
 		}
