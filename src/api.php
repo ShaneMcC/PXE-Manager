@@ -44,8 +44,9 @@ class API {
 					$type = isset($vardata['type']) ? $vardata['type'] : 'string';
 					$thisdata = isset($vardata['data']) ? $vardata['data'] : '';
 					$required = isset($vardata['required']) ? $vardata['required'] : true;
+					$default = isset($vardata['default']) ? $vardata['default'] : '';
 
-					$image->setVariable($name, $desc, $type, $thisdata, $required);
+					$image->setVariable($name, $desc, $type, $thisdata, $required, $default);
 				}
 			}
 		}

@@ -224,6 +224,7 @@ function addVar() {
 	row += '	<td data-name="description" data-value=""></td>';
 	row += '	<td data-name="data" data-value=""></td>';
 	row += '	<td data-name="type" data-type="select" data-options="variableTypes" data-value="string"></td>';
+	row += '	<td data-name="default" data-value=""></td>';
 	row += '	<td class="required" data-type="yesno" data-name="required" data-badge-yes="success" data-badge-no="danger" data-value="Yes">';
 	row += '	<td class="actions editonly">';
 	row += '		<button type="button" class="btn btn-sm btn-danger" data-action="deleteVar" role="button">Delete</button>';
@@ -241,4 +242,3 @@ function addVar() {
 
 	setEditable($('td[data-name]', row));
 }
-

@@ -33,9 +33,9 @@ class BootableImage extends DBObject {
 		return $this->setData('name', $value);
 	}
 
-	public function setVariable($name, $description, $type = 'string', $data = '', $required = true) {
+	public function setVariable($name, $description, $type = 'string', $data = '', $required = true, $default = '') {
 		$vars = $this->getData('variables');
-		$vars[strtolower($name)] = ['description' => $description, 'type' => $type, 'required' => parseBool($required)];
+		$vars[strtolower($name)] = ['description' => $description, 'type' => $type, 'required' => parseBool($required), 'default' => $default];
 
 		if (in_array(strtolower($type), self::$_VARIABLE_HASDATA)) {
 			$vars[strtolower($name)]['data'] = $data;

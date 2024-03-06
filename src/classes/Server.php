@@ -128,11 +128,13 @@ class Server extends DBObject {
 				if (array_key_exists($v, $myVars)) {
 					$validVars[$v] = $myVars[$v];
 
-					if ($vd['type'] == 'yesno') { $validVars[$v] = parseBool($validVars[$v]); }
-					if ($vd['type'] == 'none') { $validVars[$v] = $vd['data']; }
+					if ($validVars[$v] === '') { $validVars[$v] = $vd['default']; }
 				} else {
-					$validVars[$v] = '';
+					$validVars[$v] = $vd['default'];
 				}
+
+				if ($vd['type'] == 'yesno') { $validVars[$v] = parseBool($validVars[$v]); }
+				if ($vd['type'] == 'none') { $validVars[$v] = $vd['data'] ?? $vd['default']; }
 			}
 		}
 

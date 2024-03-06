@@ -52,8 +52,8 @@
 			$twig->addFunction(new Twig_Function('showSidebar', function() { $this->showSidebar(); }));
 			$twig->addFunction(new Twig_Function('showHeaderMenu', function($menuName = 'left') { $this->showHeaderMenu($menuName); }));
 
-			$twig->addFilter(new Twig_Filter('yesno', function($input) {
-				return parseBool($input) ? "Yes" : "No";
+			$twig->addFilter(new Twig_Filter('yesno', function($input, $default = null) {
+				return parseBool($input ?? $default) ? "Yes" : "No";
 			}));
 
 			$twig->addFilter(new Twig_Filter('date', function($input) {

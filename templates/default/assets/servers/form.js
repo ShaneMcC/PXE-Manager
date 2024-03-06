@@ -104,6 +104,7 @@ function setEditable(element) {
 		var key = field.data('name');
 		var fieldType = field.data('type');
 		var fieldData = field.data('data');
+		var fieldDefault = field.data('default');
 
 		if (fieldType == 'textfield' || fieldType == 'text') {
 			var rows = field.data('rows');
@@ -181,9 +182,9 @@ function setEditable(element) {
 				}
 			});
 		} else if (fieldType == 'integer') {
-			field.html('<input type="number" class="form-control form-control-sm" name="' + key + '" value="' + escapeHtml(value) + '">');
+			field.html('<input type="number" class="form-control form-control-sm" name="' + key + '" placeholder="' + escapeHtml(fieldDefault) + '" value="' + escapeHtml(value) + '">');
 		} else {
-			field.html('<input type="text" class="form-control form-control-sm" name="' + key + '" value="' + escapeHtml(value) + '">');
+			field.html('<input type="text" class="form-control form-control-sm" name="' + key + '" placeholder="' + escapeHtml(fieldDefault) + '" value="' + escapeHtml(value) + '">');
 		}
 	});
 }

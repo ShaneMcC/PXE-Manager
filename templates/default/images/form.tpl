@@ -37,6 +37,7 @@
 							<th class="description">Description</th>
 							<th class="data">Data</th>
 							<th class="type">Type</th>
+							<th class="default">Default Value</th>
 							<th class="required">Required</th>
 							<th class="actions editonly" style="display: none">Actions</th>
 						</tr>
@@ -54,6 +55,7 @@
 										{{ vardata.type }}
 									{% endif %}
 								</td>
+								<td class="default" data-name="default" data-value="{{ vardata.default }}">{{ vardata.default }}</td>
 								<td class="required" data-type="yesno" data-name="required" data-badge-yes="success" data-badge-no="danger" data-value="{{ vardata.required | yesno }}">
 									{% if vardata.required %}
 										<span class="badge badge-success">Yes</span>
