@@ -104,7 +104,7 @@ function setEditable(element) {
 		var key = field.data('name');
 		var fieldType = field.data('type');
 		var fieldData = field.data('data');
-		var fieldDefault = field.data('default');
+		var fieldDefault = (field.data('default') !== undefined) ? field.data('default') : "";
 
 		if (fieldType == 'textfield' || fieldType == 'text') {
 			var rows = field.data('rows');
