@@ -92,11 +92,12 @@ var options = {"variableTypes": {"ipv4": "IPv4 Address",
                                  "ipv6": "IPv6 Address",
                                  "ip": "IPv4 or IPv6 Address",
                                  "string": "Text String",
+                                 "password": "Password String",
                                  "integer": "Integer",
                                  "text": "Multi-Line Text Data",
                                  "selectoption": "Select Option",
-                                 "none": "Hidden Option",
                                  "yesno": "Boolean Value",
+                                 "none": "Hidden Option",
                                 }
               };
 
@@ -201,11 +202,24 @@ function cancelEdit(element) {
 	$(element).each(function (index) {
 		var field = $(this);
 		var fieldType = field.data('type');
+		var fieldValue = field.data('value')
 
 		if (fieldType == 'textfield') {
-			field.html('<pre>' + escapeHtml(field.data('value')) + '</pre>');
+			field.html('<pre>' + escapeHtml(fieldValue) + '</pre>');
+		} else if (fieldType == 'password') {
+			field.html('<small><em>Hidden</em></small>');
+		} else if (fieldType == 'yesno') {
+
+			var badgeYes = field.data('badge-yes');
+			var badgeNo = field.data('badge-no');
+
+			if (fieldValue == "Yes") {
+				field.html('<span class="badge badge-' + badgeYes + '">' + escapeHtml(fieldValue) + '</span>');
+			} else {
+				field.html('<span class="badge badge-' + badgeNo + '">' + escapeHtml(fieldValue) + '</span>');
+			}
 		} else {
-			field.html(escapeHtml(field.data('value')));
+			field.html(escapeHtml(fieldValue));
 		}
 	});
 }

@@ -7,7 +7,11 @@
 	<ul>
 	{% for k,v in validvars %}
 		<li>
-			<strong>{{ k }}</strong>: <code>{{ v | vardisplay }}</code>
+			{% if hiddenvars[k] %}
+				<strong>{{ k }}</strong>: <em><small>Hidden</small></em>
+			{% else %}
+				<strong>{{ k }}</strong>: <code>{{ v | vardisplay }}</code>
+			{% endif %}
 		</li>
 	{% endfor %}
 	</ul>

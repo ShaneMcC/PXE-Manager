@@ -212,7 +212,15 @@
 
 					$displayEngine->setVar('validvars', $server->getValidVariables());
 
-					foreach (['pxedata', 'kickstart', 'postinstall', 'validvars'] as $v) { $jsondata[$v] = $displayEngine->getVar($v); }
+					$hiddenVars = [];
+					foreach ($image->getRequiredVariables() as $v => $vd) {
+						if ($vd['type'] == 'password') {
+							$hiddenVars[$v] = true;
+						}
+					}
+					$displayEngine->setVar('hiddenvars', $hiddenVars);
+
+					foreach (['pxedata', 'kickstart', 'postinstall', 'validvars', 'hiddenvars'] as $v) { $jsondata[$v] = $displayEngine->getVar($v); }
 				}
 
 				if ($json) {

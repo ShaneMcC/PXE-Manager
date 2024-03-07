@@ -1,8 +1,8 @@
 {% if hasPermission(['edit_images']) %}
 	{% if image %}
-		<form method="post" id="imageform" action="{{ url("#{pathprepend}/images/#{image.id}/edit.json") }}">
+		<form method="post" id="imageform" autocomplete="off" action="{{ url("#{pathprepend}/images/#{image.id}/edit.json") }}">
 	{% else %}
-		<form method="post" id="imageform" action="{{ url("#{pathprepend}/images/create.json") }}">
+		<form method="post" id="imageform" autocomplete="off" action="{{ url("#{pathprepend}/images/create.json") }}">
 	{% endif %}
 
 	<input type="hidden" name="csrftoken" value="{{csrftoken}}">
@@ -13,6 +13,7 @@
 {% set variableTypes = variableTypes | merge({"ipv6": "IPv6 Address"}) %}
 {% set variableTypes = variableTypes | merge({"ip": "IPv4 or IPv6 Address"}) %}
 {% set variableTypes = variableTypes | merge({"string": "Text String"}) %}
+{% set variableTypes = variableTypes | merge({"password": "Password String"}) %}
 {% set variableTypes = variableTypes | merge({"integer": "Integer"}) %}
 {% set variableTypes = variableTypes | merge({"selectoption": "Select Option"}) %}
 {% set variableTypes = variableTypes | merge({"text": "Multi-Line Text Data"}) %}
@@ -55,7 +56,13 @@
 										{{ vardata.type }}
 									{% endif %}
 								</td>
-								<td class="default" data-name="default" data-value="{{ vardata.default }}">{{ vardata.default }}</td>
+								<td class="default" data-name="default" {% if vardata.type == 'password' %}data-type="password"{% endif %} data-value="{{ vardata.default }}">
+								{% if vardata.type == 'password' %}
+									<small><em>Hidden</em></small>
+								{% else %}
+									{{ vardata.default }}
+								{% endif %}
+								</td>
 								<td class="required" data-type="yesno" data-name="required" data-badge-yes="success" data-badge-no="danger" data-value="{{ vardata.required | yesno }}">
 									{% if vardata.required %}
 										<span class="badge badge-success">Yes</span>

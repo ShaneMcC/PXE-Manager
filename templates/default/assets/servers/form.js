@@ -183,6 +183,8 @@ function setEditable(element) {
 			});
 		} else if (fieldType == 'integer') {
 			field.html('<input type="number" class="form-control form-control-sm" name="' + key + '" placeholder="' + escapeHtml(fieldDefault) + '" value="' + escapeHtml(value) + '">');
+		} else if (fieldType == 'password') {
+			field.html('<input autocomplete="off" type="password" class="form-control form-control-sm" name="' + key + '" placeholder="********" value="' + escapeHtml(value) + '">');
 		} else {
 			field.html('<input type="text" class="form-control form-control-sm" name="' + key + '" placeholder="' + escapeHtml(fieldDefault) + '" value="' + escapeHtml(value) + '">');
 		}
@@ -213,6 +215,8 @@ function cancelEdit(element) {
 			field.html('<em>No Image</em>');
 		} else if (fieldName == 'image') {
 			field.html('<a href="{{ url('/images/') }}' + escapeHtml(fieldRawValue) + '">' + escapeHtml(fieldValue) + '</a>');
+		} else if (fieldType == 'password') {
+			field.html('<small><em>Hidden</em></small>');
 		} else {
 			field.html(escapeHtml(fieldValue));
 		}

@@ -59,5 +59,8 @@
         {% else %}
           <main class="col-sm-12 pt-3">
         {% endif %}
+        <!-- fake fields are a workaround for chrome autofill filling in our variable fields when we don't want it to. -->
+        <input style="display: none" type="text" name="fakeusernameremembered" />
+        <input style="display: none" type="password" name="fakepasswordremembered" />
         {% block contenttop %}{% endblock %}
         <div id="flashContainer">{{ flash() }}</div>

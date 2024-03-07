@@ -19,8 +19,8 @@ class BootableImage extends DBObject {
 	protected static $_key = 'id';
 	protected static $_table = 'bootableimages';
 
-	protected static $_VARIABLE_TYPES = ['ipv4', 'ipv6', 'ip', 'integer', 'string', 'text', 'yesno', 'selectoption', 'none'];
-	protected static $_VARIABLE_HASDATA = ['string', 'selectoption', 'none'];
+	protected static $_VARIABLE_TYPES = ['ipv4', 'ipv6', 'ip', 'integer', 'string', 'password', 'text', 'yesno', 'selectoption', 'none'];
+	protected static $_VARIABLE_HASDATA = ['string', 'password', 'selectoption', 'none'];
 
 	// Used to update servers after we are deleted.
 	protected $myServers = [];

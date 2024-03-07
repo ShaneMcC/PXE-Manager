@@ -19,6 +19,8 @@
 							<small><em><pre>{{ vardata.default }}</pre></em></small>
 						{% elseif vardata.type == 'text' %}
 							<pre>{{ server.variables[var] }}</pre>
+						{% elseif vardata.type == 'password' %}
+							<small><em>Hidden</em></small>
 						{% elseif server.variables[var] == '' %}
 							<small><em>{{ vardata.default }}</em></small>
 						{% else %}
