@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e96458fc948505438b982462464105fe",
+    "content-hash": "e6c329dbe4e78e0045db97c392ddc805",
     "packages": [
         {
             "name": "bramus/router",
@@ -59,16 +59,16 @@
         },
         {
             "name": "shanemcc/php-db",
-            "version": "0.5.2",
+            "version": "0.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ShaneMcC/php-db.git",
-                "reference": "843482cf5c63816a5180c03f3dceca350969d0cf"
+                "reference": "03a8fd1296a2a90856bf56039978b33d95255efd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/843482cf5c63816a5180c03f3dceca350969d0cf",
-                "reference": "843482cf5c63816a5180c03f3dceca350969d0cf",
+                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/03a8fd1296a2a90856bf56039978b33d95255efd",
+                "reference": "03a8fd1296a2a90856bf56039978b33d95255efd",
                 "shasum": ""
             },
             "require": {
@@ -95,9 +95,9 @@
             "homepage": "https://github.com/shanemcc/php-db",
             "support": {
                 "issues": "https://github.com/ShaneMcC/php-db/issues",
-                "source": "https://github.com/ShaneMcC/php-db/tree/0.5.2"
+                "source": "https://github.com/ShaneMcC/php-db/tree/0.5.3"
             },
-            "time": "2022-11-22T00:18:31+00:00"
+            "time": "2024-02-29T01:48:41+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
