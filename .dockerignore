@@ -8,3 +8,10 @@ test.php
 data/*
 .git
 *.sh
+.git
+.github
+.gitignore
+.gitmodules
+.dockerignore
+*.md
+LICENSE
