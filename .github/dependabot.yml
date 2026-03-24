@@ -1,16 +1,28 @@
 version: 2
 updates:
 - package-ecosystem: composer
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
   open-pull-requests-limit: 10
   cooldown:
     default-days: 32 # Slightly over 1 month
-- package-ecosystem: "github-actions"
-  directory: "/"
+  groups:
+    composer-minor-patch:
+      update-types:
+      - minor
+      - patch
+    composer-major:
+      update-types:
+      - major
+- package-ecosystem: github-actions
+  directory: /
   schedule:
-    interval: "daily"
+    interval: daily
   open-pull-requests-limit: 10
   cooldown:
     default-days: 32 # Slightly over 1 month
+  groups:
+    github-actions-all:
+      patterns:
+      - '*'
