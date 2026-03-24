@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6c329dbe4e78e0045db97c392ddc805",
+    "content-hash": "a93fb1466026665f533f3c9ec5700f44",
     "packages": [
         {
             "name": "bramus/router",
@@ -59,16 +59,16 @@
         },
         {
             "name": "shanemcc/php-db",
-            "version": "0.5.3",
+            "version": "0.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ShaneMcC/php-db.git",
-                "reference": "03a8fd1296a2a90856bf56039978b33d95255efd"
+                "reference": "f9330771db250734883004470c65080193453796"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/03a8fd1296a2a90856bf56039978b33d95255efd",
-                "reference": "03a8fd1296a2a90856bf56039978b33d95255efd",
+                "url": "https://api.github.com/repos/ShaneMcC/php-db/zipball/f9330771db250734883004470c65080193453796",
+                "reference": "f9330771db250734883004470c65080193453796",
                 "shasum": ""
             },
             "require": {
@@ -95,9 +95,9 @@
             "homepage": "https://github.com/shanemcc/php-db",
             "support": {
                 "issues": "https://github.com/ShaneMcC/php-db/issues",
-                "source": "https://github.com/ShaneMcC/php-db/tree/0.5.3"
+                "source": "https://github.com/ShaneMcC/php-db/tree/0.5.4"
             },
-            "time": "2024-02-29T01:48:41+00:00"
+            "time": "2026-02-14T21:57:11+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -616,12 +616,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.1"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
